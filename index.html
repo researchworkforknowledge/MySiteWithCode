@@ -4,8 +4,9 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <meta name="theme-color" content="#0a0a14">
-  <title>StudyAI Pro | #1 Study Hub for Indian Students</title>
-  <!-- Chart.js & jsPDF CDN -->
+  <meta name="description" content="StudyAI Pro – The #1 AI Study Hub for Indian Students">
+  <title>StudyAI Pro | 10/10 Study Hub</title>
+  <!-- Chart.js & jsPDF -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <style>
@@ -48,14 +49,12 @@
     ::-webkit-scrollbar { width:5px; }
     ::-webkit-scrollbar-thumb { background:var(--primary); border-radius:10px; }
 
-    /* ============ HEADER ============ */
+    /* HEADER */
     .header {
       background: var(--glass-bg); backdrop-filter: blur(18px);
       border-bottom:1px solid var(--glass-border);
-      padding:12px 20px;
-      display:flex; align-items:center; justify-content:space-between;
-      flex-wrap:wrap; gap:10px;
-      position:sticky; top:0; z-index:110;
+      padding:12px 20px; display:flex; align-items:center; justify-content:space-between;
+      flex-wrap:wrap; gap:10px; position:sticky; top:0; z-index:110;
     }
     .logo-area { display:flex; align-items:center; gap:12px; flex-wrap:nowrap; }
     .logo {
@@ -66,9 +65,8 @@
     }
     .built-by {
       font-size:0.7rem; color:var(--text2);
-      background:rgba(108,92,231,0.15);
-      padding:4px 12px; border-radius:20px;
-      border:1px solid rgba(108,92,231,0.3);
+      background:rgba(108,92,231,0.15); padding:4px 12px;
+      border-radius:20px; border:1px solid rgba(108,92,231,0.3);
       white-space:nowrap; letter-spacing:0.3px;
       display:inline-block;
     }
@@ -92,9 +90,8 @@
     .btn-sm { padding:6px 13px; font-size:0.75rem; border-radius:18px; }
     .btn-icon { width:36px; height:36px; border-radius:50%; padding:0; display:flex; align-items:center; justify-content:center; font-size:1.1rem; }
     .sidebar-toggle-btn { background:none; border:none; color:var(--text); font-size:1.5rem; cursor:pointer; }
-    .exam-badge { background:var(--accent2); color:#fff; padding:2px 10px; border-radius:12px; font-size:0.7rem; margin-left:6px; }
 
-    /* ============ SIDEBAR (collapsible on all screens) ============ */
+    /* SIDEBAR (collapsible everywhere) */
     .sidebar {
       position:fixed; top:0; left:0; height:100vh; width:260px;
       background:var(--glass-bg); backdrop-filter:blur(18px);
@@ -118,9 +115,8 @@
       box-shadow:0 0 22px rgba(108,92,231,0.3); font-weight:700;
     }
     .backdrop { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.4); z-index:150; }
-    .backdrop.show { display:block; }
 
-    /* ============ CONTENT ============ */
+    /* CONTENT */
     .content { margin-left:260px; padding:24px; transition:margin-left 0.3s; }
     .content.expanded { margin-left:0; }
     .section { display:none; }
@@ -129,8 +125,7 @@
     .card {
       background:var(--glass-bg); backdrop-filter:blur(18px);
       border-radius:var(--radius); padding:20px; margin-bottom:18px;
-      border:1px solid var(--glass-border);
-      box-shadow:0 8px 32px rgba(0,0,0,0.3);
+      border:1px solid var(--glass-border); box-shadow:0 8px 32px rgba(0,0,0,0.3);
     }
     .stat-card {
       background:var(--glass-bg); backdrop-filter:blur(18px);
@@ -154,40 +149,37 @@
     .focus-overlay { position:fixed; inset:0; background:rgba(0,0,0,0.85); backdrop-filter:blur(10px); display:none; flex-direction:column; align-items:center; justify-content:center; gap:20px; z-index:500; }
     .focus-overlay.active { display:flex; }
     .focus-overlay textarea { width:80%; max-width:500px; background:rgba(255,255,255,0.1); color:#fff; border:1px solid rgba(255,255,255,0.3); }
-    /* Exam date modal */
     .modal { position:fixed; inset:0; background:rgba(0,0,0,0.6); backdrop-filter:blur(6px); display:none; justify-content:center; align-items:center; z-index:600; }
     .modal.active { display:flex; }
     .modal-content { background:var(--glass-bg); backdrop-filter:blur(18px); padding:30px; border-radius:var(--radius); border:1px solid var(--glass-border); width:90%; max-width:400px; }
 
-    /* Mobile responsiveness */
+    /* MOBILE */
     @media (max-width:768px) {
       .sidebar { width:270px; transform:translateX(-100%); }
       .sidebar.open { transform:translateX(0); }
       .content { margin-left:0; }
       .timer-display { font-size:3rem; }
-      .header { padding:10px 14px; }
-      .logo { font-size:1.2rem; }
-      .built-by { font-size:0.65rem; padding:3px 10px; }
     }
   </style>
 </head>
 <body>
-  <!-- Backdrop for sidebar -->
+  <!-- Backdrop for mobile sidebar -->
   <div class="backdrop" id="backdrop" onclick="closeSidebar()"></div>
 
   <!-- Sidebar -->
   <nav class="sidebar" id="sidebar">
     <div class="nav-item active" data-section="dashboard" onclick="navigateTo('dashboard')"><span class="icon">📊</span>Dashboard</div>
-    <div class="nav-item" data-section="timer" onclick="navigateTo('timer')"><span class="icon">⏱️</span>Timer<span class="badge">Pomodoro</span></div>
+    <div class="nav-item" data-section="timer" onclick="navigateTo('timer')"><span class="icon">⏱️</span>Timer</div>
     <div class="nav-item" data-section="pyq" onclick="navigateTo('pyq')"><span class="icon">📝</span>PYQ & Papers</div>
     <div class="nav-item" data-section="predictor" onclick="navigateTo('predictor')"><span class="icon">🔮</span>CBQ Predictor</div>
     <div class="nav-item" data-section="notes" onclick="navigateTo('notes')"><span class="icon">📒</span>Notes Maker</div>
     <div class="nav-item" data-section="mindmap" onclick="navigateTo('mindmap')"><span class="icon">🧩</span>Mind Maps</div>
     <div class="nav-item" data-section="quiz" onclick="navigateTo('quiz')"><span class="icon">❓</span>Quizzes</div>
     <div class="nav-item" data-section="flashcards" onclick="navigateTo('flashcards')"><span class="icon">🃏</span>Flash Cards</div>
-    <div class="nav-item" data-section="formulas" onclick="navigateTo('formulas')"><span class="icon">📐</span>Formula Sheets</div>
+    <div class="nav-item" data-section="formulas" onclick="navigateTo('formulas')"><span class="icon">📐</span>Formulas</div>
     <div class="nav-item" data-section="homework" onclick="navigateTo('homework')"><span class="icon">✅</span>Homework</div>
     <div class="nav-item" data-section="doubts" onclick="navigateTo('doubts')"><span class="icon">💬</span>Doubts</div>
+    <div class="nav-item" data-section="weaknesses" onclick="navigateTo('weaknesses')"><span class="icon">📉</span>Weak Areas</div>
     <div class="nav-item" data-section="strategies" onclick="navigateTo('strategies')"><span class="icon">🎯</span>Strategies</div>
     <div class="nav-item" data-section="motivation" onclick="navigateTo('motivation')"><span class="icon">🔥</span>Motivation</div>
   </nav>
@@ -200,11 +192,11 @@
       <span class="built-by">✨ Built by Master Arhan</span>
     </div>
     <div class="header-actions">
-      <select id="boardSelect" onchange="changeBoard()"><option value="CBSE">CBSE</option><option value="ICSE">ICSE</option><option value="State-MH">Maharashtra</option><option value="State-TN">Tamil Nadu</option><option value="State-KA">Karnataka</option></select>
+      <select id="boardSelect" onchange="changeBoard()"><option value="CBSE">CBSE</option><option value="ICSE">ICSE</option><option value="State-MH">Maharashtra</option><option value="State-TN">Tamil Nadu</option></select>
       <select id="classSelect" onchange="changeClass()"><option value="10">Class 10</option><option value="12">Class 12</option></select>
-      <select id="subjectSelect" onchange="changeSubject()"><option value="Mathematics">Maths</option><option value="Physics">Physics</option><option value="Chemistry">Chemistry</option><option value="Biology">Biology</option></select>
+      <select id="subjectSelect" onchange="changeSubject()"><option value="Mathematics">Maths</option><option value="Physics">Physics</option><option value="Chemistry">Chemistry</option></select>
       <button onclick="toggleTheme()" class="btn-icon secondary">🌓</button>
-      <button id="musicToggleBtn" class="btn-icon accent" onclick="toggleMusic()">🎵</button>
+      <button id="musicToggleBtn" class="btn-icon accent" onclick="toggleMusic()" title="Lo‑Fi Beats">🎵</button>
       <button onclick="toggleFocusMode()" class="btn-icon accent" title="Focus Mode">🧘</button>
       <button onclick="openExamModal()" class="btn-icon accent" title="Set Exam Date">📅</button>
       <button onclick="resetWeekData()" class="btn-icon danger" title="Reset Week">🔄</button>
@@ -217,15 +209,18 @@
     <section class="section active" id="section-dashboard">
       <h2>📊 Study Command Center</h2>
       <p>Board: <strong id="dashBoard"></strong> | Class: <strong id="dashClass"></strong> | Subject: <strong id="dashSubject"></strong></p>
-      <div class="grid-3" id="statsGrid" style="grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:12px;"></div>
-      <!-- Exam Countdown Card -->
+      <div class="grid-3" id="statsGrid" style="display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:12px;"></div>
       <div class="card" id="examCountdownCard" style="display:none;">
         <h3>📅 Days Until Exam: <span id="examCountdownDisplay">--</span></h3>
-        <p>Stay focused! Your exam is on <strong id="examDateDisplay"></strong>.</p>
+        <p>Your exam is on <strong id="examDateDisplay"></strong>.</p>
       </div>
       <div class="card">
         <h3>📈 Weekly Progress (hours)</h3>
         <div class="chart-container"><canvas id="weeklyChart"></canvas></div>
+      </div>
+      <div class="card">
+        <h3>🎯 Today's Focus</h3>
+        <p id="dailyFocusAdvice">Complete at least one Pomodoro session and review your weak topics.</p>
       </div>
     </section>
 
@@ -267,16 +262,9 @@
 
     <!-- CBQ Predictor -->
     <section class="section" id="section-predictor">
-      <h2>🔮 CBQ Predictor <span class="exam-badge">Competency‑Based</span></h2>
-      <div class="card">
-        <button onclick="runPrediction()">🔮 Run Prediction</button>
-        <div id="predictionOutput" style="margin-top:12px;"></div>
-      </div>
-      <div class="card">
-        <textarea id="customTopicInput" placeholder="Enter topic..."></textarea>
-        <button onclick="generateCustomQuestions()" style="margin-top:8px;">✨ Generate CBQs</button>
-        <div id="customQOutput" style="margin-top:10px;"></div>
-      </div>
+      <h2>🔮 CBQ Predictor <span style="background:var(--accent);color:#000;padding:2px 8px;border-radius:12px;font-size:0.7rem;">Competency‑Based</span></h2>
+      <div class="card"><button onclick="runPrediction()">Run Prediction</button><div id="predictionOutput" style="margin-top:12px;"></div></div>
+      <div class="card"><textarea id="customTopicInput" placeholder="Enter topic..."></textarea><button onclick="generateCustomQuestions()" style="margin-top:8px;">✨ Generate CBQs</button><div id="customQOutput" style="margin-top:10px;"></div></div>
     </section>
 
     <!-- Notes -->
@@ -299,107 +287,68 @@
     <!-- Mind Map -->
     <section class="section" id="section-mindmap">
       <h2>🧩 Mind Maps</h2>
-      <div class="card">
-        <input type="text" id="mindmapTopic" placeholder="Central topic...">
-        <button onclick="generateMindMap()">🧠 Generate</button>
-        <div id="mindmapCanvas" style="min-height:300px;position:relative;border:1px dashed rgba(255,255,255,0.15);margin-top:10px;"></div>
-      </div>
+      <div class="card"><input type="text" id="mindmapTopic" placeholder="Central topic..."><button onclick="generateMindMap()">🧠 Generate</button><div id="mindmapCanvas" style="min-height:300px;position:relative;border:1px dashed rgba(255,255,255,0.15);margin-top:10px;"></div></div>
     </section>
 
     <!-- Quiz -->
     <section class="section" id="section-quiz">
       <h2>❓ Quick Quiz</h2>
-      <div class="card">
-        <button onclick="startStandardQuiz()">▶ Start Quiz</button>
-        <div id="quizArea"></div>
-        <div id="quizResult"></div>
-      </div>
+      <div class="card"><button onclick="startStandardQuiz()">▶ Start Quiz</button><div id="quizArea"></div><div id="quizResult"></div></div>
     </section>
 
     <!-- Flashcards -->
     <section class="section" id="section-flashcards">
       <h2>🃏 3D Flash Cards</h2>
-      <div class="card">
-        <input type="text" id="fcFront" placeholder="Front...">
-        <input type="text" id="fcBack" placeholder="Back...">
-        <button onclick="addFlashcard()">➕ Add</button>
-      </div>
-      <div class="flashcard" id="flashcardDisplay" onclick="flipFlashcard()">
-        <div class="flashcard-inner">
-          <div class="flashcard-front" id="fcFrontText">🧠 Add cards</div>
-          <div class="flashcard-back" id="fcBackText">✨ Answer</div>
-        </div>
-      </div>
-      <div style="display:flex;gap:8px;justify-content:center;margin-top:8px;">
-        <button onclick="prevFlashcard()" class="secondary btn-sm">◀</button>
-        <span id="fcCounter">0/0</span>
-        <button onclick="nextFlashcard()" class="secondary btn-sm">▶</button>
-        <button onclick="shuffleFlashcards()" class="btn-sm secondary">🔀</button>
-      </div>
+      <div class="card"><input type="text" id="fcFront" placeholder="Front..."><input type="text" id="fcBack" placeholder="Back..."><button onclick="addFlashcard()">➕ Add</button></div>
+      <div class="flashcard" id="flashcardDisplay" onclick="flipFlashcard()"><div class="flashcard-inner"><div class="flashcard-front" id="fcFrontText">🧠 Add cards</div><div class="flashcard-back" id="fcBackText">✨ Answer</div></div></div>
+      <div style="display:flex;gap:8px;justify-content:center;margin-top:8px;"><button onclick="prevFlashcard()" class="secondary btn-sm">◀</button><span id="fcCounter">0/0</span><button onclick="nextFlashcard()" class="secondary btn-sm">▶</button><button onclick="shuffleFlashcards()" class="btn-sm secondary">🔀</button></div>
     </section>
 
     <!-- Formulas -->
     <section class="section" id="section-formulas">
       <h2>📐 Formula Sheet</h2>
-      <div class="card">
-        <h3>Subject: <strong id="formulaSubject"></strong></h3>
-        <button onclick="generateFormulaSheet()">🔄 Refresh</button>
-        <div id="formulaOutput" style="white-space:pre-wrap;font-family:monospace;background:rgba(255,255,255,0.05);padding:14px;border-radius:10px;max-height:400px;overflow-y:auto;margin-top:10px;"></div>
-        <button onclick="copyFormulas()" class="btn-sm secondary">📋 Copy</button>
-      </div>
+      <div class="card"><h3>Subject: <strong id="formulaSubject"></strong></h3><button onclick="generateFormulaSheet()">🔄 Refresh</button><div id="formulaOutput" style="white-space:pre-wrap;font-family:monospace;background:rgba(255,255,255,0.05);padding:14px;border-radius:10px;max-height:400px;overflow-y:auto;margin-top:10px;"></div><button onclick="copyFormulas()" class="btn-sm secondary">📋 Copy</button></div>
     </section>
 
     <!-- Homework -->
     <section class="section" id="section-homework">
       <h2>✅ Homework Tracker</h2>
-      <div class="card">
-        <div style="display:flex;gap:8px;flex-wrap:wrap;">
-          <input type="text" id="hwInput" placeholder="Task..." style="flex:2;">
-          <input type="date" id="hwDate" style="flex:1;">
-        </div>
-        <button onclick="addHomework()" style="margin-top:8px;">➕ Add</button>
-      </div>
+      <div class="card"><div style="display:flex;gap:8px;flex-wrap:wrap;"><input type="text" id="hwInput" placeholder="Task..."><input type="date" id="hwDate" style="flex:1;"></div><button onclick="addHomework()" style="margin-top:8px;">➕ Add</button></div>
       <div id="hwList"></div>
     </section>
 
     <!-- Doubts -->
     <section class="section" id="section-doubts">
       <h2>💬 AI Doubt Solver</h2>
+      <div class="card"><div class="chat-box" id="doubtChat"><div class="chat-msg ai">👋 Ask me anything! (AI ready)</div></div><div style="display:flex;gap:8px;"><input type="text" id="doubtInput" placeholder="Type doubt..." onkeydown="if(event.key==='Enter')askDoubt()"><button onclick="askDoubt()">Send</button></div></div>
+    </section>
+
+    <!-- WEAK AREAS (NEW) -->
+    <section class="section" id="section-weaknesses">
+      <h2>📉 Weak Areas Tracker</h2>
       <div class="card">
-        <div class="chat-box" id="doubtChat"><div class="chat-msg ai">👋 Ask me anything! (AI ready)</div></div>
-        <div style="display:flex;gap:8px;">
-          <input type="text" id="doubtInput" placeholder="Type doubt..." onkeydown="if(event.key==='Enter')askDoubt()">
-          <button onclick="askDoubt()">Send</button>
-        </div>
+        <h3>🛑 Topics I Need to Improve</h3>
+        <div style="display:flex;gap:8px;"><input type="text" id="weakTopicInput" placeholder="e.g., Trigonometry"><button onclick="addWeakTopic()">➕ Add</button></div>
+        <div id="weakTopicsList" style="margin-top:10px;"></div>
+      </div>
+      <div class="card">
+        <h3>🔁 Revision Schedule</h3>
+        <button onclick="generateRevisionSchedule()">📋 Generate Today's Revision Plan</button>
+        <div id="revisionPlan" style="margin-top:10px;"></div>
       </div>
     </section>
 
     <!-- Strategies -->
     <section class="section" id="section-strategies">
       <h2>🎯 Strategies & Tips</h2>
-      <div class="card">
-        <button onclick="generateStrategy()">🎯 Get Strategy</button>
-        <div id="strategyOutput" style="margin-top:12px;"></div>
-      </div>
-      <div class="card">
-        <h3>😌 Last-Minute Pressure Busters</h3>
-        <div id="pressureTips"></div>
-        <button onclick="showPressureTips()" class="btn-sm secondary">🔄 Refresh</button>
-      </div>
+      <div class="card"><button onclick="generateStrategy()">Get Strategy</button><div id="strategyOutput" style="margin-top:12px;"></div></div>
+      <div class="card"><h3>😌 Pressure Busters</h3><div id="pressureTips"></div><button onclick="showPressureTips()" class="btn-sm secondary">🔄 Refresh</button></div>
     </section>
 
     <!-- Motivation -->
     <section class="section" id="section-motivation">
       <h2>🔥 Motivation</h2>
-      <div class="card" style="text-align:center;">
-        <h3 id="motivationQuote"></h3>
-        <p style="color:var(--accent);" id="motivationAuthor"></p>
-        <button onclick="newMotivationQuote()">🔄 New Quote</button>
-      </div>
-      <div class="card">
-        <h3>🏆 Achievements</h3>
-        <div class="grid-3"><div class="stat-card">🌟<br>First Quiz</div><div class="stat-card">🔥<br>5‑Day Streak</div><div class="stat-card">📒<br>10 Notes</div></div>
-      </div>
+      <div class="card" style="text-align:center;"><h3 id="motivationQuote"></h3><p id="motivationAuthor"></p><button onclick="newMotivationQuote()">🔄 New Quote</button></div>
     </section>
   </div>
 
@@ -412,452 +361,476 @@
 
   <!-- Exam Date Modal -->
   <div class="modal" id="examModal">
-    <div class="modal-content">
-      <h3>Set Your Exam Date</h3>
-      <input type="date" id="examDateInput" style="width:100%; margin:15px 0;">
-      <button onclick="saveExamDate()">💾 Save Date</button>
-      <button onclick="closeExamModal()" class="secondary" style="margin-left:10px;">Cancel</button>
-    </div>
+    <div class="modal-content"><h3>Set Your Exam Date</h3><input type="date" id="examDateInput" style="width:100%;margin:15px 0;"><button onclick="saveExamDate()">Save</button><button onclick="closeExamModal()" class="secondary" style="margin-left:10px;">Cancel</button></div>
   </div>
 
-  <!-- Hidden Lo‑Fi Player -->
-  <div id="lofiContainer" style="display:none;"></div>
+  <!-- Hidden Lo‑Fi audio element (ad‑free) -->
+  <audio id="lofiAudio" loop style="display:none;"></audio>
   <div class="toast" id="toast"></div>
 
   <script>
-    // ==================== STATE ENGINE ====================
-    const defaultState = {
-      board:'CBSE', studentClass:'10', subject:'Mathematics', theme:'dark',
-      timer:{ seconds:25*60, mode:25, running:false, interval:null, sessionsToday:0 },
-      stats:{ studyHours:0, quizzes:0, hwDone:0, streak:0 },
-      dailySessions:{}, lastActiveDate:null, lofiPlaying:false,
-      notes:[], homework:[], flashcards:[], examDate: null
-    };
-    let state = JSON.parse(localStorage.getItem('studyAIProState')) || defaultState;
-    state.stats = {...defaultState.stats, ...state.stats};
-    state.timer = {...defaultState.timer, ...state.timer};
-    state.dailySessions = state.dailySessions || {};
-    state.notes = state.notes || [];
-    state.homework = state.homework || [];
-    state.flashcards = state.flashcards || [];
-    state.examDate = state.examDate || null;
+    (function() {
+      // ==================== STATE ENGINE ====================
+      const defaultState = {
+        board: 'CBSE', studentClass: '10', subject: 'Mathematics', theme: 'dark',
+        timer: { seconds: 1500, mode: 25, running: false, interval: null, sessionsToday: 0 },
+        stats: { studyHours: 0, quizzes: 0, hwDone: 0, streak: 0 },
+        dailySessions: {}, lastActiveDate: null, lofiPlaying: false,
+        notes: [], homework: [], flashcards: [], examDate: null,
+        weakTopics: []
+      };
+      let state = JSON.parse(localStorage.getItem('studyAIProState')) || defaultState;
+      // Deep merge
+      state.stats = { ...defaultState.stats, ...state.stats };
+      state.timer = { ...defaultState.timer, ...state.timer };
+      state.dailySessions = state.dailySessions || {};
+      state.notes = state.notes || [];
+      state.homework = state.homework || [];
+      state.flashcards = state.flashcards || [];
+      state.weakTopics = state.weakTopics || [];
 
-    function save() { localStorage.setItem('studyAIProState', JSON.stringify(state)); }
-    function toast(msg) { const t=document.getElementById('toast'); t.textContent=msg; t.style.display='block'; setTimeout(()=>t.style.display='none',2000); }
+      const save = () => localStorage.setItem('studyAIProState', JSON.stringify(state));
+      const toast = msg => { const t=document.getElementById('toast'); t.textContent=msg; t.style.display='block'; setTimeout(()=>t.style.display='none',2000); };
 
-    // ==================== STREAK & TRACKING ====================
-    function updateStreak() {
-      const today = new Date().toLocaleDateString();
-      const sessions = state.dailySessions[today] || 0;
-      if (sessions >= 1) {
-        if (!state.lastActiveDate || state.lastActiveDate !== today) {
-          const yesterday = new Date(Date.now()-86400000).toLocaleDateString();
-          state.stats.streak = (state.lastActiveDate === yesterday) ? (state.stats.streak||0)+1 : 1;
-          state.lastActiveDate = today;
-        }
-      } else {
-        if (state.lastActiveDate && state.lastActiveDate !== today) {
-          const yesterday = new Date(Date.now()-86400000).toLocaleDateString();
-          if (state.lastActiveDate !== yesterday) state.stats.streak = 0;
-        }
-      }
-      save();
-    }
-
-    function addStudyHours(hours) {
-      const today = new Date().toLocaleDateString();
-      state.dailySessions[today] = (state.dailySessions[today] || 0) + 1;
-      state.stats.studyHours = (state.stats.studyHours || 0) + hours;
-      updateStreak();
-      save();
-      refreshDashboard();
-      updateChart();
-    }
-
-    // ==================== EXAM COUNTDOWN ====================
-    function updateExamCountdown() {
-      const card = document.getElementById('examCountdownCard');
-      const display = document.getElementById('examCountdownDisplay');
-      const dateDisplay = document.getElementById('examDateDisplay');
-      if (state.examDate) {
-        const examDate = new Date(state.examDate);
-        const now = new Date();
-        const diffTime = examDate - now;
-        if (diffTime > 0) {
-          const daysLeft = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-          display.textContent = daysLeft + ' day(s)';
-        } else if (diffTime === 0) {
-          display.textContent = 'Today is the exam!';
+      // ==================== STREAK & TRACKING ====================
+      function updateStreak() {
+        const today = new Date().toLocaleDateString();
+        const sessions = state.dailySessions[today] || 0;
+        if (sessions >= 1) {
+          if (!state.lastActiveDate || state.lastActiveDate !== today) {
+            const yesterday = new Date(Date.now()-86400000).toLocaleDateString();
+            state.stats.streak = (state.lastActiveDate === yesterday) ? (state.stats.streak||0)+1 : 1;
+            state.lastActiveDate = today;
+          }
         } else {
-          display.textContent = 'Exam passed';
+          if (state.lastActiveDate && state.lastActiveDate !== today) {
+            const yesterday = new Date(Date.now()-86400000).toLocaleDateString();
+            if (state.lastActiveDate !== yesterday) state.stats.streak = 0;
+          }
         }
-        dateDisplay.textContent = examDate.toLocaleDateString('en-IN', { day:'numeric', month:'long', year:'numeric' });
-        card.style.display = 'block';
-      } else {
-        card.style.display = 'none';
-      }
-    }
-
-    function openExamModal() {
-      document.getElementById('examModal').classList.add('active');
-      if (state.examDate) {
-        document.getElementById('examDateInput').value = state.examDate;
-      }
-    }
-    function closeExamModal() {
-      document.getElementById('examModal').classList.remove('active');
-    }
-    function saveExamDate() {
-      const val = document.getElementById('examDateInput').value;
-      if (val) {
-        state.examDate = val;
         save();
-        updateExamCountdown();
-        toast('Exam date saved!');
       }
-      closeExamModal();
-    }
 
-    // ==================== CHART ====================
-    let weeklyChart;
-    function initChart() {
-      const ctx = document.getElementById('weeklyChart').getContext('2d');
-      weeklyChart = new Chart(ctx, {
-        type:'bar',
-        data:{ labels:['Mon','Tue','Wed','Thu','Fri','Sat','Sun'], datasets:[{label:'Hours',data:[0,0,0,0,0,0,0],backgroundColor:'rgba(108,92,231,0.6)',borderColor:'#6c5ce7',borderWidth:1}] },
-        options:{responsive:true,plugins:{legend:{display:false}},scales:{y:{beginAtZero:true}}}
-      });
-    }
-    function updateChart() {
-      const days = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
-      const monday = new Date(); monday.setDate(monday.getDate()-((monday.getDay()+6)%7));
-      const data = days.map((_,i)=>{
-        const d=new Date(monday); d.setDate(monday.getDate()+i);
-        const key = d.toLocaleDateString();
-        const sessions = state.dailySessions[key] || 0;
-        return sessions * 0.4;
-      });
-      weeklyChart.data.datasets[0].data = data;
-      weeklyChart.update();
-    }
-
-    // ==================== SIDEBAR TOGGLE (global) ====================
-    function toggleSidebar() {
-      const sidebar = document.getElementById('sidebar');
-      sidebar.classList.toggle('hidden');
-      document.getElementById('contentArea').classList.toggle('expanded');
-      // on mobile, also manage backdrop
-      if (window.innerWidth <= 768) {
-        document.getElementById('backdrop').classList.toggle('show');
-        sidebar.classList.toggle('open'); // for mobile slide
+      function addStudyHours(hours) {
+        const today = new Date().toLocaleDateString();
+        state.dailySessions[today] = (state.dailySessions[today] || 0) + 1;
+        state.stats.studyHours = (state.stats.studyHours || 0) + hours;
+        updateStreak();
+        save();
+        refreshDashboard();
+        updateChart();
       }
-    }
-    function closeSidebar() {
-      document.getElementById('sidebar').classList.add('hidden');
-      document.getElementById('contentArea').classList.add('expanded');
-      document.getElementById('backdrop').classList.remove('show');
-    }
 
-    function navigateTo(name) {
-      document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
-      document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
-      const sec = document.getElementById('section-'+name);
-      if(sec) sec.classList.add('active');
-      const nav = document.querySelector(`.nav-item[data-section="${name}"]`);
-      if(nav) nav.classList.add('active');
-      if(name==='dashboard') { refreshDashboard(); updateExamCountdown(); }
-      if(name==='formulas') updateFormulaSubject();
-      if(name==='pyq') document.getElementById('pyqBoardLabel').textContent = `${state.board} Class ${state.studentClass}`;
-      if(window.innerWidth<768) closeSidebar();
-      document.getElementById('contentArea').scrollTop = 0;
-    }
-
-    // ==================== HEADER SYNC ====================
-    function changeBoard(){ state.board=document.getElementById('boardSelect').value; save(); refreshDashboard(); updateFormulaSubject(); }
-    function changeClass(){ state.studentClass=document.getElementById('classSelect').value; save(); refreshDashboard(); }
-    function changeSubject(){ state.subject=document.getElementById('subjectSelect').value; save(); refreshDashboard(); updateFormulaSubject(); }
-
-    function refreshDashboard() {
-      document.getElementById('dashBoard').textContent = state.board;
-      document.getElementById('dashClass').textContent = 'Class '+state.studentClass;
-      document.getElementById('dashSubject').textContent = state.subject;
-      document.getElementById('statsGrid').innerHTML = `
-        <div class="stat-card"><div class="num">${(state.stats.studyHours||0).toFixed(1)}</div><div class="lbl">📖 Hours</div></div>
-        <div class="stat-card"><div class="num">${state.stats.quizzes||0}</div><div class="lbl">❓ Quizzes</div></div>
-        <div class="stat-card"><div class="num">${state.stats.hwDone||0}</div><div class="lbl">✅ HW Done</div></div>
-        <div class="stat-card"><div class="num">${state.stats.streak||0}</div><div class="lbl">🔥 Streak</div></div>
-        <div class="stat-card"><div class="num">${state.notes.length||0}</div><div class="lbl">📒 Notes</div></div>
-      `;
-      document.getElementById('sessionCount').textContent = state.timer.sessionsToday || 0;
-      updateExamCountdown();
-    }
-
-    // ==================== THEME ====================
-    function toggleTheme() {
-      document.body.classList.toggle('light-mode');
-      state.theme = document.body.classList.contains('light-mode')?'light':'dark';
-      save();
-    }
-
-    // ==================== LOFI MUSIC ====================
-    let lofiIframe = null;
-    function toggleMusic() {
-      const btn = document.getElementById('musicToggleBtn');
-      const inlineBtn = document.getElementById('lofiInlineBtn');
-      if (!lofiIframe) {
-        lofiIframe = document.createElement('iframe');
-        lofiIframe.style.display='none';
-        lofiIframe.src = 'https://www.youtube.com/embed/jfKfPfyJRdk?autoplay=1&loop=1&controls=0';
-        lofiIframe.allow = 'autoplay';
-        document.getElementById('lofiContainer').appendChild(lofiIframe);
-        state.lofiPlaying = true;
-        btn.textContent = '🔊'; if(inlineBtn) inlineBtn.textContent = '🔊 Lo‑Fi On';
-      } else {
-        lofiIframe.remove(); lofiIframe = null;
-        state.lofiPlaying = false;
-        btn.textContent = '🎵'; if(inlineBtn) inlineBtn.textContent = '🎵 Lo‑Fi Beats';
-      }
-      save();
-    }
-
-    // ==================== TIMER ====================
-    function updateTimerDisplay() {
-      const m = Math.floor(state.timer.seconds/60), s = state.timer.seconds%60;
-      document.getElementById('timerDisplay').textContent = String(m).padStart(2,'0')+':'+String(s).padStart(2,'0');
-      document.getElementById('focusTimerDisplay') && (document.getElementById('focusTimerDisplay').textContent = document.getElementById('timerDisplay').textContent);
-    }
-    function setTimerMode(min) { state.timer.mode=min; state.timer.seconds=min*60; state.timer.running=false; clearInterval(state.timer.interval); updateTimerDisplay(); save(); }
-    function startTimer() {
-      if(state.timer.running) return;
-      state.timer.running = true;
-      state.timer.interval = setInterval(()=>{
-        if(state.timer.seconds>0){ state.timer.seconds--; updateTimerDisplay(); }
-        else {
-          clearInterval(state.timer.interval); state.timer.running=false;
-          if(state.timer.mode>=25){
-            state.timer.sessionsToday++;
-            addStudyHours(0.4);
-            if(Notification.permission==='granted') new Notification('🍅 Pomodoro Complete',{body:'+0.4 hours'});
-            toast('Session complete! +0.4h');
-          } else toast('Break finished!');
-          document.getElementById('timerLabel').textContent='Done';
-          save();
+      // ==================== EXAM COUNTDOWN ====================
+      function updateExamCountdown() {
+        const card = document.getElementById('examCountdownCard');
+        if (state.examDate) {
+          const exam = new Date(state.examDate);
+          const now = new Date();
+          const diff = Math.ceil((exam - now) / (1000*60*60*24));
+          document.getElementById('examCountdownDisplay').textContent = diff > 0 ? diff + ' day(s)' : (diff === 0 ? 'Today!' : 'Passed');
+          document.getElementById('examDateDisplay').textContent = exam.toLocaleDateString('en-IN', { day:'numeric', month:'long', year:'numeric' });
+          card.style.display = 'block';
+        } else {
+          card.style.display = 'none';
         }
-      },1000);
-      save();
-    }
-    function pauseTimer(){ state.timer.running=false; clearInterval(state.timer.interval); save(); }
-    function resetTimer(){ state.timer.running=false; clearInterval(state.timer.interval); state.timer.seconds=state.timer.mode*60; updateTimerDisplay(); save(); }
-
-    // ==================== FOCUS MODE ====================
-    function toggleFocusMode(){ document.getElementById('focusOverlay').classList.toggle('active'); }
-
-    // ==================== NOTES ====================
-    function autoSaveDraft(){
-      const title = document.getElementById('noteTitle').value, content = document.getElementById('noteContent').value;
-      localStorage.setItem('draftNote', JSON.stringify({title,content}));
-    }
-    function loadDraft(){
-      const d = JSON.parse(localStorage.getItem('draftNote'));
-      if(d){ document.getElementById('noteTitle').value=d.title; document.getElementById('noteContent').value=d.content; }
-    }
-    function saveNote(){
-      const title=document.getElementById('noteTitle').value.trim(), content=document.getElementById('noteContent').value.trim();
-      if(!title||!content) return toast('Fill both');
-      state.notes.unshift({title,content,date:new Date().toLocaleDateString()});
-      localStorage.removeItem('draftNote');
-      clearNoteForm(); save(); renderNotes(); refreshDashboard();
-    }
-    function clearNoteForm(){ document.getElementById('noteTitle').value=''; document.getElementById('noteContent').value=''; }
-    function renderNotes(){
-      const c = document.getElementById('notesList');
-      if(!state.notes.length) c.innerHTML='<div class="card">No notes yet.</div>';
-      else c.innerHTML = state.notes.map((n,i)=>`<div class="card"><small>${n.date}</small><h4>${n.title}</h4><p>${n.content.substring(0,100)}...</p><button class="danger btn-sm" onclick="deleteNote(${i})">🗑</button></div>`).join('');
-    }
-    function deleteNote(i){ state.notes.splice(i,1); save(); renderNotes(); refreshDashboard(); }
-    function exportNotesPDF(){
-      if(!state.notes.length) return toast('No notes');
-      const {jsPDF}=window.jspdf; const doc = new jsPDF(); doc.setFontSize(16); doc.text('StudyAI Notes',20,20);
-      let y=30;
-      state.notes.forEach(n=>{ if(y>270){ doc.addPage(); y=20; } doc.setFontSize(12); doc.text(`${n.title} (${n.date})`,20,y); y+=7; doc.setFontSize(10); doc.text(n.content.substring(0,180),20,y); y+=15; });
-      doc.save('notes.pdf'); toast('PDF downloaded');
-    }
-    function notesToQuiz(){
-      if(!state.notes.length) return toast('Save a note first');
-      const note = state.notes[0];
-      const questions = [
-        {q:`Based on "${note.title}": main idea?`, o:['A','B','C','D'],c:0},
-        {q:`Application of "${note.title}"?`, o:['Real A','Real B','Theory','None'],c:0}
-      ];
-      window.currentQuiz = { questions, score:0, index:0 };
-      navigateTo('quiz');
-      showQuizQuestion();
-    }
-
-    // ==================== QUIZ ====================
-    function startStandardQuiz(){
-      const qs = [{q:'Sin 30°?', o:['0','1/2','1','√3/2'],c:1},{q:'pH of water?', o:['0','5','7','14'],c:2}];
-      window.currentQuiz = { questions:qs, score:0, index:0 };
-      showQuizQuestion();
-    }
-    function showQuizQuestion(){
-      const quiz = window.currentQuiz;
-      if(!quiz || quiz.index >= quiz.questions.length){
-        document.getElementById('quizArea').innerHTML = '<h3>Done!</h3>';
-        document.getElementById('quizResult').innerHTML = `Score: ${quiz.score}/${quiz.questions.length}`;
-        state.stats.quizzes = (state.stats.quizzes||0)+1; save(); refreshDashboard();
-        return;
       }
-      const q = quiz.questions[quiz.index];
-      document.getElementById('quizArea').innerHTML = `
-        <h4>Q${quiz.index+1}: ${q.q}</h4>
-        ${q.o.map((opt,i)=>`<button onclick="answerQuiz(${i},${q.c},${quiz.index})" class="secondary" style="display:block;width:100%;margin:4px 0;">${String.fromCharCode(65+i)}. ${opt}</button>`).join('')}
-      `;
-    }
-    window.answerQuiz = function(sel,cor,idx){
-      if(sel===cor) window.currentQuiz.score++;
-      window.currentQuiz.index++;
-      showQuizQuestion();
-    };
 
-    // ==================== FLASHCARDS ====================
-    function addFlashcard(){
-      const f=document.getElementById('fcFront').value.trim(), b=document.getElementById('fcBack').value.trim();
-      if(!f||!b) return;
-      state.flashcards.push({front:f,back:b}); document.getElementById('fcFront').value=''; document.getElementById('fcBack').value='';
-      save(); updateFlashcardDisplay();
-    }
-    function updateFlashcardDisplay(){
-      if(!state.flashcards.length){
-        document.getElementById('fcFrontText').textContent='Add cards'; document.getElementById('fcBackText').textContent='Answer';
-        document.getElementById('fcCounter').textContent='0/0'; return;
+      window.openExamModal = () => {
+        document.getElementById('examModal').classList.add('active');
+        if (state.examDate) document.getElementById('examDateInput').value = state.examDate;
+      };
+      window.closeExamModal = () => document.getElementById('examModal').classList.remove('active');
+      window.saveExamDate = () => {
+        const val = document.getElementById('examDateInput').value;
+        if (val) { state.examDate = val; save(); updateExamCountdown(); toast('Exam date saved!'); }
+        closeExamModal();
+      };
+
+      // ==================== CHART ====================
+      let weeklyChart;
+      function initChart() {
+        const ctx = document.getElementById('weeklyChart').getContext('2d');
+        weeklyChart = new Chart(ctx, {
+          type: 'bar',
+          data: { labels: ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'], datasets: [{ label:'Hours', data:[0,0,0,0,0,0,0], backgroundColor:'rgba(108,92,231,0.6)', borderColor:'#6c5ce7', borderWidth:1 }] },
+          options: { responsive:true, plugins:{legend:{display:false}}, scales:{y:{beginAtZero:true}} }
+        });
       }
-      const idx = state.flashcardIndex || 0;
-      const card = state.flashcards[idx];
-      document.getElementById('fcFrontText').textContent=card.front; document.getElementById('fcBackText').textContent=card.back;
-      document.getElementById('fcCounter').textContent=`${idx+1}/${state.flashcards.length}`;
-      document.getElementById('flashcardDisplay').classList.remove('flipped');
-    }
-    function flipFlashcard(){ document.getElementById('flashcardDisplay').classList.toggle('flipped'); }
-    function nextFlashcard(){ state.flashcardIndex = ((state.flashcardIndex||0)+1) % state.flashcards.length; updateFlashcardDisplay(); }
-    function prevFlashcard(){ state.flashcardIndex = ((state.flashcardIndex||0)-1+state.flashcards.length)%state.flashcards.length; updateFlashcardDisplay(); }
-    function shuffleFlashcards(){ state.flashcards.sort(()=>Math.random()-0.5); state.flashcardIndex=0; updateFlashcardDisplay(); }
+      function updateChart() {
+        const days = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
+        const monday = new Date(); monday.setDate(monday.getDate()-((monday.getDay()+6)%7));
+        const data = days.map((_,i)=>{
+          const d=new Date(monday); d.setDate(monday.getDate()+i);
+          return (state.dailySessions[d.toLocaleDateString()] || 0) * 0.4;
+        });
+        weeklyChart.data.datasets[0].data = data;
+        weeklyChart.update();
+      }
 
-    // ==================== PYQ ====================
-    function generatePYQ(){
-      const bank = { CBSE:{Mathematics:[`Q1. [CBSE] Solve 2x²-7x+3=0.`]}, ICSE:{Mathematics:[`Q1. [ICSE] Factorise.`]} };
-      const qs = bank[state.board]?.[state.subject] || [`Q1. Practice question.`];
-      document.getElementById('pyqOutput').innerHTML = qs.map(q=>`<div class="chat-msg ai">📝 ${q}</div>`).join('');
-    }
-    function downloadPYQ(){
-      const blob = new Blob([document.getElementById('pyqOutput').innerText],{type:'text/plain'});
-      const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='PYQ.txt'; a.click();
-    }
-
-    // ==================== CBQ ====================
-    function runPrediction(){ document.getElementById('predictionOutput').innerHTML=`<p>📌 Case Study: ...</p><p>📌 Data: ...</p>`; }
-    function generateCustomQuestions(){ document.getElementById('customQOutput').innerHTML='<p>✨ CBQ 1: ...</p><p>✨ CBQ 2: ...</p>'; }
-
-    // ==================== MIND MAP ====================
-    function generateMindMap(){
-      document.getElementById('mindmapCanvas').innerHTML = `
-        <div style="position:absolute;top:40%;left:40%;padding:8px 16px;background:var(--primary);border-radius:20px;">🧠 ${document.getElementById('mindmapTopic').value||'Topic'}</div>
-        <div style="position:absolute;top:10%;left:5%;padding:6px 12px;border:2px solid var(--accent);border-radius:15px;">Branch</div>
-      `;
-    }
-
-    // ==================== FORMULAS ====================
-    function updateFormulaSubject(){ document.getElementById('formulaSubject').textContent=state.subject; }
-    function generateFormulaSheet(){
-      const sheets = {Mathematics:'(a+b)² = a²+2ab+b²', Physics:'V=IR'};
-      document.getElementById('formulaOutput').textContent = sheets[state.subject]||'Formulas...';
-    }
-    function copyFormulas(){ navigator.clipboard.writeText(document.getElementById('formulaOutput').textContent).then(()=>toast('Copied')); }
-
-    // ==================== HOMEWORK ====================
-    function setTodayDate() { document.getElementById('hwDate').valueAsDate = new Date(); }
-    function addHomework(){
-      const t=document.getElementById('hwInput').value.trim();
-      const dateInput = document.getElementById('hwDate');
-      const d = dateInput.value || new Date().toISOString().slice(0,10);
-      if(!t) return;
-      state.homework.unshift({task:t,date:d,done:false});
-      document.getElementById('hwInput').value='';
-      dateInput.valueAsDate = new Date();
-      save(); renderHomework();
-    }
-    function toggleHW(i){ state.homework[i].done=!state.homework[i].done; state.stats.hwDone=state.homework.filter(h=>h.done).length; save(); renderHomework(); refreshDashboard(); }
-    function deleteHW(i){ state.homework.splice(i,1); state.stats.hwDone=state.homework.filter(h=>h.done).length; save(); renderHomework(); refreshDashboard(); }
-    function renderHomework(){
-      const c=document.getElementById('hwList');
-      if(!state.homework.length) c.innerHTML='';
-      else c.innerHTML = state.homework.map((h,i)=>`<div style="display:flex;gap:8px;align-items:center;background:rgba(255,255,255,0.05);padding:8px;border-radius:8px;margin-bottom:4px;"><input type="checkbox" ${h.done?'checked':''} onchange="toggleHW(${i})">${h.task} (📅${h.date})<button class="danger btn-sm" onclick="deleteHW(${i})">🗑</button></div>`).join('');
-    }
-
-    // ==================== DOUBTS (AI ready) ====================
-    async function askDoubt(){
-      const q = document.getElementById('doubtInput').value.trim(); if(!q) return;
-      const chat = document.getElementById('doubtChat');
-      chat.innerHTML += `<div class="chat-msg user">🧑‍🎓 ${q}</div>`;
-      document.getElementById('doubtInput').value='';
-      chat.innerHTML += `<div class="chat-msg ai">🤖 (AI) Good question! ...</div>`;
-      chat.scrollTop = chat.scrollHeight;
-    }
-
-    // ==================== STRATEGIES & MOTIVATION ====================
-    function generateStrategy(){ document.getElementById('strategyOutput').innerHTML=`🎯 ${state.board} ${state.subject}: Week1 NCERT, Week2 PYQs.`; }
-    function showPressureTips(){ document.getElementById('pressureTips').innerHTML='😌 Deep breaths<br>💧 Stay hydrated<br>📋 Quick review'; }
-    const quotes = [
-      {q:'Believe you can and you\'re halfway there.',a:'Theodore Roosevelt'},
-      {q:'Push yourself, because no one else is going to do it for you.',a:'Unknown'},
-      {q:'The expert in anything was once a beginner.',a:'Helen Hayes'}
-    ];
-    function newMotivationQuote(){ const r=quotes[Math.floor(Math.random()*quotes.length)]; document.getElementById('motivationQuote').textContent='"'+r.q+'"'; document.getElementById('motivationAuthor').textContent='— '+r.a; }
-
-    // ==================== WEEKLY RESET ====================
-    function resetWeekData(){ state.dailySessions={}; save(); updateChart(); toast('Week reset'); }
-
-    // ==================== INIT ====================
-    function init(){
-      document.getElementById('boardSelect').value=state.board;
-      document.getElementById('classSelect').value=state.studentClass;
-      document.getElementById('subjectSelect').value=state.subject;
-      if(state.theme==='light') document.body.classList.add('light-mode');
-      // Set homework date to today
-      document.getElementById('hwDate').valueAsDate = new Date();
-      updateTimerDisplay();
-      refreshDashboard();
-      renderNotes();
-      renderHomework();
-      updateFlashcardDisplay();
-      updateFormulaSubject();
-      initChart();
-      updateChart();
-      newMotivationQuote();
-      showPressureTips();
-      loadDraft();
-      updateExamCountdown();
-      if(Notification.permission!=='granted') Notification.requestPermission();
-      if(state.lofiPlaying) { document.getElementById('musicToggleBtn').textContent='🔊'; document.getElementById('lofiInlineBtn') && (document.getElementById('lofiInlineBtn').textContent='🔊 Lo‑Fi On'); }
-      // Sidebar initially visible on desktop, hidden on mobile
-      if (window.innerWidth <= 768) {
+      // ==================== SIDEBAR TOGGLE (global) ====================
+      window.toggleSidebar = () => {
+        const sidebar = document.getElementById('sidebar');
+        sidebar.classList.toggle('hidden');
+        document.getElementById('contentArea').classList.toggle('expanded');
+        if (window.innerWidth <= 768) {
+          document.getElementById('backdrop').classList.toggle('show');
+          sidebar.classList.toggle('open'); // for mobile slide
+        }
+      };
+      window.closeSidebar = () => {
         document.getElementById('sidebar').classList.add('hidden');
         document.getElementById('contentArea').classList.add('expanded');
-      }
-    }
-    init();
-    window.addEventListener('resize', () => {
-      if (window.innerWidth > 768) {
-        document.getElementById('sidebar').classList.remove('hidden','open');
-        document.getElementById('contentArea').classList.remove('expanded');
         document.getElementById('backdrop').classList.remove('show');
-      } else {
-        if (!document.getElementById('sidebar').classList.contains('open')) {
+      };
+
+      // ==================== NAVIGATION ====================
+      window.navigateTo = name => {
+        document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+        document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+        const sec = document.getElementById('section-'+name);
+        if(sec) sec.classList.add('active');
+        const nav = document.querySelector(`.nav-item[data-section="${name}"]`);
+        if(nav) nav.classList.add('active');
+        if(name==='dashboard') { refreshDashboard(); updateExamCountdown(); }
+        if(name==='formulas') updateFormulaSubject();
+        if(name==='pyq') document.getElementById('pyqBoardLabel').textContent = `${state.board} Class ${state.studentClass}`;
+        if(name==='weaknesses') renderWeakTopics();
+        if(window.innerWidth<768) closeSidebar();
+        document.getElementById('contentArea').scrollTop = 0;
+      };
+
+      // ==================== HEADER SYNC ====================
+      window.changeBoard = () => { state.board = document.getElementById('boardSelect').value; save(); refreshDashboard(); updateFormulaSubject(); };
+      window.changeClass = () => { state.studentClass = document.getElementById('classSelect').value; save(); refreshDashboard(); };
+      window.changeSubject = () => { state.subject = document.getElementById('subjectSelect').value; save(); refreshDashboard(); updateFormulaSubject(); };
+
+      function refreshDashboard() {
+        document.getElementById('dashBoard').textContent = state.board;
+        document.getElementById('dashClass').textContent = 'Class '+state.studentClass;
+        document.getElementById('dashSubject').textContent = state.subject;
+        document.getElementById('statsGrid').innerHTML = `
+          <div class="stat-card"><div class="num">${(state.stats.studyHours||0).toFixed(1)}</div><div class="lbl">📖 Hours</div></div>
+          <div class="stat-card"><div class="num">${state.stats.quizzes||0}</div><div class="lbl">❓ Quizzes</div></div>
+          <div class="stat-card"><div class="num">${state.stats.hwDone||0}</div><div class="lbl">✅ HW Done</div></div>
+          <div class="stat-card"><div class="num">${state.stats.streak||0}</div><div class="lbl">🔥 Streak</div></div>
+          <div class="stat-card"><div class="num">${state.notes.length||0}</div><div class="lbl">📒 Notes</div></div>
+        `;
+        document.getElementById('sessionCount').textContent = state.timer.sessionsToday || 0;
+        updateDailyFocus();
+        updateExamCountdown();
+      }
+
+      function updateDailyFocus() {
+        let advice = 'Complete at least one Pomodoro session today.';
+        if (state.weakTopics.length > 0) {
+          advice = `Today, revise: <strong>${state.weakTopics[0]}</strong>. Then do 10 practice questions.`;
+        }
+        if (state.stats.streak >= 5) advice += ' 🔥 Amazing streak! Keep it up.';
+        document.getElementById('dailyFocusAdvice').innerHTML = advice;
+      }
+
+      // ==================== THEME ====================
+      window.toggleTheme = () => {
+        document.body.classList.toggle('light-mode');
+        state.theme = document.body.classList.contains('light-mode') ? 'light' : 'dark';
+        save();
+      };
+
+      // ==================== LOFI AD‑FREE MUSIC (using audio element) ====================
+      const lofiAudio = document.getElementById('lofiAudio');
+      // Using a royalty‑free Lo‑Fi track (Creative Commons)
+      lofiAudio.src = 'https://www.bensound.com/bensound-music/bensound-lofi.mp3'; // works as sample, replace with any ad‑free stream
+      window.toggleMusic = () => {
+        if (state.lofiPlaying) {
+          lofiAudio.pause();
+          state.lofiPlaying = false;
+          document.getElementById('musicToggleBtn').textContent = '🎵';
+          document.getElementById('lofiInlineBtn') && (document.getElementById('lofiInlineBtn').textContent = '🎵 Lo‑Fi Beats');
+        } else {
+          lofiAudio.play().catch(() => toast('Click again to play (browser requires interaction)'));
+          state.lofiPlaying = true;
+          document.getElementById('musicToggleBtn').textContent = '🔊';
+          document.getElementById('lofiInlineBtn') && (document.getElementById('lofiInlineBtn').textContent = '🔊 Lo‑Fi On');
+        }
+        save();
+      };
+
+      // ==================== TIMER ====================
+      function updateTimerDisplay() {
+        const m = Math.floor(state.timer.seconds/60), s = state.timer.seconds%60;
+        document.getElementById('timerDisplay').textContent = String(m).padStart(2,'0')+':'+String(s).padStart(2,'0');
+        document.getElementById('focusTimerDisplay') && (document.getElementById('focusTimerDisplay').textContent = document.getElementById('timerDisplay').textContent);
+      }
+      window.setTimerMode = min => {
+        state.timer.mode = min; state.timer.seconds = min*60;
+        state.timer.running = false; clearInterval(state.timer.interval);
+        updateTimerDisplay(); save();
+      };
+      window.startTimer = () => {
+        if(state.timer.running) return;
+        state.timer.running = true;
+        state.timer.interval = setInterval(() => {
+          if(state.timer.seconds > 0) { state.timer.seconds--; updateTimerDisplay(); }
+          else {
+            clearInterval(state.timer.interval); state.timer.running = false;
+            if(state.timer.mode >= 25) {
+              state.timer.sessionsToday++;
+              addStudyHours(0.4);
+              if(Notification.permission==='granted') new Notification('🍅 Pomodoro Complete',{body:'+0.4 hours'});
+              toast('Session complete! +0.4h');
+            } else toast('Break finished!');
+            document.getElementById('timerLabel').textContent = 'Done';
+            save();
+          }
+        }, 1000);
+        save();
+      };
+      window.pauseTimer = () => { state.timer.running=false; clearInterval(state.timer.interval); save(); };
+      window.resetTimer = () => { state.timer.running=false; clearInterval(state.timer.interval); state.timer.seconds=state.timer.mode*60; updateTimerDisplay(); save(); };
+
+      // ==================== FOCUS MODE ====================
+      window.toggleFocusMode = () => document.getElementById('focusOverlay').classList.toggle('active');
+
+      // ==================== NOTES ====================
+      window.autoSaveDraft = () => {
+        localStorage.setItem('draftNote', JSON.stringify({
+          title: document.getElementById('noteTitle').value,
+          content: document.getElementById('noteContent').value
+        }));
+      };
+      function loadDraft() {
+        const d = JSON.parse(localStorage.getItem('draftNote'));
+        if(d) { document.getElementById('noteTitle').value = d.title; document.getElementById('noteContent').value = d.content; }
+      }
+      window.saveNote = () => {
+        const t = document.getElementById('noteTitle').value.trim(), c = document.getElementById('noteContent').value.trim();
+        if(!t||!c) return toast('Fill both fields');
+        state.notes.unshift({title:t, content:c, date: new Date().toLocaleDateString()});
+        localStorage.removeItem('draftNote');
+        clearNoteForm(); save(); renderNotes(); refreshDashboard();
+      };
+      window.clearNoteForm = () => { document.getElementById('noteTitle').value=''; document.getElementById('noteContent').value=''; };
+      function renderNotes() {
+        const container = document.getElementById('notesList');
+        if(!state.notes.length) container.innerHTML = '<div class="card">No notes yet.</div>';
+        else container.innerHTML = state.notes.map((n,i)=>`<div class="card"><small>${n.date}</small><h4>${n.title}</h4><p>${n.content.substring(0,100)}...</p><button class="danger btn-sm" onclick="deleteNote(${i})">🗑</button></div>`).join('');
+      }
+      window.deleteNote = i => { state.notes.splice(i,1); save(); renderNotes(); refreshDashboard(); };
+      window.exportNotesPDF = () => {
+        if(!state.notes.length) return toast('No notes');
+        const {jsPDF}=window.jspdf; const doc=new jsPDF(); doc.setFontSize(16); doc.text('Notes',20,20);
+        let y=30;
+        state.notes.forEach(n=>{ if(y>270){ doc.addPage(); y=20; } doc.setFontSize(12); doc.text(`${n.title} (${n.date})`,20,y); y+=7; doc.setFontSize(10); doc.text(n.content.substring(0,150),20,y); y+=15; });
+        doc.save('notes.pdf'); toast('PDF downloaded');
+      };
+      window.notesToQuiz = () => {
+        if(!state.notes.length) return toast('Save a note first');
+        const note = state.notes[0];
+        window.currentQuiz = { questions:[
+          {q:`Main idea of "${note.title}"?`, o:['A','B','C','D'],c:0},
+          {q:`Application of "${note.title}"?`, o:['Real A','Real B','Theory','None'],c:0}
+        ], score:0, index:0 };
+        navigateTo('quiz');
+        showQuizQuestion();
+      };
+
+      // ==================== QUIZ ====================
+      window.startStandardQuiz = () => {
+        window.currentQuiz = { questions:[
+          {q:'Sin 30°?', o:['0','1/2','1','√3/2'],c:1},
+          {q:'pH of water?', o:['0','5','7','14'],c:2}
+        ], score:0, index:0 };
+        showQuizQuestion();
+      };
+      function showQuizQuestion() {
+        const quiz = window.currentQuiz;
+        if(!quiz || quiz.index >= quiz.questions.length) {
+          document.getElementById('quizArea').innerHTML = '<h3>Done!</h3>';
+          document.getElementById('quizResult').innerHTML = `Score: ${quiz.score}/${quiz.questions.length}`;
+          state.stats.quizzes = (state.stats.quizzes||0)+1; save(); refreshDashboard();
+          return;
+        }
+        const q = quiz.questions[quiz.index];
+        document.getElementById('quizArea').innerHTML = `
+          <h4>Q${quiz.index+1}: ${q.q}</h4>
+          ${q.o.map((opt,i)=>`<button onclick="answerQuiz(${i},${q.c},${quiz.index})" class="secondary" style="display:block;width:100%;margin:4px 0;">${String.fromCharCode(65+i)}. ${opt}</button>`).join('')}
+        `;
+      }
+      window.answerQuiz = (sel,cor,idx) => {
+        if(sel===cor) window.currentQuiz.score++;
+        window.currentQuiz.index++;
+        showQuizQuestion();
+      };
+
+      // ==================== FLASHCARDS ====================
+      window.addFlashcard = () => {
+        const f=document.getElementById('fcFront').value.trim(), b=document.getElementById('fcBack').value.trim();
+        if(!f||!b) return;
+        state.flashcards.push({front:f,back:b});
+        document.getElementById('fcFront').value=''; document.getElementById('fcBack').value='';
+        save(); updateFlashcardDisplay();
+      };
+      function updateFlashcardDisplay() {
+        if(!state.flashcards.length) {
+          document.getElementById('fcFrontText').textContent='Add cards'; document.getElementById('fcBackText').textContent='Answer';
+          document.getElementById('fcCounter').textContent='0/0'; return;
+        }
+        const idx = state.fcIndex || 0;
+        const card = state.flashcards[idx];
+        document.getElementById('fcFrontText').textContent=card.front; document.getElementById('fcBackText').textContent=card.back;
+        document.getElementById('fcCounter').textContent=`${idx+1}/${state.flashcards.length}`;
+        document.getElementById('flashcardDisplay').classList.remove('flipped');
+      }
+      window.flipFlashcard = () => document.getElementById('flashcardDisplay').classList.toggle('flipped');
+      window.nextFlashcard = () => { state.fcIndex = ((state.fcIndex||0)+1) % state.flashcards.length; updateFlashcardDisplay(); };
+      window.prevFlashcard = () => { state.fcIndex = ((state.fcIndex||0)-1+state.flashcards.length) % state.flashcards.length; updateFlashcardDisplay(); };
+      window.shuffleFlashcards = () => { state.flashcards.sort(()=>Math.random()-0.5); state.fcIndex=0; updateFlashcardDisplay(); };
+
+      // ==================== PYQ ====================
+      window.generatePYQ = () => {
+        const bank = { CBSE:{Mathematics:['Q1. Solve 2x²-7x+3=0.']} };
+        document.getElementById('pyqOutput').innerHTML = (bank[state.board]?.[state.subject]||['Q1. Practice']).map(q=>`<div class="chat-msg ai">📝 ${q}</div>`).join('');
+      };
+      window.downloadPYQ = () => {
+        const blob = new Blob([document.getElementById('pyqOutput').innerText],{type:'text/plain'});
+        const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='PYQ.txt'; a.click();
+      };
+
+      // ==================== CBQ ====================
+      window.runPrediction = () => document.getElementById('predictionOutput').innerHTML = '<p>📌 Case Study...</p>';
+      window.generateCustomQuestions = () => document.getElementById('customQOutput').innerHTML = '<p>✨ CBQs generated.</p>';
+
+      // ==================== MIND MAP ====================
+      window.generateMindMap = () => {
+        document.getElementById('mindmapCanvas').innerHTML = `
+          <div style="position:absolute;top:40%;left:40%;padding:8px 16px;background:var(--primary);border-radius:20px;">🧠 ${document.getElementById('mindmapTopic').value||'Topic'}</div>
+        `;
+      };
+
+      // ==================== FORMULAS ====================
+      function updateFormulaSubject() { document.getElementById('formulaSubject').textContent=state.subject; }
+      window.generateFormulaSheet = () => {
+        const sheets = {Mathematics:'(a+b)² = a²+2ab+b²', Physics:'V=IR'};
+        document.getElementById('formulaOutput').textContent = sheets[state.subject]||'Formulas...';
+      };
+      window.copyFormulas = () => navigator.clipboard.writeText(document.getElementById('formulaOutput').textContent).then(()=>toast('Copied'));
+
+      // ==================== HOMEWORK ====================
+      window.addHomework = () => {
+        const t=document.getElementById('hwInput').value.trim(), d=document.getElementById('hwDate').value||new Date().toISOString().slice(0,10);
+        if(!t) return;
+        state.homework.unshift({task:t,date:d,done:false});
+        document.getElementById('hwInput').value=''; save(); renderHomework();
+      };
+      window.toggleHW = i => { state.homework[i].done=!state.homework[i].done; state.stats.hwDone=state.homework.filter(h=>h.done).length; save(); renderHomework(); refreshDashboard(); };
+      window.deleteHW = i => { state.homework.splice(i,1); state.stats.hwDone=state.homework.filter(h=>h.done).length; save(); renderHomework(); refreshDashboard(); };
+      function renderHomework() {
+        const c=document.getElementById('hwList');
+        if(!state.homework.length) c.innerHTML='';
+        else c.innerHTML = state.homework.map((h,i)=>`<div style="display:flex;gap:8px;align-items:center;background:rgba(255,255,255,0.05);padding:8px;border-radius:8px;margin-bottom:4px;"><input type="checkbox" ${h.done?'checked':''} onchange="toggleHW(${i})">${h.task} (📅${h.date})<button class="danger btn-sm" onclick="deleteHW(${i})">🗑</button></div>`).join('');
+      }
+
+      // ==================== DOUBTS ====================
+      window.askDoubt = () => {
+        const q = document.getElementById('doubtInput').value.trim(); if(!q) return;
+        const chat = document.getElementById('doubtChat');
+        chat.innerHTML += `<div class="chat-msg user">🧑‍🎓 ${q}</div>`;
+        document.getElementById('doubtInput').value='';
+        chat.innerHTML += `<div class="chat-msg ai">🤖 Good question! ...</div>`;
+        chat.scrollTop = chat.scrollHeight;
+      };
+
+      // ==================== WEAK AREAS ====================
+      window.addWeakTopic = () => {
+        const val = document.getElementById('weakTopicInput').value.trim();
+        if(!val) return;
+        state.weakTopics.push(val);
+        document.getElementById('weakTopicInput').value = '';
+        save(); renderWeakTopics();
+      };
+      function renderWeakTopics() {
+        const list = document.getElementById('weakTopicsList');
+        if(!state.weakTopics.length) list.innerHTML = '<p>No weak topics added yet.</p>';
+        else list.innerHTML = state.weakTopics.map((t,i)=>`<div style="display:flex;justify-content:space-between;background:rgba(255,255,255,0.05);padding:8px;border-radius:8px;margin-bottom:4px;"><span>📉 ${t}</span><button class="danger btn-sm" onclick="removeWeakTopic(${i})">✕</button></div>`).join('');
+        updateDailyFocus();
+      }
+      window.removeWeakTopic = i => { state.weakTopics.splice(i,1); save(); renderWeakTopics(); };
+      window.generateRevisionSchedule = () => {
+        const plan = document.getElementById('revisionPlan');
+        if(!state.weakTopics.length) {
+          plan.innerHTML = '<p>No weak topics to revise. Add some first!</p>'; return;
+        }
+        plan.innerHTML = `<p>📅 <strong>Today's Revision Plan:</strong></p><ul>${state.weakTopics.map(t=>`<li>30 min focused practice on <strong>${t}</strong></li>`).join('')}</ul><p>Take a 5‑min break after each topic.</p>`;
+      };
+
+      // ==================== STRATEGIES & MOTIVATION ====================
+      window.generateStrategy = () => document.getElementById('strategyOutput').innerHTML = `🎯 ${state.board} ${state.subject}: Week1 NCERT, Week2 PYQs.`;
+      window.showPressureTips = () => document.getElementById('pressureTips').innerHTML = '😌 Deep breaths<br>💧 Stay hydrated';
+      const quotes = [
+        {q:'Believe you can and you\'re halfway there.',a:'Theodore Roosevelt'},
+        {q:'Push yourself, because no one else will.',a:'Unknown'},
+        {q:'The expert in anything was once a beginner.',a:'Helen Hayes'}
+      ];
+      window.newMotivationQuote = () => {
+        const r = quotes[Math.floor(Math.random()*quotes.length)];
+        document.getElementById('motivationQuote').textContent = '"'+r.q+'"';
+        document.getElementById('motivationAuthor').textContent = '— '+r.a;
+      };
+
+      // ==================== WEEKLY RESET ====================
+      window.resetWeekData = () => { state.dailySessions = {}; save(); updateChart(); toast('Week reset'); };
+
+      // ==================== INITIALIZATION ====================
+      function init() {
+        document.getElementById('boardSelect').value = state.board;
+        document.getElementById('classSelect').value = state.studentClass;
+        document.getElementById('subjectSelect').value = state.subject;
+        if(state.theme==='light') document.body.classList.add('light-mode');
+        document.getElementById('hwDate').valueAsDate = new Date();
+        updateTimerDisplay();
+        refreshDashboard();
+        renderNotes();
+        renderHomework();
+        updateFlashcardDisplay();
+        updateFormulaSubject();
+        initChart();
+        updateChart();
+        newMotivationQuote();
+        showPressureTips();
+        loadDraft();
+        updateExamCountdown();
+        renderWeakTopics();
+        if(Notification.permission!=='granted') Notification.requestPermission();
+        if(state.lofiPlaying) {
+          document.getElementById('musicToggleBtn').textContent = '🔊';
+          document.getElementById('lofiInlineBtn') && (document.getElementById('lofiInlineBtn').textContent = '🔊 Lo‑Fi On');
+          lofiAudio.play().catch(()=>{});
+        }
+        // Desktop: sidebar open by default; can close via hamburger
+        if(window.innerWidth > 768) {
+          document.getElementById('sidebar').classList.remove('hidden');
+          document.getElementById('contentArea').classList.remove('expanded');
+        } else {
           document.getElementById('sidebar').classList.add('hidden');
           document.getElementById('contentArea').classList.add('expanded');
         }
       }
-    });
+      init();
+
+      // Resize handling
+      window.addEventListener('resize', () => {
+        if(window.innerWidth > 768) {
+          document.getElementById('sidebar').classList.remove('hidden','open');
+          document.getElementById('contentArea').classList.remove('expanded');
+          document.getElementById('backdrop').classList.remove('show');
+        } else {
+          document.getElementById('sidebar').classList.add('hidden');
+          document.getElementById('contentArea').classList.add('expanded');
+          document.getElementById('backdrop').classList.remove('show');
+        }
+      });
+    })();
   </script>
 </body>
 </html>
