@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <meta name="theme-color" content="#0a0a14">
-  <title>StudyAI Pro | Ultimate Study Hub</title>
+  <title>StudyAI Pro | #1 Study Hub</title>
   <!-- Chart.js & jsPDF -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
@@ -52,22 +52,14 @@
     .header {
       background: var(--glass-bg); backdrop-filter: blur(18px);
       border-bottom:1px solid var(--glass-border);
-      padding:12px 20px; display:flex; align-items:center; justify-content:space-between;
-      flex-wrap:wrap; gap:10px; position:sticky; top:0; z-index:110;
+      padding:12px 20px;
+      display:flex; align-items:center; justify-content:space-between;
+      flex-wrap:wrap; gap:10px;
+      position:sticky; top:0; z-index:110;
     }
     .logo-area { display:flex; align-items:center; gap:12px; flex-wrap:nowrap; }
-    .logo {
-      font-size:1.5rem; font-weight:900;
-      background:linear-gradient(135deg,var(--primary2),var(--accent));
-      -webkit-background-clip:text; -webkit-text-fill-color:transparent;
-      cursor:pointer; white-space:nowrap;
-    }
-    .built-by {
-      font-size:0.7rem; color:var(--text2);
-      background:rgba(108,92,231,0.15); padding:4px 12px;
-      border-radius:20px; border:1px solid rgba(108,92,231,0.3);
-      white-space:nowrap; letter-spacing:0.3px;
-    }
+    .logo { font-size:1.5rem; font-weight:900; background:linear-gradient(135deg,var(--primary2),var(--accent)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; cursor:pointer; white-space:nowrap; }
+    .built-by { font-size:0.7rem; color:var(--text2); background:rgba(108,92,231,0.15); padding:4px 12px; border-radius:20px; border:1px solid rgba(108,92,231,0.3); white-space:nowrap; }
     .header-actions { display:flex; gap:8px; align-items:center; flex-wrap:wrap; }
     select, button, input, textarea {
       padding:10px 15px; border-radius:25px;
@@ -89,7 +81,7 @@
     .btn-icon { width:36px; height:36px; border-radius:50%; padding:0; display:flex; align-items:center; justify-content:center; font-size:1.1rem; }
     .hamburger { background:none; border:none; font-size:1.5rem; color:var(--text); cursor:pointer; }
 
-    /* Sidebar (collapsible globally) */
+    /* Sidebar */
     .sidebar {
       position:fixed; top:0; left:0; height:100vh; width:260px;
       background:var(--glass-bg); backdrop-filter:blur(18px);
@@ -144,7 +136,8 @@
     .chat-msg.user { background:var(--primary); color:#fff; align-self:flex-end; }
     .chat-msg.ai { background:rgba(255,255,255,0.1); align-self:flex-start; }
     .toast { position:fixed; bottom:30px; right:30px; background:var(--success); color:#fff; padding:12px 24px; border-radius:28px; z-index:999; display:none; font-weight:600; }
-    /* Focus Mode - hide header & sidebar */
+
+    /* Focus Mode */
     body.focus-mode .header, body.focus-mode .sidebar, body.focus-mode .backdrop { display:none; }
     body.focus-mode .content { margin-left:0; padding:0; }
     .focus-overlay {
@@ -153,8 +146,11 @@
     }
     body.focus-mode .focus-overlay { display:flex; }
     .focus-overlay textarea { width:80%; max-width:500px; background:rgba(255,255,255,0.1); color:#fff; border:1px solid rgba(255,255,255,0.3); }
-    /* Quick Tasks */
+
     .quick-task-item { display:flex; gap:8px; align-items:center; background:rgba(255,255,255,0.05); padding:8px; border-radius:8px; margin-bottom:4px; }
+    .modal { position:fixed; inset:0; background:rgba(0,0,0,0.6); backdrop-filter:blur(6px); display:none; justify-content:center; align-items:center; z-index:600; }
+    .modal.active { display:flex; }
+    .modal-content { background:var(--glass-bg); backdrop-filter:blur(18px); padding:30px; border-radius:var(--radius); border:1px solid var(--glass-border); width:90%; max-width:400px; }
 
     /* Mobile */
     @media (max-width:768px) {
@@ -162,12 +158,12 @@
       .sidebar.open { transform:translateX(0); }
       .content { margin-left:0; }
       .timer-display { font-size:3rem; }
+      .backdrop.show { display:block; }
     }
   </style>
 </head>
 <body>
-
-  <!-- Backdrop for mobile sidebar -->
+  <!-- Backdrop -->
   <div class="backdrop" id="backdrop" onclick="closeSidebar()"></div>
 
   <!-- Sidebar -->
@@ -344,7 +340,7 @@
     </section>
   </div>
 
-  <!-- Focus Overlay (visible only in focus mode) -->
+  <!-- Focus Overlay -->
   <div class="focus-overlay" id="focusOverlay">
     <button class="exit-focus danger" onclick="toggleFocusMode()">✕ Exit Focus</button>
     <div class="timer-display" id="focusTimerDisplay">25:00</div>
@@ -352,8 +348,8 @@
   </div>
 
   <!-- Exam Date Modal -->
-  <div class="modal" id="examModal" style="position:fixed;inset:0;background:rgba(0,0,0,0.6);backdrop-filter:blur(6px);display:none;justify-content:center;align-items:center;z-index:600;">
-    <div style="background:var(--glass-bg);backdrop-filter:blur(18px);padding:30px;border-radius:var(--radius);border:1px solid var(--glass-border);width:90%;max-width:400px;">
+  <div class="modal" id="examModal">
+    <div class="modal-content">
       <h3>Set Exam Date</h3>
       <input type="date" id="examDateInput" style="width:100%;margin:15px 0;">
       <button onclick="saveExamDate()">Save</button>
@@ -361,8 +357,8 @@
     </div>
   </div>
 
-  <div class="toast" id="toast"></div>
   <audio id="lofiAudio" loop style="display:none;"></audio>
+  <div class="toast" id="toast"></div>
 
   <script>
     (() => {
@@ -427,10 +423,10 @@
         } else card.style.display = 'none';
       }
       window.openExamModal = () => {
-        document.getElementById('examModal').style.display = 'flex';
+        document.getElementById('examModal').classList.add('active');
         if (state.examDate) document.getElementById('examDateInput').value = state.examDate;
       };
-      window.closeExamModal = () => document.getElementById('examModal').style.display = 'none';
+      window.closeExamModal = () => document.getElementById('examModal').classList.remove('active');
       window.saveExamDate = () => {
         const val = document.getElementById('examDateInput').value;
         if (val) { state.examDate = val; save(); updateExamCountdown(); toast('Exam date saved!'); }
@@ -517,54 +513,51 @@
         save();
       };
 
-      /* ---------- MUSIC (ad‑free reliable player) ---------- */
+      /* ---------- MUSIC (reliable Audio object) ---------- */
       const lofiAudio = document.getElementById('lofiAudio');
-      // Use a royalty‑free Lo‑Fi stream (Creative Commons). If fails, we fallback to silent audio.
-      lofiAudio.src = 'https://www.bensound.com/bensound-music/bensound-lofi.mp3';
+      lofiAudio.src = 'https://www.bensound.com/bensound-music/bensound-lofi.mp3'; // royalty-free
+      lofiAudio.load();
       window.toggleMusic = () => {
-        if (state.lofiPlaying) {
-          lofiAudio.pause();
-          state.lofiPlaying = false;
-          document.getElementById('musicToggleBtn').textContent = '🎵';
-          const inline = document.getElementById('lofiInlineBtn');
-          if (inline) inline.textContent = '🎵 Lo‑Fi Beats';
-        } else {
+        if (lofiAudio.paused) {
           lofiAudio.play().then(() => {
             state.lofiPlaying = true;
             document.getElementById('musicToggleBtn').textContent = '⏸️';
             const inline = document.getElementById('lofiInlineBtn');
             if (inline) inline.textContent = '⏸️ Lo‑Fi On';
             save();
-          }).catch(() => {
-            toast('⚠️ Audio could not play. Try again.');
-            // Still set playing state to false
-            state.lofiPlaying = false;
-          });
+          }).catch(() => toast('⚠️ Playback failed. Try again.'));
+        } else {
+          lofiAudio.pause();
+          state.lofiPlaying = false;
+          document.getElementById('musicToggleBtn').textContent = '🎵';
+          const inline = document.getElementById('lofiInlineBtn');
+          if (inline) inline.textContent = '🎵 Lo‑Fi Beats';
+          save();
         }
       };
 
       /* ---------- TIMER ---------- */
       function updateTimerDisplay() {
-        const m = Math.floor(state.timer.seconds / 60), s = state.timer.seconds % 60;
+        const m = Math.floor(state.timer.seconds/60), s = state.timer.seconds%60;
         document.getElementById('timerDisplay').textContent = String(m).padStart(2,'0')+':'+String(s).padStart(2,'0');
         document.getElementById('focusTimerDisplay').textContent = document.getElementById('timerDisplay').textContent;
       }
       window.setTimerMode = min => {
-        state.timer.mode = min; state.timer.seconds = min * 60;
+        state.timer.mode = min; state.timer.seconds = min*60;
         state.timer.running = false; clearInterval(state.timer.interval);
         updateTimerDisplay(); save();
       };
       window.startTimer = () => {
-        if (state.timer.running) return;
+        if(state.timer.running) return;
         state.timer.running = true;
         state.timer.interval = setInterval(() => {
-          if (state.timer.seconds > 0) { state.timer.seconds--; updateTimerDisplay(); }
+          if(state.timer.seconds > 0) { state.timer.seconds--; updateTimerDisplay(); }
           else {
             clearInterval(state.timer.interval); state.timer.running = false;
-            if (state.timer.mode >= 25) {
+            if(state.timer.mode >= 25) {
               state.timer.sessionsToday++;
               addStudyHours(0.4);
-              if (Notification.permission === 'granted') new Notification('🍅 Pomodoro Complete', { body: '+0.4 hours' });
+              if(Notification.permission==='granted') new Notification('🍅 Pomodoro Complete',{body:'+0.4 hours'});
               toast('Session complete! +0.4h');
             } else toast('Break finished!');
             document.getElementById('timerLabel').textContent = 'Done';
@@ -573,8 +566,8 @@
         }, 1000);
         save();
       };
-      window.pauseTimer = () => { state.timer.running = false; clearInterval(state.timer.interval); save(); };
-      window.resetTimer = () => { state.timer.running = false; clearInterval(state.timer.interval); state.timer.seconds = state.timer.mode * 60; updateTimerDisplay(); save(); };
+      window.pauseTimer = () => { state.timer.running=false; clearInterval(state.timer.interval); save(); };
+      window.resetTimer = () => { state.timer.running=false; clearInterval(state.timer.interval); state.timer.seconds=state.timer.mode*60; updateTimerDisplay(); save(); };
 
       /* ---------- FOCUS MODE ---------- */
       window.toggleFocusMode = () => document.body.classList.toggle('focus-mode');
@@ -583,8 +576,8 @@
       window.addQuickTask = () => {
         const input = document.getElementById('quickTaskInput');
         const val = input.value.trim();
-        if (!val) return;
-        state.quickTasks.push({ text: val, done: false });
+        if(!val) return;
+        state.quickTasks.push({text: val, done: false});
         input.value = '';
         save(); renderQuickTasks();
       };
@@ -593,105 +586,85 @@
         save(); renderQuickTasks();
       };
       window.deleteQuickTask = i => {
-        state.quickTasks.splice(i, 1);
+        state.quickTasks.splice(i,1);
         save(); renderQuickTasks();
       };
       function renderQuickTasks() {
         const container = document.getElementById('quickTaskList');
-        if (!state.quickTasks.length) container.innerHTML = '<p style="color:var(--text2);">No quick tasks yet.</p>';
-        else container.innerHTML = state.quickTasks.map((t, i) => `
+        if(!state.quickTasks.length) container.innerHTML = '<p style="color:var(--text2);">No tasks yet.</p>';
+        else container.innerHTML = state.quickTasks.map((t,i) => `
           <div class="quick-task-item">
-            <input type="checkbox" ${t.done ? 'checked' : ''} onchange="toggleQuickTask(${i})">
+            <input type="checkbox" ${t.done?'checked':''} onchange="toggleQuickTask(${i})">
             <span style="flex:1; text-decoration:${t.done?'line-through':'none'};">${t.text}</span>
             <button class="btn-sm danger" onclick="deleteQuickTask(${i})">✕</button>
           </div>
         `).join('');
-        // also update homework stats if needed
-        document.getElementById('statHW')?.parentElement && (document.getElementById('statHW').parentElement.querySelector('.num').textContent = state.stats.hwDone || 0);
       }
 
       /* ---------- NOTES ---------- */
       window.saveNote = () => {
         const title = document.getElementById('noteTitle').value.trim();
         const content = document.getElementById('noteContent').value.trim();
-        if (!title || !content) return toast('Fill both');
-        state.notes.unshift({ title, content, date: new Date().toLocaleDateString() });
-        document.getElementById('noteTitle').value = ''; document.getElementById('noteContent').value = '';
+        if(!title||!content) return toast('Fill both');
+        state.notes.unshift({title,content,date:new Date().toLocaleDateString()});
+        document.getElementById('noteTitle').value=''; document.getElementById('noteContent').value='';
         save(); renderNotes(); refreshDashboard();
       };
       function renderNotes() {
         const c = document.getElementById('notesList');
-        if (!state.notes.length) c.innerHTML = '<div class="card">No notes.</div>';
-        else c.innerHTML = state.notes.map((n, i) => `<div class="card"><small>${n.date}</small><h4>${n.title}</h4><p>${n.content.substring(0,100)}...</p><button class="btn-sm danger" onclick="deleteNote(${i})">🗑</button></div>`).join('');
+        if(!state.notes.length) c.innerHTML = '<div class="card">No notes.</div>';
+        else c.innerHTML = state.notes.map((n,i)=>`<div class="card"><small>${n.date}</small><h4>${n.title}</h4><p>${n.content.substring(0,100)}...</p><button class="btn-sm danger" onclick="deleteNote(${i})">🗑</button></div>`).join('');
       }
-      window.deleteNote = i => { state.notes.splice(i, 1); save(); renderNotes(); refreshDashboard(); };
+      window.deleteNote = i => { state.notes.splice(i,1); save(); renderNotes(); refreshDashboard(); };
       window.exportNotesPDF = () => {
-        if (!state.notes.length) return toast('No notes');
-        const { jsPDF } = window.jspdf;
-        const doc = new jsPDF();
-        doc.setFontSize(16); doc.text('StudyAI Notes', 20, 20);
-        let y = 30;
-        state.notes.forEach(n => {
-          if (y > 270) { doc.addPage(); y = 20; }
-          doc.setFontSize(12); doc.text(`${n.title} (${n.date})`, 20, y);
-          y += 7;
-          doc.setFontSize(10); doc.text(n.content.substring(0, 150), 20, y);
-          y += 15;
-        });
-        doc.save('notes.pdf');
-        toast('PDF downloaded');
+        if(!state.notes.length) return toast('No notes');
+        const {jsPDF}=window.jspdf; const doc=new jsPDF(); doc.setFontSize(16); doc.text('Notes',20,20);
+        let y=30;
+        state.notes.forEach(n=>{ if(y>270){doc.addPage();y=20;} doc.setFontSize(12); doc.text(`${n.title} (${n.date})`,20,y); y+=7; doc.setFontSize(10); doc.text(n.content.substring(0,150),20,y); y+=15; });
+        doc.save('notes.pdf'); toast('PDF downloaded');
       };
 
       /* ---------- QUIZ ---------- */
       window.startStandardQuiz = () => {
-        window.currentQuiz = {
-          questions: [
-            { q: 'Sin 30°?', o: ['0','1/2','1','√3/2'], c: 1 },
-            { q: 'pH of water?', o: ['0','5','7','14'], c: 2 }
-          ],
-          score: 0, idx: 0
-        };
+        window.currentQuiz = {questions:[
+          {q:'Sin 30°?',o:['0','1/2','1','√3/2'],c:1},
+          {q:'pH of water?',o:['0','5','7','14'],c:2}
+        ],score:0,idx:0};
         showQuizQuestion();
       };
       function showQuizQuestion() {
         const quiz = window.currentQuiz;
-        if (quiz.idx >= quiz.questions.length) {
-          document.getElementById('quizArea').innerHTML = '<h3>Done!</h3>';
-          document.getElementById('quizResult').innerHTML = `Score: ${quiz.score}/${quiz.questions.length}`;
-          state.stats.quizzes = (state.stats.quizzes || 0) + 1; save(); refreshDashboard();
+        if(quiz.idx >= quiz.questions.length) {
+          document.getElementById('quizArea').innerHTML='<h3>Done!</h3>';
+          document.getElementById('quizResult').innerHTML=`Score: ${quiz.score}/${quiz.questions.length}`;
+          state.stats.quizzes=(state.stats.quizzes||0)+1; save(); refreshDashboard();
           return;
         }
         const q = quiz.questions[quiz.idx];
         document.getElementById('quizArea').innerHTML = `
           <h4>Q${quiz.idx+1}: ${q.q}</h4>
-          ${q.o.map((o,i) => `<button onclick="answerQuiz(${i},${q.c})" class="secondary" style="display:block;width:100%;margin:4px 0;">${String.fromCharCode(65+i)}. ${o}</button>`).join('')}
+          ${q.o.map((o,i)=>`<button onclick="answerQuiz(${i},${q.c})" class="secondary" style="display:block;width:100%;margin:4px 0;">${String.fromCharCode(65+i)}. ${o}</button>`).join('')}
         `;
       }
-      window.answerQuiz = (sel, cor) => {
-        if (sel === cor) window.currentQuiz.score++;
-        window.currentQuiz.idx++;
-        showQuizQuestion();
-      };
+      window.answerQuiz = (sel,cor) => { if(sel===cor) window.currentQuiz.score++; window.currentQuiz.idx++; showQuizQuestion(); };
 
       /* ---------- FLASHCARDS ---------- */
       window.addFlashcard = () => {
-        const f = document.getElementById('fcFront').value.trim(), b = document.getElementById('fcBack').value.trim();
-        if (!f || !b) return;
-        state.flashcards.push({ front: f, back: b });
-        document.getElementById('fcFront').value = ''; document.getElementById('fcBack').value = '';
+        const f=document.getElementById('fcFront').value.trim(), b=document.getElementById('fcBack').value.trim();
+        if(!f||!b) return;
+        state.flashcards.push({front:f,back:b});
+        document.getElementById('fcFront').value=''; document.getElementById('fcBack').value='';
         save(); updateFlashcardDisplay();
       };
       function updateFlashcardDisplay() {
-        if (!state.flashcards.length) {
-          document.getElementById('fcFrontText').textContent = 'Add cards';
-          document.getElementById('fcBackText').textContent = 'Answer';
-          return;
+        if(!state.flashcards.length) {
+          document.getElementById('fcFrontText').textContent='Add cards'; document.getElementById('fcBackText').textContent='Answer';
+          document.getElementById('fcCounter').textContent='0/0'; return;
         }
         const idx = state.fcIndex || 0;
         const card = state.flashcards[idx];
-        document.getElementById('fcFrontText').textContent = card.front;
-        document.getElementById('fcBackText').textContent = card.back;
-        document.getElementById('fcCounter').textContent = `${idx+1}/${state.flashcards.length}`;
+        document.getElementById('fcFrontText').textContent=card.front; document.getElementById('fcBackText').textContent=card.back;
+        document.getElementById('fcCounter').textContent=`${idx+1}/${state.flashcards.length}`;
         document.getElementById('flashcardDisplay').classList.remove('flipped');
       }
       window.flipFlashcard = () => document.getElementById('flashcardDisplay').classList.toggle('flipped');
@@ -700,116 +673,82 @@
 
       /* ---------- PYQ & PDF ---------- */
       window.generatePYQ = () => {
-        const bank = { CBSE: { Mathematics: ['Q1. Solve 2x²-7x+3=0.'] } };
-        const qs = bank[state.board]?.[state.subject] || ['Q1. Practice question.'];
-        document.getElementById('pyqOutput').innerHTML = qs.map(q => `<div class="chat-msg ai">📝 ${q}</div>`).join('');
+        const bank = { CBSE:{Mathematics:['Q1. Solve 2x²-7x+3=0.']} };
+        document.getElementById('pyqOutput').innerHTML = (bank[state.board]?.[state.subject]||['Q1. Practice']).map(q=>`<div class="chat-msg ai">📝 ${q}</div>`).join('');
       };
       window.downloadPYQ = format => {
-        const text = document.getElementById('pyqOutput').innerText || 'No questions generated.';
-        if (format === 'txt') {
-          const blob = new Blob([text], { type: 'text/plain' });
-          const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'PYQ.txt'; a.click();
-        } else if (format === 'pdf') {
-          const { jsPDF } = window.jspdf;
-          const doc = new jsPDF();
-          doc.setFontSize(14);
-          doc.text('PYQ & Sample Papers', 20, 20);
-          let y = 30;
-          const lines = text.split('\n');
-          lines.forEach(line => {
-            if (y > 270) { doc.addPage(); y = 20; }
-            doc.text(line, 20, y);
-            y += 7;
-          });
-          doc.save('PYQ.pdf');
-          toast('PDF downloaded');
+        const text = document.getElementById('pyqOutput').innerText || '';
+        if(format==='txt') {
+          const blob=new Blob([text],{type:'text/plain'});
+          const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='PYQ.txt'; a.click();
+        } else {
+          const {jsPDF}=window.jspdf; const doc=new jsPDF(); doc.setFontSize(14); doc.text('PYQ',20,20);
+          let y=30;
+          text.split('\n').forEach(line=>{ if(y>270){doc.addPage();y=20;} doc.text(line,20,y); y+=7; });
+          doc.save('PYQ.pdf'); toast('PDF downloaded');
         }
       };
 
       /* ---------- FORMULAS ---------- */
-      function updateFormulaSubject() { document.getElementById('formulaSubject').textContent = state.subject; }
+      function updateFormulaSubject(){ document.getElementById('formulaSubject').textContent=state.subject; }
       window.generateFormulaSheet = () => {
-        const sheets = { Mathematics: '(a+b)² = a²+2ab+b²', Physics: 'V = IR' };
-        document.getElementById('formulaOutput').textContent = sheets[state.subject] || 'Formulas...';
+        const sheets = {Mathematics:'(a+b)² = a²+2ab+b²', Physics:'V=IR'};
+        document.getElementById('formulaOutput').textContent = sheets[state.subject]||'Formulas...';
       };
 
       /* ---------- HOMEWORK ---------- */
       window.addHomework = () => {
-        const t = document.getElementById('hwInput').value.trim();
-        const d = document.getElementById('hwDate').value || new Date().toISOString().slice(0,10);
-        if (!t) return;
-        state.homework.unshift({ task: t, date: d, done: false });
-        document.getElementById('hwInput').value = '';
-        save(); renderHomework();
+        const t=document.getElementById('hwInput').value.trim(), d=document.getElementById('hwDate').value||new Date().toISOString().slice(0,10);
+        if(!t) return;
+        state.homework.unshift({task:t,date:d,done:false});
+        document.getElementById('hwInput').value=''; save(); renderHomework();
       };
-      window.toggleHW = i => {
-        state.homework[i].done = !state.homework[i].done;
-        state.stats.hwDone = state.homework.filter(h => h.done).length;
-        save(); renderHomework(); refreshDashboard();
-      };
-      window.deleteHW = i => {
-        state.homework.splice(i, 1);
-        state.stats.hwDone = state.homework.filter(h => h.done).length;
-        save(); renderHomework(); refreshDashboard();
-      };
+      window.toggleHW = i => { state.homework[i].done=!state.homework[i].done; state.stats.hwDone=state.homework.filter(h=>h.done).length; save(); renderHomework(); refreshDashboard(); };
+      window.deleteHW = i => { state.homework.splice(i,1); state.stats.hwDone=state.homework.filter(h=>h.done).length; save(); renderHomework(); refreshDashboard(); };
       function renderHomework() {
-        const c = document.getElementById('hwList');
-        if (!state.homework.length) c.innerHTML = '';
-        else c.innerHTML = state.homework.map((h,i) => `
-          <div style="display:flex;gap:8px;align-items:center;background:rgba(255,255,255,0.05);padding:8px;border-radius:8px;margin-bottom:4px;">
-            <input type="checkbox" ${h.done?'checked':''} onchange="toggleHW(${i})">
-            <span>${h.task} (📅${h.date})</span>
-            <button class="btn-sm danger" onclick="deleteHW(${i})">🗑</button>
-          </div>`).join('');
+        const c=document.getElementById('hwList');
+        if(!state.homework.length) c.innerHTML='';
+        else c.innerHTML = state.homework.map((h,i)=>`<div style="display:flex;gap:8px;align-items:center;background:rgba(255,255,255,0.05);padding:8px;border-radius:8px;margin-bottom:4px;"><input type="checkbox" ${h.done?'checked':''} onchange="toggleHW(${i})"><span>${h.task} (📅${h.date})</span><button class="btn-sm danger" onclick="deleteHW(${i})">🗑</button></div>`).join('');
       }
 
-      /* ---------- DOUBTS (AI simulation) ---------- */
+      /* ---------- DOUBTS ---------- */
       window.askDoubt = () => {
         const q = document.getElementById('doubtInput').value.trim();
-        if (!q) return;
+        if(!q) return;
         const chat = document.getElementById('doubtChat');
         chat.innerHTML += `<div class="chat-msg user">🧑‍🎓 ${q}</div>`;
-        document.getElementById('doubtInput').value = '';
+        document.getElementById('doubtInput').value='';
         chat.innerHTML += `<div class="chat-msg ai" id="thinkingMsg">🤔 Thinking...</div>`;
         chat.scrollTop = chat.scrollHeight;
         setTimeout(() => {
-          const thinking = document.getElementById('thinkingMsg');
-          if (thinking) {
-            thinking.innerHTML = `🤖 <strong>Here's a helpful answer:</strong><br>Based on ${state.subject} (${state.board} Class ${state.studentClass}), this is a great question. Consider the core concept and apply it step‑by‑step.`;
-            chat.scrollTop = chat.scrollHeight;
-          }
+          const think = document.getElementById('thinkingMsg');
+          if(think) think.innerHTML = '🤖 <strong>AI answer:</strong> Great question! Based on your syllabus, here\'s a clear explanation.';
         }, 1500);
       };
 
       /* ---------- WEAK AREAS ---------- */
       window.addWeakTopic = () => {
         const val = document.getElementById('weakTopicInput').value.trim();
-        if (!val) return;
+        if(!val) return;
         state.weakTopics.push(val);
-        document.getElementById('weakTopicInput').value = '';
-        save(); renderWeakTopics();
+        document.getElementById('weakTopicInput').value=''; save(); renderWeakTopics();
       };
       window.removeWeakTopic = i => { state.weakTopics.splice(i,1); save(); renderWeakTopics(); };
       function renderWeakTopics() {
         const list = document.getElementById('weakTopicsList');
-        if (!state.weakTopics.length) list.innerHTML = '<p>No weak topics added.</p>';
-        else list.innerHTML = state.weakTopics.map((t,i) => `<div style="display:flex;justify-content:space-between;background:rgba(255,255,255,0.05);padding:8px;border-radius:8px;margin-bottom:4px;"><span>📉 ${t}</span><button class="btn-sm danger" onclick="removeWeakTopic(${i})">✕</button></div>`).join('');
+        if(!state.weakTopics.length) list.innerHTML = '<p>No weak topics.</p>';
+        else list.innerHTML = state.weakTopics.map((t,i)=>`<div style="display:flex;justify-content:space-between;background:rgba(255,255,255,0.05);padding:8px;border-radius:8px;margin-bottom:4px;"><span>📉 ${t}</span><button class="btn-sm danger" onclick="removeWeakTopic(${i})">✕</button></div>`).join('');
       }
 
       /* ---------- STRATEGIES & MOTIVATION ---------- */
       window.generateStrategy = () => document.getElementById('strategyOutput').innerHTML = `🎯 ${state.board} ${state.subject}: Week1 NCERT, Week2 PYQs.`;
-      const quotes = [
-        { q: 'Believe you can and you\'re halfway there.', a: 'Theodore Roosevelt' },
-        { q: 'Push yourself, because no one else will.', a: 'Unknown' },
-        { q: 'The expert in anything was once a beginner.', a: 'Helen Hayes' }
-      ];
+      const quotes = [{q:'Believe you can and you\'re halfway there.',a:'Theodore Roosevelt'},{q:'Push yourself.',a:'Unknown'}];
       window.newMotivationQuote = () => {
-        const r = quotes[Math.floor(Math.random() * quotes.length)];
-        document.getElementById('motivationQuote').textContent = '"' + r.q + '"';
-        document.getElementById('motivationAuthor').textContent = '— ' + r.a;
+        const r = quotes[Math.floor(Math.random()*quotes.length)];
+        document.getElementById('motivationQuote').textContent = '"'+r.q+'"';
+        document.getElementById('motivationAuthor').textContent = '— '+r.a;
       };
 
-      /* ---------- RESET ---------- */
       window.resetWeekData = () => { state.dailySessions = {}; save(); updateChart(); toast('Week reset'); };
 
       /* ---------- INIT ---------- */
@@ -817,7 +756,7 @@
         document.getElementById('boardSelect').value = state.board;
         document.getElementById('classSelect').value = state.studentClass;
         document.getElementById('subjectSelect').value = state.subject;
-        if (state.theme === 'light') document.body.classList.add('light-mode');
+        if(state.theme==='light') document.body.classList.add('light-mode');
         document.getElementById('hwDate').valueAsDate = new Date();
         updateTimerDisplay();
         refreshDashboard();
@@ -830,14 +769,13 @@
         newMotivationQuote();
         updateExamCountdown();
         renderWeakTopics();
-        if (Notification.permission !== 'granted') Notification.requestPermission();
-        if (state.lofiPlaying) {
+        if(Notification.permission!=='granted') Notification.requestPermission();
+        if(state.lofiPlaying) {
           document.getElementById('musicToggleBtn').textContent = '⏸️';
-          const inline = document.getElementById('lofiInlineBtn');
-          if (inline) inline.textContent = '⏸️ Lo‑Fi On';
-          lofiAudio.play().catch(() => {});
+          document.getElementById('lofiInlineBtn').textContent = '⏸️ Lo‑Fi On';
+          lofiAudio.play().catch(()=>{});
         }
-        if (window.innerWidth > 768) {
+        if(window.innerWidth>768) {
           document.getElementById('sidebar').classList.remove('hidden');
           document.getElementById('contentArea').classList.remove('expanded');
         } else {
