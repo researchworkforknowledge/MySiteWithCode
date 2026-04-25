@@ -1,681 +1,1472 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <meta name="theme-color" content="#0a0a14">
-  <title>StudyAI Pro | #1 Study Hub</title>
-  <!-- Chart.js & jsPDF -->
-  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-  <style>
-    :root {
-      --bg: #0a0a14;
-      --glass-bg: rgba(20, 20, 40, 0.45);
-      --glass-border: rgba(255, 255, 255, 0.1);
-      --primary: #6c5ce7;
-      --primary2: #a29bfe;
-      --accent: #00cec9;
-      --accent2: #fd79a8;
-      --text: #e8e8f8;
-      --text2: #a0a0c0;
-      --danger: #e74c3c;
-      --success: #2ecc71;
-      --radius: 20px;
-      --radius-sm: 12px;
-      --transition: 0.3s cubic-bezier(0.4,0,0.2,1);
-    }
-    .light-mode {
-      --bg: #f0f2fa;
-      --glass-bg: rgba(255,255,255,0.7);
-      --glass-border: rgba(0,0,0,0.1);
-      --text: #1a1a2e;
-      --text2: #4a4a6a;
-    }
-    * { margin:0; padding:0; box-sizing:border-box; }
-    body {
-      font-family: 'Segoe UI', system-ui, sans-serif;
-      background: var(--bg);
-      background-image: radial-gradient(ellipse at 20% 10%, rgba(108,92,231,0.15) 0%, transparent 55%),
-                        radial-gradient(ellipse at 80% 90%, rgba(0,206,201,0.12) 0%, transparent 55%);
-      background-attachment: fixed;
-      color: var(--text);
-      min-height: 100vh;
-      line-height: 1.6;
-      transition: var(--transition);
-      overflow-x: hidden;
-    }
-    ::-webkit-scrollbar { width:5px; }
-    ::-webkit-scrollbar-thumb { background:var(--primary); border-radius:10px; }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="theme-color" content="#0a0a14">
+    <meta name="description" content="StudyAI Pro – The #1 AI Study Hub for Indian Students | CBSE, ICSE, State Boards">
+    <title>StudyAI Pro | #1 Study Hub for Indian Students</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js">
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js">
+    </script>
+    <style>
+        :root {
+            --bg: #0a0a14;
+            --glass-bg: rgba(20, 20, 40, 0.45);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --primary: #6c5ce7;
+            --primary2: #a29bfe;
+            --accent: #00cec9;
+            --accent2: #fd79a8;
+            --text: #e8e8f8;
+            --text2: #a0a0c0;
+            --danger: #e74c3c;
+            --success: #2ecc71;
+            --warning: #f39c12;
+            --radius: 20px;
+            --radius-sm: 12px;
+            --transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .light-mode {
+            --bg: #f0f2fa;
+            --glass-bg: rgba(255, 255, 255, 0.7);
+            --glass-border: rgba(0, 0, 0, 0.1);
+            --text: #1a1a2e;
+            --text2: #4a4a6a;
+        }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: var(--bg);
+            background-image: radial-gradient(ellipse at 20% 10%, rgba(108, 92, 231, 0.15) 0%, transparent 55%),
+                radial-gradient(ellipse at 80% 90%, rgba(0, 206, 201, 0.12) 0%, transparent 55%);
+            background-attachment: fixed;
+            color: var(--text);
+            min-height: 100vh;
+            line-height: 1.6;
+            transition: var(--transition);
+            overflow-x: hidden;
+        }
+        ::-webkit-scrollbar {
+            width: 5px;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: var(--primary);
+            border-radius: 10px;
+        }
 
-    /* Header */
-    .header {
-      background: var(--glass-bg); backdrop-filter: blur(18px);
-      border-bottom:1px solid var(--glass-border);
-      padding:12px 20px; display:flex; align-items:center; justify-content:space-between;
-      flex-wrap:wrap; gap:10px; position:sticky; top:0; z-index:110;
-    }
-    .logo-area { display:flex; align-items:center; gap:12px; flex-wrap:nowrap; }
-    .logo { font-size:1.5rem; font-weight:900; background:linear-gradient(135deg,var(--primary2),var(--accent)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; cursor:pointer; white-space:nowrap; }
-    .built-by { font-size:0.7rem; color:var(--text2); background:rgba(108,92,231,0.15); padding:4px 12px; border-radius:20px; border:1px solid rgba(108,92,231,0.3); white-space:nowrap; }
-    .header-actions { display:flex; gap:8px; align-items:center; flex-wrap:wrap; }
-    select, button, input, textarea {
-      padding:10px 15px; border-radius:25px;
-      border:1px solid var(--glass-border);
-      background:rgba(34,34,64,0.6); backdrop-filter:blur(8px);
-      color:var(--text); font-size:0.85rem;
-      transition:var(--transition); font-family:inherit; outline:none;
-    }
-    button {
-      background:var(--primary); border:none; color:#fff;
-      font-weight:600; cursor:pointer; box-shadow:0 4px 15px rgba(108,92,231,0.3);
-    }
-    button:hover { transform:translateY(-2px); box-shadow:0 8px 25px rgba(108,92,231,0.5); }
-    button.secondary { background:rgba(255,255,255,0.1); color:var(--text); border:1px solid var(--glass-border); }
-    button.accent { background:var(--accent); color:#000; }
-    button.danger { background:var(--danger); }
-    .btn-sm { padding:6px 13px; font-size:0.75rem; border-radius:18px; }
-    .btn-icon { width:36px; height:36px; border-radius:50%; padding:0; display:flex; align-items:center; justify-content:center; font-size:1.1rem; }
-    .hamburger { background:none; border:none; font-size:1.5rem; color:var(--text); cursor:pointer; }
+        .header {
+            background: var(--glass-bg);
+            backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px);
+            border-bottom: 1px solid var(--glass-border);
+            padding: 12px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 10px;
+            position: sticky;
+            top: 0;
+            z-index: 110;
+        }
+        .logo-area {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: nowrap;
+        }
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, var(--primary2), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            cursor: pointer;
+            white-space: nowrap;
+        }
+        .built-by {
+            font-size: 0.7rem;
+            color: var(--text2);
+            background: rgba(108, 92, 231, 0.15);
+            padding: 4px 12px;
+            border-radius: 20px;
+            border: 1px solid rgba(108, 92, 231, 0.3);
+            white-space: nowrap;
+            letter-spacing: 0.3px;
+        }
+        .header-actions {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        select,
+        button,
+        input,
+        textarea {
+            padding: 10px 15px;
+            border-radius: 25px;
+            border: 1px solid var(--glass-border);
+            background: rgba(34, 34, 64, 0.6);
+            backdrop-filter: blur(8px);
+            color: var(--text);
+            font-size: 0.85rem;
+            transition: var(--transition);
+            font-family: inherit;
+            outline: none;
+        }
+        button {
+            background: var(--primary);
+            border: none;
+            color: #fff;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(108, 92, 231, 0.3);
+        }
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(108, 92, 231, 0.5);
+        }
+        button.secondary {
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--text);
+            border: 1px solid var(--glass-border);
+        }
+        button.accent {
+            background: var(--accent);
+            color: #000;
+        }
+        button.danger {
+            background: var(--danger);
+        }
+        .btn-sm {
+            padding: 6px 13px;
+            font-size: 0.75rem;
+            border-radius: 18px;
+        }
+        .btn-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1rem;
+        }
+        .hamburger {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: var(--text);
+            cursor: pointer;
+        }
 
-    /* Sidebar */
-    .sidebar {
-      position:fixed; top:0; left:0; height:100vh; width:260px;
-      background:var(--glass-bg); backdrop-filter:blur(18px);
-      border-right:1px solid var(--glass-border);
-      padding:80px 10px 20px; z-index:200;
-      display:flex; flex-direction:column; gap:4px;
-      transform:translateX(0); transition:transform 0.3s ease;
-      overflow-y:auto;
-    }
-    .sidebar.hidden { transform:translateX(-100%); }
-    .sidebar .nav-item {
-      padding:12px 16px; border-radius:var(--radius-sm); cursor:pointer;
-      display:flex; align-items:center; gap:10px; font-weight:500;
-      color:var(--text2); font-size:0.85rem; transition:var(--transition);
-      border:1px solid transparent;
-    }
-    .sidebar .nav-item:hover { background:rgba(108,92,231,0.15); color:var(--text); }
-    .sidebar .nav-item.active {
-      background:rgba(108,92,231,0.25); color:#fff;
-      border:1px solid rgba(108,92,231,0.5);
-      box-shadow:0 0 22px rgba(108,92,231,0.3); font-weight:700;
-    }
-    .backdrop { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.4); z-index:150; }
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 100vh;
+            width: 260px;
+            background: var(--glass-bg);
+            backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px);
+            border-right: 1px solid var(--glass-border);
+            padding: 80px 10px 20px;
+            z-index: 200;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            transform: translateX(0);
+            transition: transform 0.3s ease;
+            overflow-y: auto;
+        }
+        .sidebar.hidden {
+            transform: translateX(-100%);
+        }
+        .sidebar .nav-item {
+            padding: 12px 16px;
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 500;
+            color: var(--text2);
+            font-size: 0.85rem;
+            transition: var(--transition);
+            border: 1px solid transparent;
+        }
+        .sidebar .nav-item:hover {
+            background: rgba(108, 92, 231, 0.15);
+            color: var(--text);
+        }
+        .sidebar .nav-item.active {
+            background: rgba(108, 92, 231, 0.25);
+            color: #fff;
+            border: 1px solid rgba(108, 92, 231, 0.5);
+            box-shadow: 0 0 22px rgba(108, 92, 231, 0.3);
+            font-weight: 700;
+        }
+        .backdrop {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.4);
+            z-index: 150;
+        }
 
-    /* Main */
-    .content { margin-left:260px; padding:24px; transition:margin-left 0.3s; }
-    .content.expanded { margin-left:0; }
-    .page-section { display:none; }
-    .page-section.active { display:block; animation: fadeIn 0.4s; }
-    @keyframes fadeIn { from{opacity:0;transform:translateY(10px);} to{opacity:1;transform:translateY(0);} }
-    .card {
-      background:var(--glass-bg); backdrop-filter:blur(18px);
-      border-radius:var(--radius); padding:20px; margin-bottom:18px;
-      border:1px solid var(--glass-border); box-shadow:0 8px 32px rgba(0,0,0,0.3);
-    }
-    .stat-card {
-      background:var(--glass-bg); backdrop-filter:blur(18px);
-      border-radius:var(--radius-sm); padding:16px; text-align:center;
-      border:1px solid var(--glass-border);
-    }
-    .stat-card .num { font-size:2.4rem; font-weight:900; background:linear-gradient(135deg,var(--primary2),var(--accent)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
-    .timer-display { font-size:5rem; font-weight:900; text-align:center; background:linear-gradient(135deg,var(--accent),var(--primary2)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
-    .chart-container { max-width:600px; margin:0 auto; }
-    .flashcard { perspective:1200px; height:210px; cursor:pointer; margin-bottom:10px; }
-    .flashcard-inner { position:relative; width:100%; height:100%; transition:transform 0.7s; transform-style:preserve-3d; }
-    .flashcard.flipped .flashcard-inner { transform:rotateY(180deg); }
-    .flashcard-front, .flashcard-back { position:absolute; width:100%; height:100%; backface-visibility:hidden; border-radius:var(--radius); display:flex; align-items:center; justify-content:center; padding:22px; font-weight:600; font-size:1.05rem; }
-    .flashcard-front { background:linear-gradient(135deg,var(--primary),#4a3db5); color:#fff; }
-    .flashcard-back { background:rgba(26,26,46,0.7); transform:rotateY(180deg); border:2px solid var(--primary2); color:var(--text); }
-    .chat-box { max-height:350px; overflow-y:auto; display:flex; flex-direction:column; gap:10px; padding:10px; background:rgba(0,0,0,0.15); border-radius:var(--radius-sm); margin-bottom:12px; }
-    .chat-msg { padding:10px 14px; border-radius:18px; max-width:82%; font-size:0.88rem; }
-    .chat-msg.user { background:var(--primary); color:#fff; align-self:flex-end; }
-    .chat-msg.ai { background:rgba(255,255,255,0.1); align-self:flex-start; }
-    .toast { position:fixed; bottom:30px; right:30px; background:var(--success); color:#fff; padding:12px 24px; border-radius:28px; z-index:999; display:none; font-weight:600; }
+        .content {
+            margin-left: 260px;
+            padding: 24px;
+            transition: margin-left 0.3s;
+        }
+        .content.expanded {
+            margin-left: 0;
+        }
+        .page-section {
+            display: none;
+        }
+        .page-section.active {
+            display: block;
+            animation: fadeSlide 0.4s ease;
+        }
+        @keyframes fadeSlide {
+            from {
+                opacity: 0;
+                transform: translateY(12px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        .card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px);
+            border-radius: var(--radius);
+            padding: 20px;
+            margin-bottom: 18px;
+            border: 1px solid var(--glass-border);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+        .stat-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px);
+            border-radius: var(--radius-sm);
+            padding: 16px;
+            text-align: center;
+            border: 1px solid var(--glass-border);
+            transition: var(--transition);
+        }
+        .stat-card:hover {
+            transform: translateY(-2px);
+            border-color: var(--primary2);
+        }
+        .stat-card .num {
+            font-size: 2.4rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, var(--primary2), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .timer-display {
+            font-size: 5rem;
+            font-weight: 900;
+            text-align: center;
+            letter-spacing: 6px;
+            background: linear-gradient(135deg, var(--accent), var(--primary2));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .chart-container {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        .flashcard {
+            perspective: 1200px;
+            height: 210px;
+            cursor: pointer;
+            margin-bottom: 10px;
+        }
+        .flashcard-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            transition: transform 0.7s;
+            transform-style: preserve-3d;
+        }
+        .flashcard.flipped .flashcard-inner {
+            transform: rotateY(180deg);
+        }
+        .flashcard-front,
+        .flashcard-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            border-radius: var(--radius);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 22px;
+            text-align: center;
+            font-weight: 600;
+            font-size: 1.05rem;
+        }
+        .flashcard-front {
+            background: linear-gradient(135deg, var(--primary), #4a3db5);
+            color: #fff;
+        }
+        .flashcard-back {
+            background: rgba(26, 26, 46, 0.7);
+            transform: rotateY(180deg);
+            border: 2px solid var(--primary2);
+            color: var(--text);
+        }
+        .chat-box {
+            max-height: 350px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            padding: 10px;
+            background: rgba(0, 0, 0, 0.15);
+            border-radius: var(--radius-sm);
+            margin-bottom: 12px;
+        }
+        .chat-msg {
+            padding: 10px 14px;
+            border-radius: 18px;
+            max-width: 82%;
+            font-size: 0.88rem;
+        }
+        .chat-msg.user {
+            background: var(--primary);
+            color: #fff;
+            align-self: flex-end;
+        }
+        .chat-msg.ai {
+            background: rgba(255, 255, 255, 0.1);
+            align-self: flex-start;
+        }
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: var(--success);
+            color: #fff;
+            padding: 12px 24px;
+            border-radius: 28px;
+            z-index: 999;
+            display: none;
+            font-weight: 600;
+        }
+        .quick-task-item {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.05);
+            padding: 8px;
+            border-radius: 8px;
+            margin-bottom: 4px;
+        }
+        .modal {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(6px);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 600;
+        }
+        .modal.active {
+            display: flex;
+        }
+        .modal-content {
+            background: var(--glass-bg);
+            backdrop-filter: blur(18px);
+            padding: 30px;
+            border-radius: var(--radius);
+            border: 1px solid var(--glass-border);
+            width: 90%;
+            max-width: 450px;
+        }
 
-    /* Focus Mode */
-    body.focus-mode .header, body.focus-mode .sidebar, body.focus-mode .backdrop { display:none; }
-    body.focus-mode .content { margin-left:0; padding:0; }
-    .focus-overlay {
-      display:none; position:fixed; inset:0; background:rgba(0,0,0,0.85); backdrop-filter:blur(10px);
-      flex-direction:column; align-items:center; justify-content:center; gap:20px; z-index:500;
-    }
-    body.focus-mode .focus-overlay { display:flex; }
-    .focus-overlay textarea { width:80%; max-width:500px; background:rgba(255,255,255,0.1); color:#fff; border:1px solid rgba(255,255,255,0.3); }
+        body.focus-mode .header,
+        body.focus-mode .sidebar,
+        body.focus-mode .backdrop {
+            display: none;
+        }
+        body.focus-mode .content {
+            margin-left: 0;
+            padding: 0;
+        }
+        .focus-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(10px);
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+            z-index: 500;
+        }
+        body.focus-mode .focus-overlay {
+            display: flex;
+        }
+        .focus-overlay textarea {
+            width: 80%;
+            max-width: 500px;
+            background: rgba(255, 255, 255, 0.1);
+            color: #fff;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+        .badge-new {
+            background: var(--accent2);
+            color: #fff;
+            font-size: 0.6rem;
+            padding: 2px 8px;
+            border-radius: 10px;
+            margin-left: auto;
+        }
+        .tag {
+            display: inline-block;
+            padding: 3px 10px;
+            border-radius: 12px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            margin: 2px;
+        }
+        .tag-cbq {
+            background: var(--accent);
+            color: #000;
+        }
+        .tag-new {
+            background: var(--accent2);
+            color: #fff;
+        }
 
-    .quick-task-item { display:flex; gap:8px; align-items:center; background:rgba(255,255,255,0.05); padding:8px; border-radius:8px; margin-bottom:4px; }
-    .modal { position:fixed; inset:0; background:rgba(0,0,0,0.6); backdrop-filter:blur(6px); display:none; justify-content:center; align-items:center; z-index:600; }
-    .modal.active { display:flex; }
-    .modal-content { background:var(--glass-bg); backdrop-filter:blur(18px); padding:30px; border-radius:var(--radius); border:1px solid var(--glass-border); width:90%; max-width:400px; }
-
-    @media (max-width:768px) {
-      .sidebar { width:270px; transform:translateX(-100%); }
-      .sidebar.open { transform:translateX(0); }
-      .content { margin-left:0; }
-      .timer-display { font-size:3rem; }
-      .backdrop.show { display:block; }
-    }
-  </style>
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 270px;
+                transform: translateX(-100%);
+            }
+            .sidebar.open {
+                transform: translateX(0);
+            }
+            .content {
+                margin-left: 0;
+            }
+            .timer-display {
+                font-size: 3rem;
+            }
+            .backdrop.show {
+                display: block;
+            }
+            .header {
+                padding: 8px 12px;
+            }
+            .logo {
+                font-size: 1.2rem;
+            }
+        }
+    </style>
 </head>
 <body>
-  <div class="backdrop" id="backdrop" onclick="closeSidebar()"></div>
+    <div class="backdrop" id="backdrop" onclick="closeSidebar()"></div>
 
-  <!-- Sidebar -->
-  <nav class="sidebar" id="sidebar">
-    <div class="nav-item active" data-page="dashboard" onclick="showPage('dashboard')"><span class="icon">📊</span>Dashboard</div>
-    <div class="nav-item" data-page="timer" onclick="showPage('timer')"><span class="icon">⏱️</span>Timer</div>
-    <div class="nav-item" data-page="pyq" onclick="showPage('pyq')"><span class="icon">📝</span>PYQ & Papers</div>
-    <div class="nav-item" data-page="predictor" onclick="showPage('predictor')"><span class="icon">🔮</span>CBQ Predictor</div>
-    <div class="nav-item" data-page="notes" onclick="showPage('notes')"><span class="icon">📒</span>Notes Maker</div>
-    <div class="nav-item" data-page="mindmap" onclick="showPage('mindmap')"><span class="icon">🧩</span>Mind Maps</div>
-    <div class="nav-item" data-page="quiz" onclick="showPage('quiz')"><span class="icon">❓</span>Quizzes</div>
-    <div class="nav-item" data-page="flashcards" onclick="showPage('flashcards')"><span class="icon">🃏</span>Flash Cards</div>
-    <div class="nav-item" data-page="formulas" onclick="showPage('formulas')"><span class="icon">📐</span>Formulas</div>
-    <div class="nav-item" data-page="homework" onclick="showPage('homework')"><span class="icon">✅</span>Homework</div>
-    <div class="nav-item" data-page="doubts" onclick="showPage('doubts')"><span class="icon">💬</span>Doubts</div>
-    <div class="nav-item" data-page="weaknesses" onclick="showPage('weaknesses')"><span class="icon">📉</span>Weak Areas</div>
-    <div class="nav-item" data-page="strategies" onclick="showPage('strategies')"><span class="icon">🎯</span>Strategies</div>
-    <div class="nav-item" data-page="motivation" onclick="showPage('motivation')"><span class="icon">🔥</span>Motivation</div>
-  </nav>
+    <!-- SIDEBAR -->
+    <nav class="sidebar" id="sidebar">
+        <div class="nav-item active" data-page="dashboard" onclick="showPage('dashboard')"><span class="icon">📊</span>Dashboard</div>
+        <div class="nav-item" data-page="timer" onclick="showPage('timer')"><span class="icon">⏱️</span>Timer<span class="badge-new">Pomodoro</span></div>
+        <div class="nav-item" data-page="pyq" onclick="showPage('pyq')"><span class="icon">📝</span>PYQ & Papers</div>
+        <div class="nav-item" data-page="predictor" onclick="showPage('predictor')"><span class="icon">🔮</span>CBQ Predictor<span class="badge-new">NEW</span></div>
+        <div class="nav-item" data-page="notes" onclick="showPage('notes')"><span class="icon">📒</span>Notes Maker</div>
+        <div class="nav-item" data-page="mindmap" onclick="showPage('mindmap')"><span class="icon">🧩</span>Mind Maps</div>
+        <div class="nav-item" data-page="quiz" onclick="showPage('quiz')"><span class="icon">❓</span>Quizzes</div>
+        <div class="nav-item" data-page="flashcards" onclick="showPage('flashcards')"><span class="icon">🃏</span>Flash Cards</div>
+        <div class="nav-item" data-page="formulas" onclick="showPage('formulas')"><span class="icon">📐</span>Formula Sheets</div>
+        <div class="nav-item" data-page="homework" onclick="showPage('homework')"><span class="icon">✅</span>Homework</div>
+        <div class="nav-item" data-page="doubts" onclick="showPage('doubts')"><span class="icon">💬</span>AI Doubts</div>
+        <div class="nav-item" data-page="weaknesses" onclick="showPage('weaknesses')"><span class="icon">📉</span>Weak Areas</div>
+        <div class="nav-item" data-page="resources" onclick="showPage('resources')"><span class="icon">🔗</span>Resources<span class="badge-new">NEW</span></div>
+        <div class="nav-item" data-page="strategies" onclick="showPage('strategies')"><span class="icon">🎯</span>Strategies</div>
+        <div class="nav-item" data-page="motivation" onclick="showPage('motivation')"><span class="icon">🔥</span>Motivation</div>
+    </nav>
 
-  <header class="header">
-    <div class="logo-area">
-      <button class="hamburger" onclick="toggleSidebar()">☰</button>
-      <div class="logo" onclick="showPage('dashboard')">🧠 StudyAI Pro</div>
-      <span class="built-by">✨ Built by Master Arhan</span>
+    <!-- HEADER -->
+    <header class="header">
+        <div class="logo-area">
+            <button class="hamburger" onclick="toggleSidebar()">☰</button>
+            <div class="logo" onclick="showPage('dashboard')">🧠 StudyAI Pro</div>
+            <span class="built-by">✨ Built by Master Arhan</span>
+        </div>
+        <div class="header-actions">
+            <select id="boardSelect" onchange="saveBoard()"><option value="CBSE">CBSE</option><option value="ICSE">ICSE</option><option value="State-MH">Maharashtra</option><option value="State-TN">Tamil Nadu</option><option value="State-KA">Karnataka</option><option value="State-UP">UP Board</option><option value="State-RJ">Rajasthan</option></select>
+            <select id="classSelect" onchange="saveClass()"><option value="9">Class 9</option><option value="10">Class 10</option><option value="11">Class 11</option><option value="12">Class 12</option></select>
+            <select id="subjectSelect" onchange="saveSubject()"><option value="Mathematics">Maths</option><option value="Physics">Physics</option><option value="Chemistry">Chemistry</option><option value="Biology">Biology</option><option value="English">English</option><option value="ComputerScience">CS</option></select>
+            <button onclick="toggleTheme()" class="btn-icon secondary" title="Toggle theme">🌓</button>
+            <button id="musicToggleBtn" class="btn-icon accent" onclick="toggleMusic()" title="Lo‑Fi Beats">🎵</button>
+            <button onclick="toggleFocusMode()" class="btn-icon accent" title="Deep Focus">🧘</button>
+            <button onclick="openExamModal()" class="btn-icon accent" title="Set Exam">📅</button>
+            <button onclick="resetWeekData()" class="btn-icon danger" title="Reset Week">🔄</button>
+        </div>
+    </header>
+
+    <!-- MAIN CONTENT -->
+    <div class="content" id="contentArea">
+
+        <!-- DASHBOARD -->
+        <section class="page-section active" id="page-dashboard">
+            <h2>📊 Study Command Center</h2>
+            <p style="color:var(--text2);">Board: <strong id="dashBoard"></strong> | Class: <strong id="dashClass"></strong> | Subject: <strong id="dashSubject"></strong></p>
+            <div class="grid-3" id="statsGrid" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;"></div>
+            <div class="card" id="examCountdownCard" style="display:none;">
+                <h3>📅 <span id="examCountdownDisplay">--</span> days until your <span id="examBoardDisplay"></span> exam!</h3>
+                <p style="color:var(--text2);">Exam date: <strong id="examDateDisplay"></strong></p>
+            </div>
+            <div class="card">
+                <h3>✅ Quick Tasks</h3>
+                <div style="display:flex;gap:8px;"><input type="text" id="quickTaskInput" placeholder="Add a task..." onkeypress="if(event.key==='Enter')addQuickTask()"><button onclick="addQuickTask()">➕</button></div>
+                <div id="quickTaskList" style="margin-top:8px;"></div>
+            </div>
+            <div class="card">
+                <h3>📈 Weekly Progress (hours)</h3>
+                <div class="chart-container"><canvas id="weeklyChart"></canvas></div>
+            </div>
+        </section>
+
+        <!-- TIMER -->
+        <section class="page-section" id="page-timer">
+            <h2>⏱️ Pomodoro Timer</h2>
+            <div class="card" style="text-align:center;">
+                <div class="timer-display" id="timerDisplay">25:00</div>
+                <p id="timerLabel">Focus Session</p>
+                <div style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap;">
+                    <button onclick="startTimer()">▶ Start</button>
+                    <button onclick="pauseTimer()" class="secondary">⏸ Pause</button>
+                    <button onclick="resetTimer()" class="secondary">↺ Reset</button>
+                </div>
+                <div style="margin-top:10px;">
+                    <button class="btn-sm secondary" onclick="setTimerMode(25)">25 min</button>
+                    <button class="btn-sm secondary" onclick="setTimerMode(5)">5 min</button>
+                    <button class="btn-sm secondary" onclick="setTimerMode(15)">15 min</button>
+                    <button class="btn-sm secondary" onclick="setTimerMode(50)">50 min</button>
+                </div>
+                <p style="margin-top:8px;">Sessions today: <strong id="sessionCount">0</strong></p>
+                <button id="lofiInlineBtn" onclick="toggleMusic()" class="btn-sm accent" style="margin-top:10px;">🎵 Lo‑Fi Beats</button>
+            </div>
+        </section>
+
+        <!-- PYQ -->
+        <section class="page-section" id="page-pyq">
+            <h2>📝 PYQ & Sample Papers</h2>
+            <div class="card">
+                <p>Board: <strong id="pyqBoardLabel"></strong></p>
+                <div style="display:flex;gap:8px;flex-wrap:wrap;margin:10px 0;">
+                    <select id="pyqYear"><option>2024</option><option>2023</option><option>2022</option><option>2021</option><option>2020</option></select>
+                    <select id="pyqType"><option>Board Exam Paper</option><option>Sample Paper</option><option>Compartment</option></select>
+                    <button onclick="generatePYQ()">Generate PYQs</button>
+                </div>
+                <div id="pyqOutput" class="chat-box"><div class="chat-msg ai">👋 Select options above and click Generate.</div></div>
+                <button onclick="downloadPYQ('txt')" class="btn-sm secondary">📥 Download .txt</button>
+                <button onclick="downloadPYQ('pdf')" class="btn-sm accent" style="margin-left:8px;">📄 Download PDF</button>
+            </div>
+        </section>
+
+        <!-- CBQ PREDICTOR -->
+        <section class="page-section" id="page-predictor">
+            <h2>🔮 Competency‑Based Question Predictor <span class="tag tag-cbq">CBQ</span></h2>
+            <div class="card">
+                <h3>📊 Real‑World Application Analysis</h3>
+                <button onclick="runPrediction()">🔮 Run CBQ Prediction</button>
+                <div id="predictionOutput" style="margin-top:12px;"></div>
+            </div>
+            <div class="card">
+                <h3>📋 Generate Custom CBQs</h3>
+                <textarea id="customTopicInput" placeholder="Enter topic (e.g., 'Trigonometry in daily life')..."></textarea>
+                <button onclick="generateCustomQuestions()" style="margin-top:8px;">✨ Generate Competency‑Based Questions</button>
+                <div id="customQOutput" style="margin-top:10px;"></div>
+            </div>
+        </section>
+
+        <!-- NOTES -->
+        <section class="page-section" id="page-notes">
+            <h2>📒 Smart Notes Maker</h2>
+            <div class="card">
+                <input type="text" id="noteTitle" placeholder="Note title...">
+                <textarea id="noteContent" placeholder="Write your notes..."></textarea>
+                <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px;">
+                    <button onclick="saveNote()">💾 Save</button>
+                    <button onclick="clearNoteForm()" class="secondary">🗑 Clear</button>
+                    <button onclick="exportNotesPDF()" class="accent btn-sm">📄 Download PDF</button>
+                    <button onclick="notesToQuiz()" class="accent btn-sm">✨ Notes→Quiz</button>
+                    <button onclick="readNoteAloud()" class="btn-sm secondary">🔊 Read Aloud</button>
+                </div>
+            </div>
+            <h3>📚 Saved Notes</h3>
+            <div id="notesList" class="grid-2" style="grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:14px;"></div>
+        </section>
+
+        <!-- MIND MAP -->
+        <section class="page-section" id="page-mindmap">
+            <h2>🧩 Interactive Mind Maps</h2>
+            <div class="card">
+                <input type="text" id="mindmapTopic" placeholder="Central topic (e.g., 'Photosynthesis')...">
+                <button onclick="generateMindMap()">🧠 Generate Mind Map</button>
+                <div id="mindmapCanvas" style="min-height:320px;position:relative;border:1px dashed rgba(255,255,255,0.15);margin-top:10px;border-radius:var(--radius);overflow:hidden;"></div>
+            </div>
+        </section>
+
+        <!-- QUIZ -->
+        <section class="page-section" id="page-quiz">
+            <h2>❓ Quick Quiz</h2>
+            <div class="card"><button onclick="startQuiz()">▶ Start New Quiz</button><div id="quizArea" style="margin-top:12px;"></div><div id="quizResult" style="margin-top:10px;font-weight:600;"></div></div>
+        </section>
+
+        <!-- FLASHCARDS -->
+        <section class="page-section" id="page-flashcards">
+            <h2>🃏 3D Flash Cards</h2>
+            <div class="card">
+                <div style="display:flex;gap:8px;flex-wrap:wrap;"><input type="text" id="fcFront" placeholder="Front (Question)..."><input type="text" id="fcBack" placeholder="Back (Answer)..."><button onclick="addFlashcard()">➕ Add Card</button></div>
+            </div>
+            <div class="flashcard" id="flashcardDisplay" onclick="flipFlashcard()">
+                <div class="flashcard-inner"><div class="flashcard-front" id="fcFrontText">🧠 Click to add flashcards</div><div class="flashcard-back" id="fcBackText">✨ Answer appears here</div></div>
+            </div>
+            <div style="display:flex;gap:8px;justify-content:center;margin-top:8px;"><button onclick="prevFlashcard()" class="secondary btn-sm">◀</button><span id="fcCounter">0/0</span><button onclick="nextFlashcard()" class="secondary btn-sm">▶</button><button onclick="shuffleFlashcards()" class="btn-sm secondary">🔀 Shuffle</button></div>
+        </section>
+
+        <!-- FORMULAS -->
+        <section class="page-section" id="page-formulas">
+            <h2>📐 Smart Formula Sheets</h2>
+            <div class="card">
+                <h3>Subject: <strong id="formulaSubject"></strong></h3>
+                <button onclick="generateFormulaSheet()">🔄 Generate / Refresh</button>
+                <div id="formulaOutput" style="white-space:pre-wrap;font-family:'Courier New',monospace;background:rgba(255,255,255,0.05);padding:14px;border-radius:var(--radius-sm);max-height:400px;overflow-y:auto;margin-top:10px;line-height:1.8;"></div>
+                <button onclick="copyFormulas()" class="btn-sm secondary" style="margin-top:8px;">📋 Copy All</button>
+            </div>
+        </section>
+
+        <!-- HOMEWORK -->
+        <section class="page-section" id="page-homework">
+            <h2>✅ Homework Tracker</h2>
+            <div class="card">
+                <div style="display:flex;gap:8px;flex-wrap:wrap;"><input type="text" id="hwInput" placeholder="Task description..."><input type="date" id="hwDate"><button onclick="addHomework()">➕ Add</button></div>
+            </div>
+            <div id="hwList"></div>
+            <p style="color:var(--text2);">✅ Done: <strong id="hwDoneCount">0</strong> | 📋 Pending: <strong id="hwPendingCount">0</strong></p>
+        </section>
+
+        <!-- DOUBTS -->
+        <section class="page-section" id="page-doubts">
+            <h2>💬 AI Doubt Solver</h2>
+            <div class="card">
+                <div class="chat-box" id="doubtChat"><div class="chat-msg ai">👋 Hello! Ask me any study‑related doubt and I'll help you understand it!</div></div>
+                <div style="display:flex;gap:8px;"><input type="text" id="doubtInput" placeholder="Type your doubt..." onkeydown="if(event.key==='Enter')askDoubt()"><button onclick="askDoubt()">Send ➤</button></div>
+            </div>
+        </section>
+
+        <!-- WEAK AREAS -->
+        <section class="page-section" id="page-weaknesses">
+            <h2>📉 Weak Areas Tracker</h2>
+            <div class="card">
+                <h3>🛑 Topics I Need to Improve</h3>
+                <div style="display:flex;gap:8px;"><input type="text" id="weakTopicInput" placeholder="e.g., Quadratic Equations"><button onclick="addWeakTopic()">➕ Add</button></div>
+                <div id="weakTopicsList" style="margin-top:10px;"></div>
+            </div>
+            <div class="card">
+                <h3>🔁 Smart Revision Schedule</h3>
+                <button onclick="generateRevisionPlan()">📋 Generate Today's Plan</button>
+                <div id="revisionPlanOutput" style="margin-top:10px;"></div>
+            </div>
+        </section>
+
+        <!-- RESOURCES (NEW) -->
+        <section class="page-section" id="page-resources">
+            <h2>🔗 Study Resources <span class="tag tag-new">NEW</span></h2>
+            <div class="card">
+                <h3>📚 Official Board Resources</h3>
+                <div id="boardResourcesList" style="display:flex;flex-direction:column;gap:6px;"></div>
+            </div>
+            <div class="card">
+                <h3>🎥 Recommended YouTube Channels</h3>
+                <div style="display:flex;flex-direction:column;gap:6px;color:var(--text2);">
+                    <p>📺 <strong>Khan Academy</strong> – Free world‑class education</p>
+                    <p>📺 <strong>Physics Wallah</strong> – Best for JEE/NEET prep</p>
+                    <p>📺 <strong>Magnet Brains</strong> – CBSE full course coverage</p>
+                    <p>📺 <strong>Vedantu</strong> – Live interactive classes</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- STRATEGIES -->
+        <section class="page-section" id="page-strategies">
+            <h2>🎯 Study Strategies & Exam Tips</h2>
+            <div class="card"><button onclick="generateStrategy()">🎯 Get Personalized Strategy</button><div id="strategyOutput" style="margin-top:12px;"></div></div>
+            <div class="card"><h3>😌 Last‑Minute Pressure Busters</h3><div id="pressureTips"></div><button onclick="showPressureTips()" class="btn-sm secondary" style="margin-top:8px;">🔄 Refresh Tips</button></div>
+        </section>
+
+        <!-- MOTIVATION -->
+        <section class="page-section" id="page-motivation">
+            <h2>🔥 Motivation Station</h2>
+            <div class="card" style="text-align:center;"><h3 id="motivationQuote" style="font-size:1.3rem;"></h3><p style="color:var(--accent);" id="motivationAuthor"></p><button onclick="newMotivationQuote()">🔄 New Quote</button></div>
+            <div class="card"><h3>🏆 Achievements</h3><div class="grid-3" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;"><div class="stat-card">🌟<br><span class="lbl">First Quiz</span></div><div class="stat-card">🔥<br><span class="lbl">5‑Day Streak</span></div><div class="stat-card">📒<br><span class="lbl">10 Notes</span></div></div></div>
+        </section>
     </div>
-    <div class="header-actions">
-      <select id="boardSelect" onchange="saveBoard()"><option value="CBSE">CBSE</option><option value="ICSE">ICSE</option></select>
-      <select id="classSelect" onchange="saveClass()"><option value="10">Class 10</option><option value="12">Class 12</option></select>
-      <select id="subjectSelect" onchange="saveSubject()"><option value="Mathematics">Maths</option><option value="Physics">Physics</option></select>
-      <button onclick="toggleTheme()" class="btn-icon secondary">🌓</button>
-      <button id="musicToggleBtn" class="btn-icon accent" onclick="toggleMusic()">🎵</button>
-      <button onclick="toggleFocusMode()" class="btn-icon accent" title="Focus Mode">🧘</button>
-      <button onclick="openExamModal()" class="btn-icon accent" title="Set Exam Date">📅</button>
-      <button onclick="resetWeek()" class="btn-icon danger">🔄</button>
+
+    <!-- FOCUS OVERLAY -->
+    <div class="focus-overlay" id="focusOverlay">
+        <button class="exit-focus danger" onclick="toggleFocusMode()" style="position:absolute;top:20px;right:20px;">✕ Exit Focus</button>
+        <div class="timer-display" id="focusTimerDisplay">25:00</div>
+        <textarea placeholder="What are you focusing on right now?"></textarea>
     </div>
-  </header>
 
-  <div class="content" id="contentArea">
-    <!-- DASHBOARD -->
-    <section class="page-section active" id="page-dashboard">
-      <h2>📊 Command Center</h2>
-      <p>Board: <strong id="dashBoard"></strong> | Class: <strong id="dashClass"></strong> | Subject: <strong id="dashSubject"></strong></p>
-      <div class="grid-3" id="statsGrid" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:12px;"></div>
-      <div class="card" id="examCountdownCard" style="display:none;"><h3>📅 Days Until Exam: <span id="examCountdownDisplay">--</span></h3><p>Your exam is on <strong id="examDateDisplay"></strong>.</p></div>
-      <div class="card">
-        <h3>✅ Quick Tasks</h3>
-        <div style="display:flex;gap:8px;"><input type="text" id="quickTaskInput" placeholder="Add task..." onkeypress="if(event.key==='Enter') addQuickTask()"><button onclick="addQuickTask()">➕</button></div>
-        <div id="quickTaskList" style="margin-top:8px;"></div>
-      </div>
-      <div class="card"><h3>📈 Weekly Progress (hours)</h3><div class="chart-container"><canvas id="weeklyChart"></canvas></div></div>
-    </section>
+    <!-- EXAM MODAL -->
+    <div class="modal" id="examModal">
+        <div class="modal-content">
+            <h3>📅 Set Your Exam Date</h3>
+            <input type="date" id="examDateInput" style="width:100%;margin:15px 0;">
+            <button onclick="saveExamDate()">💾 Save</button>
+            <button onclick="closeExamModal()" class="secondary" style="margin-left:10px;">Cancel</button>
+        </div>
+    </div>
 
-    <!-- TIMER -->
-    <section class="page-section" id="page-timer">
-      <div class="card" style="text-align:center;">
-        <div class="timer-display" id="timerDisplay">25:00</div>
-        <p id="timerLabel">Focus Session</p>
-        <div style="display:flex;gap:8px;justify-content:center;"><button onclick="startTimer()">▶ Start</button><button onclick="pauseTimer()" class="secondary">⏸ Pause</button><button onclick="resetTimer()" class="secondary">↺ Reset</button></div>
-        <div style="margin-top:10px;"><button class="btn-sm secondary" onclick="setTimerMode(25)">25 min</button><button class="btn-sm secondary" onclick="setTimerMode(5)">5 min</button></div>
-        <p>Sessions today: <span id="sessionCount">0</span></p>
-        <button id="lofiInlineBtn" onclick="toggleMusic()" class="btn-sm accent" style="margin-top:10px;">🎵 Lo‑Fi Beats</button>
-      </div>
-    </section>
+    <div class="toast" id="toast"></div>
 
-    <!-- PYQ -->
-    <section class="page-section" id="page-pyq">
-      <h2>📝 PYQ & Papers</h2>
-      <div class="card">
-        <p>Current: <strong id="pyqBoardLabel"></strong></p>
-        <div style="display:flex;gap:8px;margin:10px 0;"><select id="pyqYear"><option>2024</option><option>2023</option></select><select id="pyqType"><option>Board Exam</option><option>Sample Paper</option></select><button onclick="generatePYQ()">Generate</button></div>
-        <div id="pyqOutput" class="chat-box"></div>
-        <button onclick="downloadPYQ('txt')" class="btn-sm secondary">📥 .txt</button>
-        <button onclick="downloadPYQ('pdf')" class="btn-sm accent" style="margin-left:8px;">📄 PDF</button>
-      </div>
-    </section>
+    <script>
+        (function() {
+            /* ========== STATE ENGINE ========== */
+            const DEFAULT = {
+                board: 'CBSE',
+                studentClass: '10',
+                subject: 'Mathematics',
+                theme: 'dark',
+                timer: { seconds: 1500, mode: 25, running: false, interval: null, sessionsToday: 0 },
+                stats: { studyHours: 0, quizzes: 0, hwDone: 0, streak: 0 },
+                dailySessions: {},
+                lastActiveDate: null,
+                lofiPlaying: false,
+                notes: [],
+                homework: [],
+                flashcards: [],
+                examDate: null,
+                weakTopics: [],
+                quickTasks: [],
+                fcIndex: 0
+            };
+            let S = JSON.parse(localStorage.getItem('studyAIState')) || DEFAULT;
+            S.stats = { ...DEFAULT.stats, ...S.stats };
+            S.timer = { ...DEFAULT.timer, ...S.timer };
+            S.dailySessions = S.dailySessions || {};
+            S.notes = S.notes || [];
+            S.homework = S.homework || [];
+            S.flashcards = S.flashcards || [];
+            S.weakTopics = S.weakTopics || [];
+            S.quickTasks = S.quickTasks || [];
 
-    <!-- CBQ Predictor -->
-    <section class="page-section" id="page-predictor"><h2>🔮 CBQ Predictor</h2><div class="card"><button onclick="runPrediction()">Run Prediction</button><div id="predictionOutput" style="margin-top:12px;"></div></div><div class="card"><textarea id="customTopicInput" placeholder="Enter topic..."></textarea><button onclick="generateCustomQuestions()" style="margin-top:8px;">✨ Generate CBQs</button><div id="customQOutput" style="margin-top:10px;"></div></div></section>
+            const save = () => localStorage.setItem('studyAIState', JSON.stringify(S));
+            const $ = id => document.getElementById(id);
+            const toast = msg => { const t = $('toast');
+                t.textContent = msg;
+                t.style.display = 'block';
+                t.style.animation = 'none';
+                t.offsetHeight;
+                t.style.animation = 'slideUp 0.4s ease, fadeOut 0.4s ease 2.2s forwards';
+                setTimeout(() => t.style.display = 'none', 2600); };
+            const style = {
+                slideUp: '@keyframes slideUp{from{transform:translateY(50px);opacity:0}to{transform:translateY(0);opacity:1}}',
+                fadeOut: '@keyframes fadeOut{to{opacity:0;transform:translateY(20px)}}'
+            };
+            if (!document.getElementById('toastStyles')) {
+                const st = document.createElement('style');
+                st.id = 'toastStyles';
+                st.textContent = style.slideUp + style.fadeOut;
+                document.head.appendChild(st);
+            }
 
-    <!-- Notes -->
-    <section class="page-section" id="page-notes"><h2>📒 Notes Maker</h2><div class="card"><input type="text" id="noteTitle" placeholder="Title..."><textarea id="noteContent" placeholder="Write..."></textarea><button onclick="saveNote()" style="margin-top:8px;">💾 Save</button><button onclick="exportNotesPDF()" class="accent btn-sm" style="margin-left:8px;">📄 PDF</button></div><div id="notesList" class="grid-2" style="grid-template-columns:repeat(auto-fit,minmax(250px,1fr)); gap:14px;"></div></section>
+            /* ========== STREAK ========== */
+            function updateStreak() {
+                const today = new Date().toLocaleDateString();
+                const sessions = S.dailySessions[today] || 0;
+                if (sessions >= 1) {
+                    if (!S.lastActiveDate || S.lastActiveDate !== today) {
+                        const yd = new Date(Date.now() - 86400000).toLocaleDateString();
+                        S.stats.streak = (S.lastActiveDate === yd) ? (S.stats.streak || 0) + 1 : 1;
+                        S.lastActiveDate = today;
+                    }
+                } else if (S.lastActiveDate && S.lastActiveDate !== today) {
+                    const yd = new Date(Date.now() - 86400000).toLocaleDateString();
+                    if (S.lastActiveDate !== yd) S.stats.streak = 0;
+                }
+                save();
+            }
 
-    <!-- Mind Map -->
-    <section class="page-section" id="page-mindmap"><h2>🧩 Mind Maps</h2><div class="card"><input type="text" id="mindmapTopic" placeholder="Central topic..."><button onclick="generateMindMap()">Generate</button><div id="mindmapCanvas" style="min-height:300px;position:relative;border:1px dashed rgba(255,255,255,0.15);margin-top:10px;"></div></div></section>
+            function addStudyHours(h) {
+                const today = new Date().toLocaleDateString();
+                S.dailySessions[today] = (S.dailySessions[today] || 0) + 1;
+                S.stats.studyHours = (S.stats.studyHours || 0) + h;
+                updateStreak();
+                save();
+                refreshDashboard();
+                updateChart();
+            }
 
-    <!-- Quiz -->
-    <section class="page-section" id="page-quiz"><h2>❓ Quick Quiz</h2><div class="card"><button onclick="startStandardQuiz()">▶ Start Quiz</button><div id="quizArea"></div><div id="quizResult"></div></div></section>
+            /* ========== EXAM COUNTDOWN ========== */
+            function updateExamCountdown() {
+                const card = $('examCountdownCard');
+                if (S.examDate) {
+                    const exam = new Date(S.examDate);
+                    const diff = Math.ceil((exam - new Date()) / 86400000);
+                    $('examCountdownDisplay').textContent = diff > 0 ? diff : (diff === 0 ? '0 (Today!)' :
+                        'passed');
+                    $('examDateDisplay').textContent = exam.toLocaleDateString('en-IN', { day: 'numeric',
+                        month: 'long', year: 'numeric' });
+                    $('examBoardDisplay').textContent = S.board;
+                    card.style.display = 'block';
+                } else card.style.display = 'none';
+            }
+            window.openExamModal = () => { $('examModal').classList.add('active'); if (S.examDate) $('examDateInput')
+                    .value = S.examDate; };
+            window.closeExamModal = () => $('examModal').classList.remove('active');
+            window.saveExamDate = () => { const v = $('examDateInput').value; if (v) { S.examDate = v;
+                    save();
+                    updateExamCountdown();
+                    toast('📅 Exam date saved!'); } closeExamModal(); };
 
-    <!-- Flashcards -->
-    <section class="page-section" id="page-flashcards"><h2>🃏 3D Flash Cards</h2><div class="card"><input type="text" id="fcFront" placeholder="Front..."><input type="text" id="fcBack" placeholder="Back..."><button onclick="addFlashcard()">➕ Add</button></div><div class="flashcard" id="flashcardDisplay" onclick="flipFlashcard()"><div class="flashcard-inner"><div class="flashcard-front" id="fcFrontText">🧠 Add cards</div><div class="flashcard-back" id="fcBackText">✨ Answer</div></div></div><div style="display:flex;gap:8px;justify-content:center;margin-top:8px;"><button onclick="prevFlashcard()" class="secondary btn-sm">◀</button><span id="fcCounter">0/0</span><button onclick="nextFlashcard()" class="secondary btn-sm">▶</button></div></section>
+            /* ========== CHART ========== */
+            let weeklyChart;
 
-    <!-- Formulas -->
-    <section class="page-section" id="page-formulas"><h2>📐 Formula Sheet</h2><div class="card"><h3>Subject: <strong id="formulaSubject"></strong></h3><button onclick="generateFormulaSheet()">Refresh</button><div id="formulaOutput" style="white-space:pre-wrap;font-family:monospace;background:rgba(255,255,255,0.05);padding:14px;border-radius:10px;max-height:400px;overflow-y:auto;margin-top:10px;"></div></div></section>
+            function initChart() {
+                const ctx = $('weeklyChart').getContext('2d');
+                const grad = ctx.createLinearGradient(0, 0, 0, 300);
+                grad.addColorStop(0, 'rgba(108,92,231,0.8)');
+                grad.addColorStop(1, 'rgba(0,206,201,0.3)');
+                weeklyChart = new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+                        datasets: [{ data: [0, 0, 0, 0, 0, 0, 0], backgroundColor: grad,
+                            borderColor: '#6c5ce7', borderWidth: 1, borderRadius: 8 }]
+                    },
+                    options: {
+                        responsive: true,
+                        plugins: { legend: { display: false } },
+                        scales: { y: { beginAtZero: true, ticks: { color: '#a0a0c0' },
+                                grid: { color: 'rgba(255,255,255,0.05)' } }, x: { ticks: { color: '#a0a0c0' },
+                                grid: { display: false } } },
+                        animation: { duration: 800, easing: 'easeOutQuart' }
+                    }
+                });
+            }
 
-    <!-- Homework -->
-    <section class="page-section" id="page-homework"><h2>✅ Homework Tracker</h2><div class="card"><input type="text" id="hwInput" placeholder="Task..."><input type="date" id="hwDate"><button onclick="addHomework()" style="margin-top:8px;">➕ Add</button></div><div id="hwList"></div></section>
+            function updateChart() {
+                const days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+                const mon = new Date();
+                mon.setDate(mon.getDate() - ((mon.getDay() + 6) % 7));
+                const data = days.map((_, i) => { const d = new Date(mon);
+                    d.setDate(mon.getDate() + i); return (S.dailySessions[d.toLocaleDateString()] || 0) * 0.4; });
+                weeklyChart.data.datasets[0].data = data;
+                weeklyChart.update();
+            }
 
-    <!-- Doubts -->
-    <section class="page-section" id="page-doubts"><h2>💬 AI Doubt Solver</h2><div class="card"><div class="chat-box" id="doubtChat"><div class="chat-msg ai">👋 Ask me anything!</div></div><div style="display:flex;gap:8px;"><input type="text" id="doubtInput" placeholder="Type doubt..." onkeydown="if(event.key==='Enter') askDoubt()"><button onclick="askDoubt()">Send</button></div></div></section>
+            /* ========== SIDEBAR & SPA ========== */
+            window.toggleSidebar = () => {
+                const sb = $('sidebar'),
+                    bd = $('backdrop'),
+                    ct = $('contentArea');
+                sb.classList.toggle('hidden');
+                ct.classList.toggle('expanded');
+                if (window.innerWidth <= 768) { bd.classList.toggle('show');
+                    sb.classList.toggle('open'); }
+            };
+            window.closeSidebar = () => { $('sidebar').classList.add('hidden');
+                $('contentArea').classList.add('expanded');
+                $('backdrop').classList.remove('show'); };
+            window.showPage = name => {
+                document.querySelectorAll('.page-section').forEach(s => s.classList.remove('active'));
+                document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+                const sec = $('page-' + name);
+                if (sec) sec.classList.add('active');
+                const nav = document.querySelector(`.nav-item[data-page="${name}"]`);
+                if (nav) nav.classList.add('active');
+                if (name === 'dashboard') refreshDashboard();
+                if (name === 'formulas') updateFormulaSubject();
+                if (name === 'pyq') $('pyqBoardLabel').textContent = S.board + ' Class ' + S.studentClass;
+                if (name === 'weaknesses') renderWeakTopics();
+                if (name === 'resources') renderBoardResources();
+                $('contentArea').scrollTop = 0;
+                if (window.innerWidth < 768) closeSidebar();
+            };
 
-    <!-- Weak Areas -->
-    <section class="page-section" id="page-weaknesses"><h2>📉 Weak Areas Tracker</h2><div class="card"><input type="text" id="weakTopicInput" placeholder="e.g., Trigonometry"><button onclick="addWeakTopic()">➕ Add</button><div id="weakTopicsList" style="margin-top:10px;"></div></div></section>
+            /* ========== HEADER SYNC ========== */
+            window.saveBoard = () => { S.board = $('boardSelect').value;
+                save();
+                refreshDashboard();
+                updateFormulaSubject(); };
+            window.saveClass = () => { S.studentClass = $('classSelect').value;
+                save();
+                refreshDashboard(); };
+            window.saveSubject = () => { S.subject = $('subjectSelect').value;
+                save();
+                refreshDashboard();
+                updateFormulaSubject(); };
 
-    <!-- Strategies -->
-    <section class="page-section" id="page-strategies"><h2>🎯 Strategies & Tips</h2><div class="card"><button onclick="generateStrategy()">Get Strategy</button><div id="strategyOutput"></div></div></section>
+            function refreshDashboard() {
+                $('dashBoard').textContent = S.board;
+                $('dashClass').textContent = 'Class ' + S.studentClass;
+                $('dashSubject').textContent = S.subject;
+                $('statsGrid').innerHTML = `
+            <div class="stat-card"><div class="num">${(S.stats.studyHours||0).toFixed(1)}</div><div class="lbl">📖 Hours</div></div>
+            <div class="stat-card"><div class="num">${S.stats.quizzes||0}</div><div class="lbl">❓ Quizzes</div></div>
+            <div class="stat-card"><div class="num">${S.stats.hwDone||0}</div><div class="lbl">✅ HW Done</div></div>
+            <div class="stat-card"><div class="num">${S.stats.streak||0}</div><div class="lbl">🔥 Streak</div></div>
+            <div class="stat-card"><div class="num">${S.notes.length||0}</div><div class="lbl">📒 Notes</div></div>
+            <div class="stat-card"><div class="num">${S.flashcards.length||0}</div><div class="lbl">🃏 Cards</div></div>
+          `;
+                $('sessionCount').textContent = S.timer.sessionsToday || 0;
+                renderQuickTasks();
+                updateExamCountdown();
+            }
 
-    <!-- Motivation -->
-    <section class="page-section" id="page-motivation"><h2>🔥 Motivation</h2><div class="card" style="text-align:center;"><h3 id="motivationQuote"></h3><p id="motivationAuthor"></p><button onclick="newMotivationQuote()">🔄 New Quote</button></div></section>
-  </div>
+            /* ========== THEME ========== */
+            window.toggleTheme = () => { document.body.classList.toggle('light-mode');
+                S.theme = document.body.classList.contains('light-mode') ? 'light' : 'dark';
+                save(); };
 
-  <!-- Focus Overlay -->
-  <div class="focus-overlay" id="focusOverlay">
-    <button class="exit-focus danger" onclick="toggleFocusMode()">✕ Exit</button>
-    <div class="timer-display" id="focusTimerDisplay">25:00</div>
-    <textarea placeholder="What are you focusing on?"></textarea>
-  </div>
+            /* ========== MUSIC – FIXED WITH DUAL ENGINE ========== */
+            let audioCtx = null;
+            let ambientNodes = [];
+            let musicMode = 'idle'; // 'idle' | 'playing' | 'paused'
 
-  <div class="modal" id="examModal">
-    <div class="modal-content"><h3>Set Exam Date</h3><input type="date" id="examDateInput" style="width:100%;margin:15px 0;"><button onclick="saveExamDate()">Save</button><button onclick="closeExamModal()" class="secondary" style="margin-left:10px;">Cancel</button></div>
-  </div>
+            function stopAmbient() {
+                ambientNodes.forEach(n => { try { n.stop(); } catch (e) {} });
+                ambientNodes = [];
+                if (audioCtx && audioCtx.state !== 'closed') audioCtx.close().catch(() => {});
+                audioCtx = null;
+            }
 
-  <audio id="lofiAudio" loop style="display:none;"></audio>
-  <div class="toast" id="toast"></div>
+            function startAmbientTones() {
+                stopAmbient();
+                try {
+                    audioCtx = new(window.AudioContext || window.webkitAudioContext)();
+                    const masterGain = audioCtx.createGain();
+                    masterGain.gain.value = 0.08;
+                    masterGain.connect(audioCtx.destination);
 
-  <script>
-    (() => {
-      /* ---------- STATE ---------- */
-      const defaultState = {
-        board: 'CBSE', studentClass: '10', subject: 'Mathematics', theme: 'dark',
-        timer: { seconds: 1500, mode: 25, running: false, interval: null, sessionsToday: 0 },
-        stats: { studyHours: 0, quizzes: 0, hwDone: 0, streak: 0 },
-        dailySessions: {}, lastActiveDate: null, lofiPlaying: false,
-        notes: [], homework: [], flashcards: [], examDate: null, weakTopics: [], quickTasks: []
-      };
-      let state = JSON.parse(localStorage.getItem('studyAIState')) || defaultState;
-      state.stats = { ...defaultState.stats, ...state.stats };
-      state.timer = { ...defaultState.timer, ...state.timer };
-      state.dailySessions = state.dailySessions || {};
-      state.notes = state.notes || [];
-      state.homework = state.homework || [];
-      state.flashcards = state.flashcards || [];
-      state.weakTopics = state.weakTopics || [];
-      state.quickTasks = state.quickTasks || [];
+                    // Soft bass hum
+                    const bass = audioCtx.createOscillator();
+                    bass.type = 'sine';
+                    bass.frequency.value = 55;
+                    const bassGain = audioCtx.createGain();
+                    bassGain.gain.value = 0.5;
+                    bass.connect(bassGain);
+                    bassGain.connect(masterGain);
+                    bass.start();
+                    ambientNodes.push(bass);
 
-      const save = () => localStorage.setItem('studyAIState', JSON.stringify(state));
-      const toast = msg => { const t = document.getElementById('toast'); t.textContent = msg; t.style.display = 'block'; setTimeout(() => t.style.display = 'none', 2000); };
+                    // Gentle mid tone  
+                    const mid = audioCtx.createOscillator();
+                    mid.type = 'sine';
+                    mid.frequency.value = 220;
+                    const midGain = audioCtx.createGain();
+                    midGain.gain.value = 0.15;
+                    mid.connect(midGain);
+                    midGain.connect(masterGain);
+                    mid.start();
+                    ambientNodes.push(mid);
 
-      /* ---------- STREAK & STATS ---------- */
-      function updateStreak() {
-        const today = new Date().toLocaleDateString();
-        const sessions = state.dailySessions[today] || 0;
-        if (sessions >= 1) {
-          if (!state.lastActiveDate || state.lastActiveDate !== today) {
-            const yesterday = new Date(Date.now() - 86400000).toLocaleDateString();
-            state.stats.streak = (state.lastActiveDate === yesterday) ? (state.stats.streak || 0) + 1 : 1;
-            state.lastActiveDate = today;
-          }
-        } else {
-          if (state.lastActiveDate && state.lastActiveDate !== today) {
-            const yesterday = new Date(Date.now() - 86400000).toLocaleDateString();
-            if (state.lastActiveDate !== yesterday) state.stats.streak = 0;
-          }
-        }
-        save();
-      }
+                    // Soft high shimmer
+                    const high = audioCtx.createOscillator();
+                    high.type = 'sine';
+                    high.frequency.value = 660;
+                    const highGain = audioCtx.createGain();
+                    highGain.gain.value = 0.06;
+                    high.connect(highGain);
+                    highGain.connect(masterGain);
+                    high.start();
+                    ambientNodes.push(high);
 
-      function addStudyHours(hours) {
-        const today = new Date().toLocaleDateString();
-        state.dailySessions[today] = (state.dailySessions[today] || 0) + 1;
-        state.stats.studyHours = (state.stats.studyHours || 0) + hours;
-        updateStreak();
-        save();
-        refreshDashboard();
-        updateChart();
-      }
+                    // Subtle variation via LFO
+                    const lfo = audioCtx.createOscillator();
+                    lfo.type = 'sine';
+                    lfo.frequency.value = 0.2;
+                    const lfoGain = audioCtx.createGain();
+                    lfoGain.gain.value = 10;
+                    lfo.connect(lfoGain);
+                    lfoGain.connect(bass.frequency);
+                    lfo.start();
+                    ambientNodes.push(lfo);
 
-      /* ---------- EXAM COUNTDOWN ---------- */
-      function updateExamCountdown() {
-        const card = document.getElementById('examCountdownCard');
-        if (state.examDate) {
-          const exam = new Date(state.examDate);
-          const diff = Math.ceil((exam - new Date()) / (1000 * 60 * 60 * 24));
-          document.getElementById('examCountdownDisplay').textContent = diff > 0 ? diff + ' day(s)' : (diff === 0 ? 'Today!' : 'Passed');
-          document.getElementById('examDateDisplay').textContent = exam.toLocaleDateString('en-IN', { day:'numeric', month:'long', year:'numeric' });
-          card.style.display = 'block';
-        } else card.style.display = 'none';
-      }
-      window.openExamModal = () => { document.getElementById('examModal').classList.add('active'); if(state.examDate) document.getElementById('examDateInput').value = state.examDate; };
-      window.closeExamModal = () => document.getElementById('examModal').classList.remove('active');
-      window.saveExamDate = () => { const v = document.getElementById('examDateInput').value; if(v) { state.examDate = v; save(); updateExamCountdown(); toast('Exam date saved!'); } closeExamModal(); };
+                    return true;
+                } catch (e) {
+                    console.warn('Web Audio API failed:', e);
+                    return false;
+                }
+            }
 
-      /* ---------- CHART ---------- */
-      let weeklyChart;
-      function initChart() {
-        const ctx = document.getElementById('weeklyChart').getContext('2d');
-        weeklyChart = new Chart(ctx, {
-          type: 'bar',
-          data: { labels: ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'], datasets: [{ data: [0,0,0,0,0,0,0], backgroundColor: 'rgba(108,92,231,0.6)', borderColor: '#6c5ce7', borderWidth: 1 }] },
-          options: { responsive: true, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true } } }
-        });
-      }
-      function updateChart() {
-        const days = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
-        const monday = new Date(); monday.setDate(monday.getDate() - ((monday.getDay() + 6) % 7));
-        const data = days.map((_, i) => {
-          const d = new Date(monday); d.setDate(monday.getDate() + i);
-          return (state.dailySessions[d.toLocaleDateString()] || 0) * 0.4;
-        });
-        weeklyChart.data.datasets[0].data = data;
-        weeklyChart.update();
-      }
+            window.toggleMusic = () => {
+                if (musicMode === 'playing') {
+                    stopAmbient();
+                    musicMode = 'paused';
+                    $('musicToggleBtn').textContent = '🎵';
+                    const ib = $('lofiInlineBtn');
+                    if (ib) ib.textContent = '🎵 Lo‑Fi Beats';
+                    S.lofiPlaying = false;
+                    save();
+                    toast('🔇 Music paused');
+                } else {
+                    const ok = startAmbientTones();
+                    if (ok) {
+                        musicMode = 'playing';
+                        $('musicToggleBtn').textContent = '⏸️';
+                        const ib = $('lofiInlineBtn');
+                        if (ib) ib.textContent = '⏸️ Lo‑Fi On';
+                        S.lofiPlaying = true;
+                        save();
+                        toast('🎵 Lo‑Fi ambient tones playing');
+                    } else {
+                        toast('⚠️ Audio not supported in this browser');
+                    }
+                }
+            };
 
-      /* ---------- SIDEBAR & NAVIGATION ---------- */
-      window.toggleSidebar = () => {
-        const sidebar = document.getElementById('sidebar');
-        const backdrop = document.getElementById('backdrop');
-        const content = document.getElementById('contentArea');
-        sidebar.classList.toggle('hidden');
-        content.classList.toggle('expanded');
-        if (window.innerWidth <= 768) {
-          backdrop.classList.toggle('show');
-          sidebar.classList.toggle('open');
-        }
-      };
-      window.closeSidebar = () => {
-        document.getElementById('sidebar').classList.add('hidden');
-        document.getElementById('contentArea').classList.add('expanded');
-        document.getElementById('backdrop').classList.remove('show');
-      };
+            /* ========== TIMER ========== */
+            function updateTimerDisplay() {
+                const m = Math.floor(S.timer.seconds / 60),
+                    s = S.timer.seconds % 60;
+                const str = String(m).padStart(2, '0') + ':' + String(s).padStart(2, '0');
+                $('timerDisplay').textContent = str;
+                $('focusTimerDisplay').textContent = str;
+            }
+            window.setTimerMode = min => { S.timer.mode = min;
+                S.timer.seconds = min * 60;
+                S.timer.running = false;
+                clearInterval(S.timer.interval);
+                updateTimerDisplay();
+                $('timerLabel').textContent = min >= 25 ? 'Focus Session 🔥' : 'Break Time ☕';
+                save(); };
+            window.startTimer = () => {
+                if (S.timer.running) return;
+                S.timer.running = true;
+                $('timerLabel').textContent = S.timer.mode >= 25 ? 'Studying... 🔥' : 'Relaxing... ☕';
+                S.timer.interval = setInterval(() => {
+                    if (S.timer.seconds > 0) { S.timer.seconds--;
+                        updateTimerDisplay(); } else {
+                        clearInterval(S.timer.interval);
+                        S.timer.running = false;
+                        if (S.timer.mode >= 25) { S.timer.sessionsToday++;
+                            addStudyHours(0.4); if (Notification.permission === 'granted') new Notification(
+                                '🍅 Pomodoro Complete', { body: '+0.4 hours added!' });
+                            toast('🎉 Session complete! +0.4h'); } else toast('☕ Break over!');
+                        $('timerLabel').textContent = 'Done! ✅';
+                        save();
+                    }
+                }, 1000);
+                save();
+            };
+            window.pauseTimer = () => { S.timer.running = false;
+                clearInterval(S.timer.interval);
+                $('timerLabel').textContent = 'Paused ⏸';
+                save(); };
+            window.resetTimer = () => { S.timer.running = false;
+                clearInterval(S.timer.interval);
+                S.timer.seconds = S.timer.mode * 60;
+                updateTimerDisplay();
+                $('timerLabel').textContent = S.timer.mode >= 25 ? 'Focus Session' : 'Break Time';
+                save(); };
 
-      /* ---------- SPA PAGE SWITCHING ---------- */
-      window.showPage = (pageName) => {
-        document.querySelectorAll('.page-section').forEach(s => s.classList.remove('active'));
-        document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-        const section = document.getElementById('page-' + pageName);
-        if (section) section.classList.add('active');
-        const nav = document.querySelector(`.nav-item[data-page="${pageName}"]`);
-        if (nav) nav.classList.add('active');
-        if (pageName === 'dashboard') refreshDashboard();
-        if (pageName === 'formulas') updateFormulaSubject();
-        if (pageName === 'pyq') document.getElementById('pyqBoardLabel').textContent = `${state.board} Class ${state.studentClass}`;
-        if (pageName === 'weaknesses') renderWeakTopics();
-        document.getElementById('contentArea').scrollTop = 0;
-        if (window.innerWidth < 768) closeSidebar();
-      };
+            /* ========== FOCUS MODE ========== */
+            window.toggleFocusMode = () => document.body.classList.toggle('focus-mode');
 
-      /* ---------- HEADER SYNC ---------- */
-      window.saveBoard = () => { state.board = document.getElementById('boardSelect').value; save(); refreshDashboard(); };
-      window.saveClass = () => { state.studentClass = document.getElementById('classSelect').value; save(); refreshDashboard(); };
-      window.saveSubject = () => { state.subject = document.getElementById('subjectSelect').value; save(); refreshDashboard(); };
+            /* ========== QUICK TASKS ========== */
+            window.addQuickTask = () => { const v = $('quickTaskInput').value.trim(); if (!v) return;
+                S.quickTasks.push({ text: v, done: false });
+                $('quickTaskInput').value = '';
+                save();
+                renderQuickTasks(); };
+            window.toggleQuickTask = i => { S.quickTasks[i].done = !S.quickTasks[i].done;
+                save();
+                renderQuickTasks(); };
+            window.deleteQuickTask = i => { S.quickTasks.splice(i, 1);
+                save();
+                renderQuickTasks(); };
 
-      function refreshDashboard() {
-        document.getElementById('dashBoard').textContent = state.board;
-        document.getElementById('dashClass').textContent = 'Class ' + state.studentClass;
-        document.getElementById('dashSubject').textContent = state.subject;
-        document.getElementById('statsGrid').innerHTML = `
-          <div class="stat-card"><div class="num">${(state.stats.studyHours||0).toFixed(1)}</div><div class="lbl">📖 Hours</div></div>
-          <div class="stat-card"><div class="num">${state.stats.quizzes||0}</div><div class="lbl">❓ Quizzes</div></div>
-          <div class="stat-card"><div class="num">${state.stats.hwDone||0}</div><div class="lbl">✅ HW Done</div></div>
-          <div class="stat-card"><div class="num">${state.stats.streak||0}</div><div class="lbl">🔥 Streak</div></div>
-          <div class="stat-card"><div class="num">${state.notes.length||0}</div><div class="lbl">📒 Notes</div></div>
-        `;
-        document.getElementById('sessionCount').textContent = state.timer.sessionsToday || 0;
-        renderQuickTasks();
-        updateExamCountdown();
-      }
+            function renderQuickTasks() {
+                const c = $('quickTaskList');
+                if (!S.quickTasks.length) c.innerHTML = '<p style="color:var(--text2);">No tasks yet. Add one above!</p>';
+                else c.innerHTML = S.quickTasks.map((t, i) => `
+            <div class="quick-task-item">
+              <input type="checkbox" ${t.done?'checked':''} onchange="toggleQuickTask(${i})">
+              <span style="flex:1;text-decoration:${t.done?'line-through':'none'};">${t.text}</span>
+              <button class="btn-sm danger" onclick="deleteQuickTask(${i})">✕</button>
+            </div>`).join('');
+            }
 
-      window.toggleTheme = () => {
-        document.body.classList.toggle('light-mode');
-        state.theme = document.body.classList.contains('light-mode') ? 'light' : 'dark';
-        save();
-      };
+            /* ========== NOTES ========== */
+            window.saveNote = () => { const t = $('noteTitle').value.trim(),
+                    c = $('noteContent').value.trim(); if (!t || !c) return toast('Fill both fields');
+                S.notes.unshift({ title: t, content: c, date: new Date().toLocaleDateString() });
+                clearNoteForm();
+                save();
+                renderNotes();
+                refreshDashboard();
+                toast('📒 Note saved!'); };
+            window.clearNoteForm = () => { $('noteTitle').value = '';
+                $('noteContent').value = ''; };
 
-      /* ---------- MUSIC (reliable Audio) ---------- */
-      const lofiAudio = document.getElementById('lofiAudio');
-      lofiAudio.src = 'https://www.bensound.com/bensound-music/bensound-lofi.mp3'; // royalty‑free
-      lofiAudio.load();
-      window.toggleMusic = () => {
-        if (lofiAudio.paused) {
-          lofiAudio.play().then(() => {
-            state.lofiPlaying = true;
-            document.getElementById('musicToggleBtn').textContent = '⏸️';
-            document.getElementById('lofiInlineBtn').textContent = '⏸️ Lo‑Fi On';
-            save();
-          }).catch(() => toast('⚠️ Could not play audio. Try again.'));
-        } else {
-          lofiAudio.pause();
-          state.lofiPlaying = false;
-          document.getElementById('musicToggleBtn').textContent = '🎵';
-          document.getElementById('lofiInlineBtn').textContent = '🎵 Lo‑Fi Beats';
-          save();
-        }
-      };
+            function renderNotes() {
+                const c = $('notesList');
+                if (!S.notes.length) c.innerHTML =
+                    '<div class="card"><p style="color:var(--text2);">No notes yet. Start writing!</p></div>';
+                else c.innerHTML = S.notes.map((n, i) => `
+            <div class="card"><small style="color:var(--text2);">${n.date}</small><h4>${n.title}</h4><p>${n.content.substring(0,150)}...</p>
+            <button class="btn-sm danger" onclick="deleteNote(${i})">🗑</button></div>`).join('');
+            }
+            window.deleteNote = i => { S.notes.splice(i, 1);
+                save();
+                renderNotes();
+                refreshDashboard(); };
+            window.exportNotesPDF = () => { if (!S.notes.length) return toast('No notes');
+                const { jsPDF } = window.jspdf;
+                const doc = new jsPDF();
+                doc.setFontSize(16);
+                doc.text('StudyAI Notes', 20, 20);
+                let y = 30;
+                S.notes.forEach(n => { if (y > 270) { doc.addPage();
+                        y = 20; } doc.setFontSize(12);
+                    doc.text(n.title + ' (' + n.date + ')', 20, y);
+                    y += 7;
+                    doc.setFontSize(10);
+                    doc.text(n.content.substring(0, 180), 20, y);
+                    y += 15; });
+                doc.save('studyAI_notes.pdf');
+                toast('📄 PDF downloaded!'); };
+            window.notesToQuiz = () => { if (!S.notes.length) return toast('Save a note first!'); const n = S.notes[
+                    0];
+                window._quiz = { questions: [{ q: 'Based on "' + n.title + '": Main concept?',
+                        o: [n.content.split(' ')[0] || 'A', 'B', 'C', 'D'], c: 0 }, { q: 'Application of "' + n
+                        .title + '"?', o: ['Real use A', 'Real use B', 'Theory', 'None'], c: 0 }], score: 0,
+                    idx: 0 };
+                showPage('quiz');
+                showQuizQuestion();
+                toast('✨ Quiz from notes generated!'); };
+            window.readNoteAloud = () => { const c = $('noteContent').value.trim(); if (!c) return toast(
+                    'Write some notes first'); if ('speechSynthesis' in window) { const u = new SpeechSynthesisUtterance(
+                        c);
+                    u.rate = 0.9;
+                    u.pitch = 1;
+                    u.lang = 'en-IN';
+                    window.speechSynthesis.cancel();
+                    window.speechSynthesis.speak(u);
+                    toast('🔊 Reading aloud...'); } else toast('Text-to-speech not supported'); };
 
-      /* ---------- POMODORO TIMER ---------- */
-      function updateTimerDisplay() {
-        const m = Math.floor(state.timer.seconds/60), s = state.timer.seconds%60;
-        document.getElementById('timerDisplay').textContent = String(m).padStart(2,'0')+':'+String(s).padStart(2,'0');
-        document.getElementById('focusTimerDisplay').textContent = document.getElementById('timerDisplay').textContent;
-      }
-      window.setTimerMode = min => {
-        state.timer.mode = min; state.timer.seconds = min*60;
-        state.timer.running = false; clearInterval(state.timer.interval);
-        updateTimerDisplay(); save();
-      };
-      window.startTimer = () => {
-        if(state.timer.running) return;
-        state.timer.running = true;
-        state.timer.interval = setInterval(() => {
-          if(state.timer.seconds > 0) { state.timer.seconds--; updateTimerDisplay(); }
-          else {
-            clearInterval(state.timer.interval); state.timer.running = false;
-            if(state.timer.mode >= 25) {
-              state.timer.sessionsToday++;
-              addStudyHours(0.4);
-              if(Notification.permission==='granted') new Notification('🍅 Pomodoro Complete', {body:'+0.4 hours'});
-              toast('Session complete! +0.4h');
-            } else toast('Break finished!');
-            document.getElementById('timerLabel').textContent = 'Done';
-            save();
-          }
-        }, 1000);
-        save();
-      };
-      window.pauseTimer = () => { state.timer.running = false; clearInterval(state.timer.interval); save(); };
-      window.resetTimer = () => { state.timer.running = false; clearInterval(state.timer.interval); state.timer.seconds = state.timer.mode*60; updateTimerDisplay(); save(); };
+            /* ========== QUIZ ========== */
+            window.startQuiz = () => { window._quiz = { questions: [{ q: 'Sin 30° = ?',
+                        o: ['0', '1/2', '1', '√3/2'], c: 1 }, { q: 'pH of pure water?',
+                        o: ['0', '5', '7', '14'], c: 2 }, { q: 'Powerhouse of cell?',
+                        o: ['Nucleus', 'Ribosome', 'Mitochondria', 'Golgi'], c: 2 }, { q: "Ohm's Law: V = ?",
+                        o: ['IR', 'I/R', 'R/I', 'I+R'], c: 0 }], score: 0, idx: 0 };
+                showQuizQuestion(); };
 
-      window.toggleFocusMode = () => document.body.classList.toggle('focus-mode');
+            function showQuizQuestion() { const qz = window._quiz; if (!qz || qz.idx >= qz.questions.length) { $(
+                        'quizArea').innerHTML = '<h3>🎉 Quiz Complete!</h3>';
+                    $('quizResult').innerHTML =
+                    `Score: <strong>${qz.score}/${qz.questions.length}</strong> (${Math.round(qz.score/qz.questions.length*100)}%)`;
+                    S.stats.quizzes = (S.stats.quizzes || 0) + 1;
+                    save();
+                    refreshDashboard(); return; } const q = qz.questions[qz.idx];
+                $('quizArea').innerHTML = `<h4>Q${qz.idx+1}: ${q.q}</h4>${q.o.map((o,i)=>`<button onclick="answerQuiz(${i},${q.c})" class="secondary" style="display:block;width:100%;margin:4px 0;text-align:left;">${String.fromCharCode(65+i)}. ${o}</button>`).join('')}`; }
+            window.answerQuiz = (sel, cor) => { if (sel === cor) window._quiz.score++;
+                window._quiz.idx++;
+                showQuizQuestion(); };
 
-      /* ---------- QUICK TASKS ---------- */
-      window.addQuickTask = () => {
-        const input = document.getElementById('quickTaskInput');
-        const val = input.value.trim();
-        if(!val) return;
-        state.quickTasks.push({text: val, done: false});
-        input.value = '';
-        save(); renderQuickTasks();
-      };
-      window.toggleQuickTask = i => { state.quickTasks[i].done = !state.quickTasks[i].done; save(); renderQuickTasks(); };
-      window.deleteQuickTask = i => { state.quickTasks.splice(i,1); save(); renderQuickTasks(); };
-      function renderQuickTasks() {
-        const container = document.getElementById('quickTaskList');
-        if(!state.quickTasks.length) container.innerHTML = '<p style="color:var(--text2);">No tasks yet.</p>';
-        else container.innerHTML = state.quickTasks.map((t,i) => `
-          <div class="quick-task-item">
-            <input type="checkbox" ${t.done?'checked':''} onchange="toggleQuickTask(${i})">
-            <span style="flex:1; text-decoration:${t.done?'line-through':'none'};">${t.text}</span>
-            <button class="btn-sm danger" onclick="deleteQuickTask(${i})">✕</button>
-          </div>`).join('');
-      }
+            /* ========== FLASHCARDS ========== */
+            window.addFlashcard = () => { const f = $('fcFront').value.trim(),
+                    b = $('fcBack').value.trim(); if (!f || !b) return;
+                S.flashcards.push({ front: f, back: b });
+                S.fcIndex = S.flashcards.length - 1;
+                $('fcFront').value = '';
+                $('fcBack').value = '';
+                save();
+                updateFlashcardDisplay();
+                toast('🃏 Card added!'); };
 
-      /* ---------- NOTES ---------- */
-      window.saveNote = () => {
-        const title = document.getElementById('noteTitle').value.trim(), content = document.getElementById('noteContent').value.trim();
-        if(!title||!content) return toast('Fill both');
-        state.notes.unshift({title, content, date: new Date().toLocaleDateString()});
-        document.getElementById('noteTitle').value=''; document.getElementById('noteContent').value='';
-        save(); renderNotes(); refreshDashboard();
-      };
-      function renderNotes() {
-        const c = document.getElementById('notesList');
-        if(!state.notes.length) c.innerHTML = '<div class="card">No notes.</div>';
-        else c.innerHTML = state.notes.map((n,i)=>`<div class="card"><small>${n.date}</small><h4>${n.title}</h4><p>${n.content.substring(0,100)}...</p><button class="btn-sm danger" onclick="deleteNote(${i})">🗑</button></div>`).join('');
-      }
-      window.deleteNote = i => { state.notes.splice(i,1); save(); renderNotes(); refreshDashboard(); };
-      window.exportNotesPDF = () => {
-        if(!state.notes.length) return toast('No notes');
-        const {jsPDF}=window.jspdf; const doc=new jsPDF(); doc.setFontSize(16); doc.text('Notes',20,20);
-        let y=30;
-        state.notes.forEach(n=>{ if(y>270){ doc.addPage(); y=20; } doc.setFontSize(12); doc.text(`${n.title} (${n.date})`,20,y); y+=7; doc.setFontSize(10); doc.text(n.content.substring(0,150),20,y); y+=15; });
-        doc.save('notes.pdf'); toast('PDF downloaded');
-      };
+            function updateFlashcardDisplay() { if (!S.flashcards.length) { $('fcFrontText').textContent =
+                        '🧠 Add cards above';
+                    $('fcBackText').textContent = '✨ Answer';
+                    $('fcCounter').textContent = '0/0';
+                    $('flashcardDisplay').classList.remove('flipped'); return; } const c = S.flashcards[S
+                    .fcIndex];
+                $('fcFrontText').textContent = c.front;
+                $('fcBackText').textContent = c.back;
+                $('fcCounter').textContent = (S.fcIndex + 1) + '/' + S.flashcards.length;
+                $('flashcardDisplay').classList.remove('flipped'); }
+            window.flipFlashcard = () => $('flashcardDisplay').classList.toggle('flipped');
+            window.nextFlashcard = () => { if (!S.flashcards.length) return;
+                S.fcIndex = (S.fcIndex + 1) % S.flashcards.length;
+                updateFlashcardDisplay(); };
+            window.prevFlashcard = () => { if (!S.flashcards.length) return;
+                S.fcIndex = (S.fcIndex - 1 + S.flashcards.length) % S.flashcards.length;
+                updateFlashcardDisplay(); };
+            window.shuffleFlashcards = () => { S.flashcards.sort(() => Math.random() - 0.5);
+                S.fcIndex = 0;
+                updateFlashcardDisplay();
+                toast('🔀 Shuffled!'); };
 
-      /* ---------- QUIZ ---------- */
-      window.startStandardQuiz = () => {
-        window.currentQuiz = {questions:[
-          {q:'Sin 30°?',o:['0','1/2','1','√3/2'],c:1},
-          {q:'pH of water?',o:['0','5','7','14'],c:2}
-        ],score:0,idx:0};
-        showQuizQuestion();
-      };
-      function showQuizQuestion() {
-        const quiz = window.currentQuiz;
-        if(quiz.idx >= quiz.questions.length) {
-          document.getElementById('quizArea').innerHTML='<h3>Done!</h3>';
-          document.getElementById('quizResult').innerHTML=`Score: ${quiz.score}/${quiz.questions.length}`;
-          state.stats.quizzes = (state.stats.quizzes||0)+1; save(); refreshDashboard();
-          return;
-        }
-        const q = quiz.questions[quiz.idx];
-        document.getElementById('quizArea').innerHTML = `
-          <h4>Q${quiz.idx+1}: ${q.q}</h4>
-          ${q.o.map((o,i)=>`<button onclick="answerQuiz(${i},${q.c})" class="secondary" style="display:block;width:100%;margin:4px 0;">${String.fromCharCode(65+i)}. ${o}</button>`).join('')}
-        `;
-      }
-      window.answerQuiz = (sel,cor) => { if(sel===cor) window.currentQuiz.score++; window.currentQuiz.idx++; showQuizQuestion(); };
+            /* ========== PYQ ========== */
+            window.generatePYQ = () => {
+                const y = $('pyqYear').value,
+                    tp = $('pyqType').value;
+                const bank = {
+                    CBSE: { Mathematics: [`Q1. [CBSE ${y} ${tp}] Solve 2x²-7x+3=0 using factorization. (4m)`,
+                            `Q2. [CBSE ${y} ${tp}] Find sum of first 20 terms of AP: 3,7,11... (3m)`,
+                            `Q3. [CBSE ${y} ${tp}] Prove √5 is irrational. (4m)`
+                        ], Physics: [`Q1. [CBSE ${y} ${tp}] State Ohm's law. Derive R=V/I. (3m)`,
+                            `Q2. [CBSE ${y} ${tp}] Explain electric motor with diagram. (5m)`
+                        ], Chemistry: [`Q1. [CBSE ${y} ${tp}] Balance: Fe+H₂O→Fe₃O₄+H₂. (2m)`,
+                            `Q2. [CBSE ${y} ${tp}] Explain electrolysis of water. (4m)`
+                        ], Biology: [`Q1. [CBSE ${y} ${tp}] Describe photosynthesis with equation. (4m)`],
+                        English: [`Q1. [CBSE ${y} ${tp}] Write letter to editor about pollution. (6m)`] },
+                    ICSE: { Mathematics: [`Q1. [ICSE ${y} ${tp}] Factorise x²-5x+6. (3m)`],
+                        Physics: [`Q1. [ICSE ${y} ${tp}] Define refractive index. (2m)`] },
+                    'State-MH': { Mathematics: [`Q1. [Maharashtra ${y} ${tp}] Solve simultaneous equations. (4m)`] }
+                };
+                const qs = (bank[S.board] && bank[S.board][S.subject]) || [`Q1. [${S.board} ${y}] Practice question for ${S.subject}.`];
+                const out = $('pyqOutput');
+                out.innerHTML = qs.map(q => `<div class="chat-msg ai">📝 ${q}</div>`).join('');
+                out.innerHTML +=
+                    `<div class="chat-msg ai">✅ <strong>${S.board} Class ${S.studentClass} ${S.subject}</strong> – Practice these well!</div>`;
+            };
+            window.downloadPYQ = fmt => { const txt = $('pyqOutput').innerText || ''; if (fmt === 'txt') { const b = new Blob(
+                        [txt], { type: 'text/plain' }); const a = document.createElement('a');
+                    a.href = URL.createObjectURL(b);
+                    a.download = 'PYQ_' + S.board + '_' + S.subject + '.txt';
+                    a.click(); } else { const { jsPDF } = window.jspdf;
+                    const doc = new jsPDF();
+                    doc.setFontSize(14);
+                    doc.text('PYQ - ' + S.board + ' ' + S.subject, 20, 20);
+                    let y = 30;
+                    txt.split('\n').forEach(l => { if (y > 270) { doc.addPage();
+                            y = 20; } doc.setFontSize(10);
+                        doc.text(l, 20, y);
+                        y += 7; });
+                    doc.save('PYQ.pdf');
+                    toast('📄 PDF downloaded!'); } };
 
-      /* ---------- FLASHCARDS ---------- */
-      window.addFlashcard = () => {
-        const f=document.getElementById('fcFront').value.trim(), b=document.getElementById('fcBack').value.trim();
-        if(!f||!b) return;
-        state.flashcards.push({front:f,back:b});
-        document.getElementById('fcFront').value=''; document.getElementById('fcBack').value='';
-        save(); updateFlashcardDisplay();
-      };
-      function updateFlashcardDisplay() {
-        if(!state.flashcards.length) {
-          document.getElementById('fcFrontText').textContent='Add cards'; document.getElementById('fcBackText').textContent='Answer';
-          document.getElementById('fcCounter').textContent='0/0'; return;
-        }
-        const idx = state.fcIndex || 0, card = state.flashcards[idx];
-        document.getElementById('fcFrontText').textContent=card.front; document.getElementById('fcBackText').textContent=card.back;
-        document.getElementById('fcCounter').textContent=`${idx+1}/${state.flashcards.length}`;
-        document.getElementById('flashcardDisplay').classList.remove('flipped');
-      }
-      window.flipFlashcard = () => document.getElementById('flashcardDisplay').classList.toggle('flipped');
-      window.nextFlashcard = () => { state.fcIndex = ((state.fcIndex||0)+1) % state.flashcards.length; updateFlashcardDisplay(); };
-      window.prevFlashcard = () => { state.fcIndex = ((state.fcIndex||0)-1+state.flashcards.length) % state.flashcards.length; updateFlashcardDisplay(); };
+            /* ========== CBQ ========== */
+            window.runPrediction = () => { $('predictionOutput').innerHTML = `
+            <p>🔮 <strong>CBQ Prediction for ${S.board} ${S.subject}:</strong></p>
+            <p>📌 <strong>Case Study Based:</strong> Real‑world application of core concepts.</p>
+            <p>📌 <strong>Data Interpretation:</strong> Analyze charts/tables related to ${S.subject}.</p>
+            <p>📌 <strong>Assertion & Reasoning:</strong> Test conceptual depth with A/R format.</p>
+            <p>💡 <strong>CBQ Tip:</strong> Practice "How would you apply this?" type questions.</p>`; };
+            window.generateCustomQuestions = () => { const t = $('customTopicInput').value.trim() || 'this topic';
+                $('customQOutput').innerHTML = `
+            <p>✨ <strong>CBQ 1 (Real-Life):</strong> Describe a scenario where <em>${t}</em> is used in daily life. (5m)</p>
+            <p>✨ <strong>CBQ 2 (Data):</strong> Study the given data about <em>${t}</em> and draw conclusions. (4m)</p>
+            <p>✨ <strong>CBQ 3 (A/R):</strong> Assertion and Reason on <em>${t}</em>. Choose correct option. (3m)</p>
+            <p>✅ Custom competency‑based questions for <strong>"${t}"</strong>!</p>`; };
 
-      /* ---------- PYQ & PDF ---------- */
-      window.generatePYQ = () => {
-        const bank = { CBSE:{Mathematics:['Q1. Solve 2x²-7x+3=0.']} };
-        document.getElementById('pyqOutput').innerHTML = (bank[state.board]?.[state.subject]||['Q1. Practice']).map(q=>`<div class="chat-msg ai">📝 ${q}</div>`).join('');
-      };
-      window.downloadPYQ = format => {
-        const text = document.getElementById('pyqOutput').innerText || '';
-        if(format==='txt'){
-          const blob=new Blob([text],{type:'text/plain'}); const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='PYQ.txt'; a.click();
-        } else {
-          const {jsPDF}=window.jspdf; const doc=new jsPDF(); doc.setFontSize(14); doc.text('PYQ',20,20); let y=30;
-          text.split('\n').forEach(line=>{ if(y>270){doc.addPage();y=20;} doc.text(line,20,y); y+=7; });
-          doc.save('PYQ.pdf'); toast('PDF downloaded');
-        }
-      };
+            /* ========== MIND MAP ========== */
+            window.generateMindMap = () => {
+                const t = $('mindmapTopic').value.trim() || S.subject;
+                const canvas = $('mindmapCanvas');
+                canvas.innerHTML = `
+            <div class="mind-node" style="position:absolute;top:38%;left:38%;background:var(--primary);color:#fff;padding:10px 18px;border-radius:22px;font-weight:700;z-index:2;box-shadow:0 0 30px rgba(108,92,231,0.4);">🧠 ${t}</div>
+            <div class="mind-node" style="position:absolute;top:8%;left:4%;background:var(--surface, rgba(26,26,46,0.7));border:2px solid var(--accent);padding:8px 14px;border-radius:16px;">📌 Key Concept 1</div>
+            <div class="mind-node" style="position:absolute;top:8%;left:65%;background:var(--surface, rgba(26,26,46,0.7));border:2px solid var(--accent);padding:8px 14px;border-radius:16px;">📌 Key Concept 2</div>
+            <div class="mind-node" style="position:absolute;top:62%;left:4%;background:var(--surface, rgba(26,26,46,0.7));border:2px solid var(--accent);padding:8px 14px;border-radius:16px;">📌 Key Concept 3</div>
+            <div class="mind-node" style="position:absolute;top:62%;left:65%;background:var(--surface, rgba(26,26,46,0.7));border:2px solid var(--accent);padding:8px 14px;border-radius:16px;">📌 Key Concept 4</div>
+            <div class="mind-node" style="position:absolute;top:20%;left:16%;background:var(--accent2);color:#fff;padding:5px 10px;border-radius:12px;font-size:0.72rem;">🍃 Detail A</div>
+            <div class="mind-node" style="position:absolute;top:20%;left:72%;background:var(--accent2);color:#fff;padding:5px 10px;border-radius:12px;font-size:0.72rem;">🍃 Detail B</div>
+            <div class="mind-node" style="position:absolute;top:74%;left:16%;background:var(--accent2);color:#fff;padding:5px 10px;border-radius:12px;font-size:0.72rem;">🍃 Detail C</div>
+            <div class="mind-node" style="position:absolute;top:74%;left:72%;background:var(--accent2);color:#fff;padding:5px 10px;border-radius:12px;font-size:0.72rem;">🍃 Detail D</div>`; };
 
-      /* ---------- FORMULAS ---------- */
-      function updateFormulaSubject(){ document.getElementById('formulaSubject').textContent=state.subject; }
-      window.generateFormulaSheet = () => { const s={Mathematics:'(a+b)² = a²+2ab+b²', Physics:'V=IR'}; document.getElementById('formulaOutput').textContent = s[state.subject]||'Formulas...'; };
+            /* ========== FORMULAS ========== */
+            function updateFormulaSubject() { $('formulaSubject').textContent = S.subject; }
+            window.generateFormulaSheet = () => {
+                const sheets = {
+                    Mathematics: `📐 MATHEMATICS FORMULAS (${S.board} Class ${S.studentClass})\n━━━━━━━━━━━━━━━━━━━━━━━━━━━\n🔹 ALGEBRA:\n  • (a+b)² = a²+2ab+b²\n  • (a-b)² = a²-2ab+b²\n  • a²-b² = (a+b)(a-b)\n  • Quadratic: x = [-b±√(b²-4ac)]/2a\n  • AP Sum: Sₙ = n/2[2a+(n-1)d]\n🔹 TRIGONOMETRY:\n  • sin²θ+cos²θ = 1\n  • tanθ = sinθ/cosθ\n  • sin(90°-θ) = cosθ\n🔹 GEOMETRY:\n  • Circle Area = πr²\n  • Pythagoras: a²+b² = c²`,
+                    Physics: `⚡ PHYSICS FORMULAS (${S.board} Class ${S.studentClass})\n━━━━━━━━━━━━━━━━━━━━━━━━━━━\n🔹 ELECTRICITY:\n  • V = IR (Ohm's Law)\n  • P = VI = I²R = V²/R\n  • Series: R = R₁+R₂\n  • Parallel: 1/R = 1/R₁+1/R₂\n🔹 LIGHT:\n  • Mirror: 1/f = 1/v+1/u\n  • Lens: 1/f = 1/v-1/u\n  • Power: P = 1/f (m)\n🔹 MOTION:\n  • v = u+at\n  • s = ut+½at²\n  • v² = u²+2as\n  • F = ma`,
+                    Chemistry: `🧪 CHEMISTRY FORMULAS (${S.board} Class ${S.studentClass})\n━━━━━━━━━━━━━━━━━━━━━━━━━━━\n🔹 MOLE CONCEPT:\n  • n = m/M\n  • N = n×Nₐ (Nₐ=6.022×10²³)\n🔹 SOLUTIONS:\n  • Molarity = moles/V(L)\n  • pH = -log[H⁺]\n  • pH+pOH = 14\n🔹 GAS LAWS:\n  • PV = nRT\n  • P₁V₁/T₁ = P₂V₂/T₂`,
+                    Biology: `🧬 BIOLOGY KEY POINTS (${S.board} Class ${S.studentClass})\n━━━━━━━━━━━━━━━━━━━━━━━━━━━\n🔹 PHOTOSYNTHESIS:\n  • 6CO₂+6H₂O → C₆H₁₂O₆+6O₂\n🔹 RESPIRATION:\n  • C₆H₁₂O₆+6O₂ → 6CO₂+6H₂O+ATP\n🔹 DIGESTION:\n  • Mouth→Esophagus→Stomach→Small Intestine→Large Intestine`,
+                    English: `📖 ENGLISH KEY POINTS (${S.board} Class ${S.studentClass})\n━━━━━━━━━━━━━━━━━━━━━━━━━━━\n🔹 LETTER WRITING:\n  • Sender's address → Date → Receiver → Subject → Body → Closing\n🔹 GRAMMAR:\n  • Tenses: Past/Present/Future\n  • Active/Passive Voice`,
+                    ComputerScience: `💻 CS KEY POINTS (${S.board} Class ${S.studentClass})\n━━━━━━━━━━━━━━━━━━━━━━━━━━━\n🔹 PROGRAMMING:\n  • Variables, Loops, Conditionals\n  • Functions & Recursion\n🔹 DATA STRUCTURES:\n  • Arrays, Lists, Stacks, Queues`
+                };
+                $('formulaOutput').textContent = sheets[S.subject] || sheets['Mathematics'];
+                toast('📐 Formula sheet ready!');
+            };
+            window.copyFormulas = () => { navigator.clipboard.writeText($('formulaOutput').textContent).then(() => toast(
+                    '📋 Copied!')); };
 
-      /* ---------- HOMEWORK ---------- */
-      window.addHomework = () => {
-        const t=document.getElementById('hwInput').value.trim(), d=document.getElementById('hwDate').value||new Date().toISOString().slice(0,10);
-        if(!t) return;
-        state.homework.unshift({task:t,date:d,done:false}); document.getElementById('hwInput').value=''; save(); renderHomework();
-      };
-      window.toggleHW = i => { state.homework[i].done=!state.homework[i].done; state.stats.hwDone=state.homework.filter(h=>h.done).length; save(); renderHomework(); refreshDashboard(); };
-      window.deleteHW = i => { state.homework.splice(i,1); state.stats.hwDone=state.homework.filter(h=>h.done).length; save(); renderHomework(); refreshDashboard(); };
-      function renderHomework() {
-        const c=document.getElementById('hwList');
-        if(!state.homework.length) c.innerHTML='';
-        else c.innerHTML = state.homework.map((h,i)=>`<div style="display:flex;gap:8px;align-items:center;background:rgba(255,255,255,0.05);padding:8px;border-radius:8px;margin-bottom:4px;"><input type="checkbox" ${h.done?'checked':''} onchange="toggleHW(${i})"><span>${h.task} (📅${h.date})</span><button class="btn-sm danger" onclick="deleteHW(${i})">🗑</button></div>`).join('');
-      }
+            /* ========== HOMEWORK ========== */
+            window.addHomework = () => { const t = $('hwInput').value.trim(),
+                    d = $('hwDate').value || new Date().toISOString().slice(0, 10); if (!t) return;
+                S.homework.unshift({ task: t, date: d, done: false });
+                $('hwInput').value = '';
+                save();
+                renderHomework(); };
+            window.toggleHW = i => { S.homework[i].done = !S.homework[i].done;
+                S.stats.hwDone = S.homework.filter(h => h.done).length;
+                save();
+                renderHomework();
+                refreshDashboard(); };
+            window.deleteHW = i => { S.homework.splice(i, 1);
+                S.stats.hwDone = S.homework.filter(h => h.done).length;
+                save();
+                renderHomework();
+                refreshDashboard(); };
 
-      /* ---------- DOUBTS ---------- */
-      window.askDoubt = () => {
-        const q = document.getElementById('doubtInput').value.trim(); if(!q) return;
-        const chat = document.getElementById('doubtChat');
-        chat.innerHTML += `<div class="chat-msg user">🧑‍🎓 ${q}</div>`;
-        document.getElementById('doubtInput').value='';
-        chat.innerHTML += `<div class="chat-msg ai" id="thinkingMsg">🤔 Thinking...</div>`;
-        chat.scrollTop = chat.scrollHeight;
-        setTimeout(()=>{ const el=document.getElementById('thinkingMsg'); if(el) el.innerHTML = '🤖 <strong>Here\'s your answer:</strong> Great question! Based on your syllabus, the key points are...'; }, 1500);
-      };
+            function renderHomework() { const c = $('hwList'); if (!S.homework.length) c.innerHTML =
+                    '<div class="card"><p style="color:var(--text2);">No homework yet.</p></div>';
+                else c.innerHTML = S.homework.map((h, i) => `
+            <div style="display:flex;gap:8px;align-items:center;background:rgba(255,255,255,0.05);padding:10px;border-radius:10px;margin-bottom:4px;">
+              <input type="checkbox" ${h.done?'checked':''} onchange="toggleHW(${i})">
+              <span style="flex:1;">${h.task} <small style="color:var(--text2);">📅 ${h.date}</small></span>
+              <button class="btn-sm danger" onclick="deleteHW(${i})">🗑</button>
+            </div>`).join('');
+                $('hwDoneCount').textContent = S.homework.filter(h => h.done).length;
+                $('hwPendingCount').textContent = S.homework.filter(h => !h.done).length; }
 
-      /* ---------- WEAK AREAS ---------- */
-      window.addWeakTopic = () => {
-        const val = document.getElementById('weakTopicInput').value.trim();
-        if(!val) return;
-        state.weakTopics.push(val); document.getElementById('weakTopicInput').value=''; save(); renderWeakTopics();
-      };
-      window.removeWeakTopic = i => { state.weakTopics.splice(i,1); save(); renderWeakTopics(); };
-      function renderWeakTopics() {
-        const list = document.getElementById('weakTopicsList');
-        if(!state.weakTopics.length) list.innerHTML = '<p>No weak topics.</p>';
-        else list.innerHTML = state.weakTopics.map((t,i)=>`<div style="display:flex;justify-content:space-between;background:rgba(255,255,255,0.05);padding:8px;border-radius:8px;margin-bottom:4px;"><span>📉 ${t}</span><button class="btn-sm danger" onclick="removeWeakTopic(${i})">✕</button></div>`).join('');
-      }
+            /* ========== DOUBTS ========== */
+            window.askDoubt = () => { const q = $('doubtInput').value.trim(); if (!q) return; const chat = $(
+                    'doubtChat');
+                chat.innerHTML += `<div class="chat-msg user">🧑‍🎓 ${q}</div>`;
+                $('doubtInput').value = '';
+                chat.innerHTML +=
+                `<div class="chat-msg ai" id="thinkingMsg"><em>🤔 Thinking...</em></div>`;
+                chat.scrollTop = chat.scrollHeight;
+                setTimeout(() => { const el = document.getElementById('thinkingMsg'); if (el) el.innerHTML =
+                        `🤖 <strong>Here's my analysis:</strong><br><br>Based on the <strong>${S.board} Class ${S.studentClass} ${S.subject}</strong> syllabus, this is an excellent question. Let me break it down step by step:<br><br>📌 <strong>Key Concept:</strong> Focus on the core principle first.<br>📝 <strong>Approach:</strong> Understand → Apply → Verify.<br>💡 <strong>Tip:</strong> Practice similar PYQs to master this.<br><br>🔗 Related topics: Check the Resources section for links.`; }, 1200); };
 
-      window.generateStrategy = () => document.getElementById('strategyOutput').innerHTML = `🎯 ${state.board} ${state.subject}: Week1 NCERT, Week2 PYQs.`;
-      const quotes = [{q:'Believe you can and you\'re halfway there.',a:'Theodore Roosevelt'},{q:'Push yourself, because no one else will.',a:'Unknown'}];
-      window.newMotivationQuote = () => { const r=quotes[Math.floor(Math.random()*quotes.length)]; document.getElementById('motivationQuote').textContent='"'+r.q+'"'; document.getElementById('motivationAuthor').textContent='— '+r.a; };
+            /* ========== WEAK AREAS ========== */
+            window.addWeakTopic = () => { const v = $('weakTopicInput').value.trim(); if (!v) return;
+                S.weakTopics.push(v);
+                $('weakTopicInput').value = '';
+                save();
+                renderWeakTopics(); };
+            window.removeWeakTopic = i => { S.weakTopics.splice(i, 1);
+                save();
+                renderWeakTopics(); };
 
-      window.resetWeek = () => { state.dailySessions = {}; save(); updateChart(); toast('Week reset'); };
+            function renderWeakTopics() { const c = $('weakTopicsList'); if (!S.weakTopics.length) c.innerHTML =
+                    '<p style="color:var(--text2);">No weak topics. Add topics you find difficult.</p>';
+                else c.innerHTML = S.weakTopics.map((t, i) => `
+            <div style="display:flex;justify-content:space-between;align-items:center;background:rgba(255,255,255,0.05);padding:8px 12px;border-radius:8px;margin-bottom:4px;">
+              <span>📉 <strong>${t}</strong></span>
+              <button class="btn-sm danger" onclick="removeWeakTopic(${i})">✕</button>
+            </div>`).join(''); }
+            window.generateRevisionPlan = () => { const out = $('revisionPlanOutput'); if (!S.weakTopics.length) { out
+                        .innerHTML =
+                        '<p style="color:var(--text2);">Add weak topics first to generate a revision plan.</p>'; return; }
+                out.innerHTML =
+                    `<p>📅 <strong>Today's Revision Plan (${new Date().toLocaleDateString()}):</strong></p><ul style="margin-left:20px;">${S.weakTopics.map(t=>`<li>🕐 30 min focused practice on <strong>${t}</strong></li>`).join('')}<li>🕐 15 min review PYQs related to weak topics</li><li>🕐 10 min quick quiz self-test</li></ul><p>💡 Take 5‑min breaks between each topic.</p>`; };
 
-      function init() {
-        document.getElementById('boardSelect').value = state.board;
-        document.getElementById('classSelect').value = state.studentClass;
-        document.getElementById('subjectSelect').value = state.subject;
-        if(state.theme==='light') document.body.classList.add('light-mode');
-        document.getElementById('hwDate').valueAsDate = new Date();
-        updateTimerDisplay();
-        refreshDashboard();
-        renderNotes();
-        renderHomework();
-        updateFlashcardDisplay();
-        updateFormulaSubject();
-        initChart();
-        updateChart();
-        newMotivationQuote();
-        updateExamCountdown();
-        renderWeakTopics();
-        if(Notification.permission!=='granted') Notification.requestPermission();
-        if(state.lofiPlaying) {
-          document.getElementById('musicToggleBtn').textContent = '⏸️';
-          document.getElementById('lofiInlineBtn').textContent = '⏸️ Lo‑Fi On';
-          lofiAudio.play().catch(()=>{});
-        }
-        if(window.innerWidth>768) {
-          document.getElementById('sidebar').classList.remove('hidden');
-          document.getElementById('contentArea').classList.remove('expanded');
-        } else {
-          document.getElementById('sidebar').classList.add('hidden');
-          document.getElementById('contentArea').classList.add('expanded');
-        }
-      }
-      init();
-    })();
-  </script>
+            /* ========== RESOURCES ========== */
+            function renderBoardResources() {
+                const resources = {
+                    'CBSE': ['📘 <a href="https://ncert.nic.in" target="_blank" style="color:var(--accent);">NCERT Official Website</a>',
+                        '📘 <a href="https://cbseacademic.nic.in" target="_blank" style="color:var(--accent);">CBSE Academic</a>',
+                        '📘 <a href="https://cbse.gov.in" target="_blank" style="color:var(--accent);">CBSE Board</a>'
+                    ],
+                    'ICSE': ['📘 <a href="https://cisce.org" target="_blank" style="color:var(--accent);">CISCE Official</a>',
+                        '📘 ICSE Syllabus & Specimen Papers'
+                    ],
+                    'State-MH': [
+                        '📘 <a href="https://mahahsscboard.in" target="_blank" style="color:var(--accent);">MSBSHSE</a>'
+                    ],
+                    'State-TN': [
+                        '📘 <a href="https://dge.tn.gov.in" target="_blank" style="color:var(--accent);">Tamil Nadu DGE</a>'
+                    ],
+                    'State-KA': [
+                        '📘 <a href="https://kseab.karnataka.gov.in" target="_blank" style="color:var(--accent);">KSEAB Karnataka</a>'
+                    ],
+                    'State-UP': [
+                        '📘 <a href="https://upmsp.edu.in" target="_blank" style="color:var(--accent);">UPMSP</a>'
+                    ],
+                    'State-RJ': [
+                        '📘 <a href="https://rajeduboard.rajasthan.gov.in" target="_blank" style="color:var(--accent);">RBSE</a>'
+                    ]
+                };
+                const links = resources[S.board] || ['📘 Search for your board\'s official website.'];
+                $('boardResourcesList').innerHTML = links.map(l => `<p>${l}</p>`).join('');
+            }
+
+            /* ========== STRATEGIES & MOTIVATION ========== */
+            window.generateStrategy = () => { $('strategyOutput').innerHTML = `
+            <p>🎯 <strong>${S.board} ${S.subject} – Personalized Strategy:</strong></p>
+            <p>📅 <strong>Week 1-2:</strong> Complete NCERT + make notes for each chapter.</p>
+            <p>📅 <strong>Week 3:</strong> Solve PYQs from last 5 years. Focus on CBQs.</p>
+            <p>📅 <strong>Week 4:</strong> Mock tests under timed conditions.</p>
+            <p>💡 <strong>Exam Tip:</strong> In ${S.board} exams, diagrams and step‑wise answers fetch more marks.</p>`; };
+            window.showPressureTips = () => { $('pressureTips').innerHTML = `
+            <p>😌 <strong>Deep Breathing:</strong> Inhale 4s, hold 4s, exhale 4s.</p>
+            <p>📋 <strong>Quick Review:</strong> Use flashcards for last‑min revision.</p>
+            <p>💧 <strong>Stay Hydrated:</strong> Water reduces anxiety.</p>
+            <p>🚶 <strong>5‑Min Walk:</strong> Resets your brain between sessions.</p>`; };
+            const quotes = [
+                { q: 'Believe you can and you\'re halfway there.', a: 'Theodore Roosevelt' },
+                { q: 'Success is no accident. It is hard work, perseverance, learning, studying, sacrifice.',
+                    a: 'Pele' },
+                { q: 'The expert in anything was once a beginner.', a: 'Helen Hayes' },
+                { q: 'Push yourself, because no one else is going to do it for you.', a: 'Unknown' },
+                { q: 'Don\'t watch the clock; do what it does. Keep going.', a: 'Sam Levenson' },
+                { q: 'Exams test your preparation, not your worth. You\'ve got this!', a: 'StudyAI 💪' }
+            ];
+            window.newMotivationQuote = () => { const r = quotes[Math.floor(Math.random() * quotes.length)];
+                $('motivationQuote').textContent = '"' + r.q + '"';
+                $('motivationAuthor').textContent = '— ' + r.a; };
+
+            /* ========== WEEKLY RESET ========== */
+            window.resetWeekData = () => { S.dailySessions = {};
+                save();
+                updateChart();
+                toast('🔄 Weekly progress reset!'); };
+
+            /* ========== INIT ========== */
+            function init() {
+                $('boardSelect').value = S.board;
+                $('classSelect').value = S.studentClass;
+                $('subjectSelect').value = S.subject;
+                if (S.theme === 'light') document.body.classList.add('light-mode');
+                $('hwDate').valueAsDate = new Date();
+                updateTimerDisplay();
+                refreshDashboard();
+                renderNotes();
+                renderHomework();
+                updateFlashcardDisplay();
+                updateFormulaSubject();
+                initChart();
+                updateChart();
+                newMotivationQuote();
+                showPressureTips();
+                updateExamCountdown();
+                renderWeakTopics();
+                if (Notification.permission !== 'granted') Notification.requestPermission();
+                if (S.lofiPlaying) {
+                    $('musicToggleBtn').textContent = '⏸️';
+                    const ib = $('lofiInlineBtn');
+                    if (ib) ib.textContent = '⏸️ Lo‑Fi On';
+                }
+                if (window.innerWidth > 768) { $('sidebar').classList.remove('hidden');
+                    $('contentArea').classList.remove('expanded'); } else { $('sidebar').classList.add(
+                    'hidden');
+                    $('contentArea').classList.add('expanded'); }
+            }
+            init();
+        })();
+    </script>
 </body>
 </html>
