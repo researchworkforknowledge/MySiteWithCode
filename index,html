@@ -1,0 +1,1599 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StudyAI Pro - Your AI Study Assistant | All Indian Boards</title>
+    <style>
+        :root {
+            --bg: #0f0f1a;
+            --surface: #1a1a2e;
+            --surface2: #222240;
+            --primary: #6c5ce7;
+            --primary2: #a29bfe;
+            --accent: #00cec9;
+            --accent2: #fd79a8;
+            --gold: #fdcb6e;
+            --text: #e0e0f0;
+            --text2: #b0b0c8;
+            --danger: #e74c3c;
+            --success: #2ecc71;
+            --warning: #f39c12;
+            --border: #2a2a45;
+            --shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+            --radius: 16px;
+            --radius-sm: 10px;
+            --transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .light-mode {
+            --bg: #f5f6fa;
+            --surface: #ffffff;
+            --surface2: #eef0f7;
+            --text: #1a1a2e;
+            --text2: #555;
+            --border: #dde;
+            --shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            transition: var(--transition);
+            line-height: 1.6;
+        }
+        /* Scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: var(--bg);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: var(--primary);
+            border-radius: 10px;
+        }
+        /* Header */
+        .header {
+            background: var(--surface);
+            border-bottom: 1px solid var(--border);
+            padding: 14px 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 12px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: var(--shadow);
+        }
+        .logo {
+            font-size: 1.6rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--primary2), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: -0.5px;
+        }
+        .logo span {
+            font-size: 0.7rem;
+            background: var(--surface2);
+            padding: 3px 10px;
+            border-radius: 20px;
+            -webkit-text-fill-color: var(--text2);
+            margin-left: 6px;
+        }
+        .header-actions {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        select,
+        button {
+            padding: 10px 16px;
+            border-radius: 25px;
+            border: 1px solid var(--border);
+            background: var(--surface2);
+            color: var(--text);
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: var(--transition);
+            font-family: inherit;
+        }
+        button {
+            background: var(--primary);
+            border: none;
+            color: #fff;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(108, 92, 231, 0.4);
+        }
+        button.secondary {
+            background: var(--surface2);
+            color: var(--text);
+            border: 1px solid var(--border);
+        }
+        button.accent {
+            background: var(--accent);
+            color: #000;
+        }
+        button.danger {
+            background: var(--danger);
+        }
+        .btn-sm {
+            padding: 6px 14px;
+            font-size: 0.8rem;
+            border-radius: 20px;
+        }
+        /* Main Layout */
+        .main-container {
+            display: flex;
+            min-height: calc(100vh - 70px);
+        }
+        /* Sidebar */
+        .sidebar {
+            width: 260px;
+            background: var(--surface);
+            border-right: 1px solid var(--border);
+            padding: 16px 10px;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            overflow-y: auto;
+            position: sticky;
+            top: 70px;
+            height: calc(100vh - 70px);
+            flex-shrink: 0;
+        }
+        .sidebar .nav-item {
+            padding: 12px 16px;
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 500;
+            color: var(--text2);
+            font-size: 0.9rem;
+            white-space: nowrap;
+        }
+        .sidebar .nav-item:hover,
+        .sidebar .nav-item.active {
+            background: var(--primary);
+            color: #fff;
+        }
+        .sidebar .nav-item .icon {
+            font-size: 1.2rem;
+            width: 24px;
+            text-align: center;
+        }
+        .sidebar .badge {
+            background: var(--accent2);
+            color: #fff;
+            font-size: 0.7rem;
+            padding: 2px 8px;
+            border-radius: 10px;
+            margin-left: auto;
+        }
+        /* Content */
+        .content {
+            flex: 1;
+            padding: 24px;
+            overflow-y: auto;
+            max-width: 1100px;
+        }
+        .section {
+            display: none;
+        }
+        .section.active {
+            display: block;
+            animation: fadeSlideIn 0.4s ease;
+        }
+        @keyframes fadeSlideIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        .card {
+            background: var(--surface);
+            border-radius: var(--radius);
+            padding: 20px;
+            border: 1px solid var(--border);
+            box-shadow: var(--shadow);
+            margin-bottom: 20px;
+            transition: var(--transition);
+        }
+        .card:hover {
+            border-color: var(--primary2);
+        }
+        .card h3 {
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .grid-2 {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 16px;
+        }
+        .grid-3 {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 14px;
+        }
+        .stat-card {
+            background: var(--surface2);
+            border-radius: var(--radius-sm);
+            padding: 18px;
+            text-align: center;
+            border: 1px solid var(--border);
+        }
+        .stat-card .num {
+            font-size: 2.5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--primary2), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .stat-card .lbl {
+            font-size: 0.85rem;
+            color: var(--text2);
+        }
+        /* Timer */
+        .timer-display {
+            font-size: 4rem;
+            font-weight: 800;
+            text-align: center;
+            font-variant-numeric: tabular-nums;
+            letter-spacing: 4px;
+        }
+        .timer-controls {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 12px;
+        }
+        /* Input & Textarea */
+        input[type="text"],
+        input[type="number"],
+        textarea {
+            width: 100%;
+            padding: 12px;
+            border-radius: var(--radius-sm);
+            border: 1px solid var(--border);
+            background: var(--surface2);
+            color: var(--text);
+            font-family: inherit;
+            font-size: 0.95rem;
+            transition: var(--transition);
+            resize: vertical;
+        }
+        textarea {
+            min-height: 100px;
+        }
+        input:focus,
+        textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(108, 92, 231, 0.15);
+        }
+        /* Flashcard */
+        .flashcard {
+            perspective: 1000px;
+            height: 200px;
+            cursor: pointer;
+            margin-bottom: 12px;
+        }
+        .flashcard-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            transition: transform 0.6s;
+            transform-style: preserve-3d;
+        }
+        .flashcard.flipped .flashcard-inner {
+            transform: rotateY(180deg);
+        }
+        .flashcard-front,
+        .flashcard-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            border-radius: var(--radius);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            text-align: center;
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+        .flashcard-front {
+            background: var(--primary);
+            color: #fff;
+        }
+        .flashcard-back {
+            background: var(--surface2);
+            color: var(--text);
+            transform: rotateY(180deg);
+            border: 2px solid var(--primary2);
+        }
+        /* Mind Map */
+        .mindmap-container {
+            position: relative;
+            min-height: 350px;
+            border: 1px dashed var(--border);
+            border-radius: var(--radius);
+            overflow: hidden;
+            background: var(--surface2);
+        }
+        .mind-node {
+            position: absolute;
+            padding: 10px 16px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.85rem;
+            transition: var(--transition);
+            white-space: nowrap;
+        }
+        .mind-node.central {
+            background: var(--primary);
+            color: #fff;
+            font-size: 1rem;
+            z-index: 2;
+        }
+        .mind-node.branch {
+            background: var(--surface);
+            border: 2px solid var(--accent);
+            color: var(--text);
+        }
+        .mind-node.leaf {
+            background: var(--accent2);
+            color: #fff;
+            font-size: 0.75rem;
+            padding: 6px 12px;
+        }
+        /* Progress bar */
+        .progress-bar {
+            height: 10px;
+            background: var(--surface2);
+            border-radius: 10px;
+            overflow: hidden;
+            margin: 8px 0;
+        }
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary), var(--accent));
+            border-radius: 10px;
+            transition: width 0.6s ease;
+        }
+        /* Chat-like doubt solver */
+        .chat-box {
+            max-height: 350px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            padding: 10px;
+            background: var(--surface2);
+            border-radius: var(--radius-sm);
+            margin-bottom: 12px;
+        }
+        .chat-msg {
+            padding: 10px 14px;
+            border-radius: 18px;
+            max-width: 80%;
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+        .chat-msg.user {
+            background: var(--primary);
+            color: #fff;
+            align-self: flex-end;
+            border-bottom-right-radius: 4px;
+        }
+        .chat-msg.ai {
+            background: var(--surface);
+            color: var(--text);
+            align-self: flex-start;
+            border-bottom-left-radius: 4px;
+            border: 1px solid var(--border);
+        }
+        /* Tag */
+        .tag {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 15px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin: 3px;
+        }
+        .tag.purple {
+            background: rgba(108, 92, 231, 0.2);
+            color: var(--primary2);
+        }
+        .tag.green {
+            background: rgba(46, 204, 113, 0.2);
+            color: var(--success);
+        }
+        .tag.orange {
+            background: rgba(243, 156, 18, 0.2);
+            color: var(--warning);
+        }
+        /* Checklist */
+        .checklist-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px;
+            border-radius: 8px;
+            background: var(--surface2);
+            margin-bottom: 6px;
+            transition: var(--transition);
+        }
+        .checklist-item.done {
+            opacity: 0.6;
+            text-decoration: line-through;
+        }
+        .checklist-item input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            accent-color: var(--success);
+            cursor: pointer;
+        }
+        /* Toast */
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: var(--success);
+            color: #fff;
+            padding: 12px 24px;
+            border-radius: 25px;
+            font-weight: 600;
+            z-index: 999;
+            animation: slideUp 0.4s ease, fadeOut 0.4s ease 2s forwards;
+            box-shadow: var(--shadow);
+        }
+        @keyframes slideUp {
+            from {
+                transform: translateY(60px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+        @keyframes fadeOut {
+            to {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+        }
+        /* Responsive */
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 100%;
+                height: auto;
+                position: relative;
+                top: 0;
+                flex-direction: row;
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 6px;
+                padding: 10px;
+            }
+            .sidebar .nav-item {
+                padding: 8px 12px;
+                font-size: 0.75rem;
+            }
+            .sidebar .badge {
+                display: none;
+            }
+            .main-container {
+                flex-direction: column;
+            }
+            .content {
+                padding: 12px;
+            }
+            .timer-display {
+                font-size: 2.5rem;
+            }
+            .header {
+                padding: 10px 14px;
+            }
+            .logo {
+                font-size: 1.2rem;
+            }
+        }
+        .empty-state {
+            text-align: center;
+            padding: 40px;
+            color: var(--text2);
+        }
+        .empty-state .icon {
+            font-size: 4rem;
+            margin-bottom: 12px;
+        }
+        .highlight-box {
+            background: linear-gradient(135deg, rgba(108, 92, 231, 0.1), rgba(0, 206, 201, 0.1));
+            border: 1px solid var(--primary2);
+            border-radius: var(--radius);
+            padding: 20px;
+            margin: 16px 0;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="logo">🧠 StudyAI Pro <span>All Boards</span></div>
+        <div class="header-actions">
+            <select id="boardSelect" onchange="changeBoard()">
+                <option value="CBSE">🇮🇳 CBSE</option>
+                <option value="ICSE">📚 ICSE</option>
+                <option value="State-MH">🏛️ Maharashtra State</option>
+                <option value="State-TN">🏛️ Tamil Nadu State</option>
+                <option value="State-KA">🏛️ Karnataka State</option>
+                <option value="State-GJ">🏛️ Gujarat State</option>
+                <option value="State-RJ">🏛️ Rajasthan State</option>
+                <option value="State-UP">🏛️ UP State</option>
+                <option value="State-WB">🏛️ West Bengal State</option>
+                <option value="State-BR">🏛️ Bihar State</option>
+                <option value="State-Others">🏛️ Other Boards</option>
+            </select>
+            <select id="classSelect" onchange="changeClass()">
+                <option value="10">Class 10</option>
+                <option value="12">Class 12</option>
+                <option value="9">Class 9</option>
+                <option value="11">Class 11</option>
+            </select>
+            <select id="subjectSelect" onchange="changeSubject()">
+                <option value="Mathematics">📐 Mathematics</option>
+                <option value="Physics">⚡ Physics</option>
+                <option value="Chemistry">🧪 Chemistry</option>
+                <option value="Biology">🧬 Biology</option>
+                <option value="English">📖 English</option>
+                <option value="History">🏛️ History</option>
+                <option value="Geography">🌍 Geography</option>
+                <option value="ComputerScience">💻 Computer Science</option>
+            </select>
+            <button onclick="toggleTheme()" class="secondary btn-sm" title="Toggle Dark/Light Mode">🌓</button>
+            <button onclick="resetAllData()" class="danger btn-sm" title="Reset All Data">🔄 Reset</button>
+        </div>
+    </header>
+
+    <!-- Main Layout -->
+    <div class="main-container">
+        <!-- Sidebar -->
+        <nav class="sidebar" id="sidebar">
+            <div class="nav-item active" data-section="dashboard" onclick="showSection('dashboard', this)"><span class="icon">📊</span> Dashboard</div>
+            <div class="nav-item" data-section="timer" onclick="showSection('timer', this)"><span class="icon">⏱️</span> Study Timer <span class="badge">Pomodoro</span></div>
+            <div class="nav-item" data-section="pyq" onclick="showSection('pyq', this)"><span class="icon">📝</span> PYQ & Papers</div>
+            <div class="nav-item" data-section="predictor" onclick="showSection('predictor', this)"><span class="icon">🔮</span> Question Predictor</div>
+            <div class="nav-item" data-section="notes" onclick="showSection('notes', this)"><span class="icon">📒</span> Notes Maker</div>
+            <div class="nav-item" data-section="mindmap" onclick="showSection('mindmap', this)"><span class="icon">🧩</span> Mind Maps</div>
+            <div class="nav-item" data-section="quiz" onclick="showSection('quiz', this)"><span class="icon">❓</span> Quizzes</div>
+            <div class="nav-item" data-section="flashcards" onclick="showSection('flashcards', this)"><span class="icon">🃏</span> Flash Cards</div>
+            <div class="nav-item" data-section="formulas" onclick="showSection('formulas', this)"><span class="icon">📐</span> Formula Sheets</div>
+            <div class="nav-item" data-section="homework" onclick="showSection('homework', this)"><span class="icon">✅</span> Homework Tracker</div>
+            <div class="nav-item" data-section="doubts" onclick="showSection('doubts', this)"><span class="icon">💬</span> Clear Doubts</div>
+            <div class="nav-item" data-section="strategies" onclick="showSection('strategies', this)"><span class="icon">🎯</span> Strategies & Tips</div>
+            <div class="nav-item" data-section="motivation" onclick="showSection('motivation', this)"><span class="icon">🔥</span> Motivation</div>
+        </nav>
+
+        <!-- Content Area -->
+        <main class="content" id="contentArea">
+            <!-- Dashboard -->
+            <section class="section active" id="section-dashboard">
+                <h2>📊 Welcome Back! Your Study Dashboard</h2>
+                <p style="color:var(--text2);margin-bottom:16px;">Board: <strong id="dashBoard"></strong> | Class: <strong id="dashClass"></strong> | Subject: <strong id="dashSubject"></strong></p>
+                <div class="grid-3" id="statsGrid">
+                    <div class="stat-card"><div class="num" id="statStudyHours">0</div><div class="lbl">📖 Hours Studied</div></div>
+                    <div class="stat-card"><div class="num" id="statQuizzes">0</div><div class="lbl">❓ Quizzes Taken</div></div>
+                    <div class="stat-card"><div class="num" id="statHW">0</div><div class="lbl">✅ HW Completed</div></div>
+                    <div class="stat-card"><div class="num" id="statFlashcards">0</div><div class="lbl">🃏 Cards Reviewed</div></div>
+                    <div class="stat-card"><div class="num" id="statStreak">0</div><div class="lbl">🔥 Day Streak</div></div>
+                    <div class="stat-card"><div class="num" id="statNotes">0</div><div class="lbl">📒 Notes Saved</div></div>
+                </div>
+                <div class="card">
+                    <h3>📈 Weekly Progress</h3>
+                    <div class="progress-bar"><div class="progress-fill" id="weeklyProgress" style="width:0%"></div></div>
+                    <p style="margin-top:8px;color:var(--text2);">Keep going! You're doing great. 🚀</p>
+                </div>
+                <div class="highlight-box">
+                    <strong>🎯 Today's Focus:</strong> <span id="dailyFocus">Complete at least 2 study sessions and review 5 flashcards!</span>
+                </div>
+            </section>
+
+            <!-- Timer -->
+            <section class="section" id="section-timer">
+                <h2>⏱️ Pomodoro Study Timer</h2>
+                <div class="card" style="text-align:center;">
+                    <div class="timer-display" id="timerDisplay">25:00</div>
+                    <p style="color:var(--text2);" id="timerLabel">Focus Session</p>
+                    <div class="timer-controls">
+                        <button onclick="startTimer()">▶ Start</button>
+                        <button onclick="pauseTimer()" class="secondary">⏸ Pause</button>
+                        <button onclick="resetTimer()" class="secondary">↺ Reset</button>
+                    </div>
+                    <div style="margin-top:12px;">
+                        <button class="btn-sm secondary" onclick="setTimerMode(25)">25 min Focus</button>
+                        <button class="btn-sm secondary" onclick="setTimerMode(5)">5 min Break</button>
+                        <button class="btn-sm secondary" onclick="setTimerMode(15)">15 min Break</button>
+                        <button class="btn-sm secondary" onclick="setTimerMode(50)">50 min Deep</button>
+                    </div>
+                    <p style="margin-top:10px;color:var(--text2);">Sessions completed today: <strong id="sessionCount">0</strong></p>
+                </div>
+            </section>
+
+            <!-- PYQ -->
+            <section class="section" id="section-pyq">
+                <h2>📝 Previous Year Questions & Sample Papers</h2>
+                <div class="card">
+                    <h3>🔍 Generate PYQ Set</h3>
+                    <p style="color:var(--text2);">Select your preferences to generate relevant PYQs and sample papers.</p>
+                    <div style="display:flex;gap:10px;flex-wrap:wrap;margin:12px 0;">
+                        <select id="pyqYear"><option>2024</option><option>2023</option><option>2022</option><option>2021</option><option>2020</option></select>
+                        <select id="pyqType"><option>Board Exam Paper</option><option>Sample Paper</option><option>Compartment Exam</option></select>
+                        <button onclick="generatePYQ()">Generate Questions</button>
+                    </div>
+                    <div id="pyqOutput" class="chat-box" style="max-height:400px;">
+                        <div class="chat-msg ai">👋 Select options and click generate to see PYQs and sample questions tailored for your board!</div>
+                    </div>
+                    <button onclick="downloadPYQ()" class="btn-sm secondary" style="margin-top:8px;">📥 Download as Text</button>
+                </div>
+            </section>
+
+            <!-- Predictor -->
+            <section class="section" id="section-predictor">
+                <h2>🔮 AI Question Predictor & Analyzer</h2>
+                <div class="card">
+                    <h3>📊 Analysis Based on Past Trends</h3>
+                    <p style="color:var(--text2);">Our AI analyzes PYQ patterns to predict likely questions for your upcoming exam.</p>
+                    <button onclick="runPrediction()">🔮 Run Prediction Analysis</button>
+                    <div id="predictionOutput" style="margin-top:16px;"></div>
+                </div>
+                <div class="card">
+                    <h3>📋 Custom Question Generator</h3>
+                    <textarea id="customTopicInput" placeholder="Enter topic (e.g., 'Quadratic Equations' or 'Electromagnetic Induction')..."></textarea>
+                    <button onclick="generateCustomQuestions()" style="margin-top:10px;">✨ Generate Self-Made Questions</button>
+                    <div id="customQOutput" style="margin-top:12px;"></div>
+                </div>
+            </section>
+
+            <!-- Notes -->
+            <section class="section" id="section-notes">
+                <h2>📒 Smart Notes Maker</h2>
+                <div class="card">
+                    <input type="text" id="noteTitle" placeholder="Note title...">
+                    <textarea id="noteContent" placeholder="Write your notes here... Use **bold** or bullet points!" style="min-height:180px;"></textarea>
+                    <div style="display:flex;gap:10px;margin-top:10px;flex-wrap:wrap;">
+                        <button onclick="saveNote()">💾 Save Note</button>
+                        <button onclick="clearNoteForm()" class="secondary">🗑 Clear</button>
+                        <button onclick="exportNotes()" class="secondary btn-sm">📥 Export All Notes</button>
+                    </div>
+                </div>
+                <h3>📚 Your Saved Notes</h3>
+                <div id="notesList" class="grid-2"></div>
+            </section>
+
+            <!-- Mind Map -->
+            <section class="section" id="section-mindmap">
+                <h2>🧩 Interactive Mind Maps</h2>
+                <div class="card">
+                    <input type="text" id="mindmapTopic" placeholder="Central topic (e.g., 'Photosynthesis')...">
+                    <button onclick="generateMindMap()" style="margin-top:8px;">🧠 Generate Mind Map</button>
+                    <div class="mindmap-container" id="mindmapCanvas"></div>
+                    <p style="color:var(--text2);font-size:0.8rem;">Click nodes to expand/collapse • Drag to rearrange (simulated)</p>
+                </div>
+            </section>
+
+            <!-- Quiz -->
+            <section class="section" id="section-quiz">
+                <h2>❓ Interactive Quiz</h2>
+                <div class="card" id="quizCard">
+                    <h3>🧪 Quick Quiz</h3>
+                    <p style="color:var(--text2);">Test your knowledge with auto-generated questions!</p>
+                    <button onclick="startQuiz()">▶ Start New Quiz</button>
+                    <div id="quizArea" style="margin-top:16px;"></div>
+                    <div id="quizResult" style="margin-top:12px;font-weight:600;"></div>
+                </div>
+            </section>
+
+            <!-- Flashcards -->
+            <section class="section" id="section-flashcards">
+                <h2>🃏 Smart Flashcards</h2>
+                <div class="card">
+                    <div style="display:flex;gap:10px;flex-wrap:wrap;">
+                        <input type="text" id="fcFront" placeholder="Front (Question/Term)...">
+                        <input type="text" id="fcBack" placeholder="Back (Answer/Definition)...">
+                        <button onclick="addFlashcard()">➕ Add Card</button>
+                    </div>
+                </div>
+                <div class="flashcard" id="flashcardDisplay" onclick="flipFlashcard()">
+                    <div class="flashcard-inner">
+                        <div class="flashcard-front" id="fcFrontText">🧠 Click to add flashcards!</div>
+                        <div class="flashcard-back" id="fcBackText">✨ Answer appears here</div>
+                    </div>
+                </div>
+                <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;">
+                    <button onclick="prevFlashcard()" class="secondary btn-sm">◀ Previous</button>
+                    <span id="fcCounter" style="color:var(--text2);">0 / 0</span>
+                    <button onclick="nextFlashcard()" class="secondary btn-sm">Next ▶</button>
+                    <button onclick="shuffleFlashcards()" class="btn-sm secondary">🔀 Shuffle</button>
+                </div>
+            </section>
+
+            <!-- Formulas -->
+            <section class="section" id="section-formulas">
+                <h2>📐 Smart Formula Sheets</h2>
+                <div class="card">
+                    <h3>📋 Auto-Generated Formula Sheet</h3>
+                    <p style="color:var(--text2);">Based on your selected subject: <strong id="formulaSubject"></strong></p>
+                    <button onclick="generateFormulaSheet()">🔄 Generate / Refresh</button>
+                    <div id="formulaOutput" style="margin-top:16px;white-space:pre-wrap;font-family:monospace;background:var(--surface2);padding:16px;border-radius:var(--radius-sm);max-height:400px;overflow-y:auto;"></div>
+                    <button onclick="copyFormulas()" class="btn-sm secondary" style="margin-top:8px;">📋 Copy All Formulas</button>
+                </div>
+            </section>
+
+            <!-- Homework -->
+            <section class="section" id="section-homework">
+                <h2>✅ Homework & Assignment Tracker</h2>
+                <div class="card">
+                    <div style="display:flex;gap:10px;flex-wrap:wrap;">
+                        <input type="text" id="hwInput" placeholder="Add homework/task...">
+                        <input type="date" id="hwDate">
+                        <button onclick="addHomework()">➕ Add</button>
+                    </div>
+                </div>
+                <div id="hwList"></div>
+                <p style="color:var(--text2);">✅ Completed: <strong id="hwDoneCount">0</strong> | 📋 Pending: <strong id="hwPendingCount">0</strong></p>
+            </section>
+
+            <!-- Doubts -->
+            <section class="section" id="section-doubts">
+                <h2>💬 AI Doubt Solver</h2>
+                <div class="card">
+                    <div class="chat-box" id="doubtChat">
+                        <div class="chat-msg ai">👋 Hello! Ask me any study-related doubt. I'll do my best to help you understand!</div>
+                    </div>
+                    <div style="display:flex;gap:10px;">
+                        <input type="text" id="doubtInput" placeholder="Type your doubt here..." onkeypress="if(event.key==='Enter')askDoubt()">
+                        <button onclick="askDoubt()">Send ➤</button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Strategies -->
+            <section class="section" id="section-strategies">
+                <h2>🎯 Study Strategies & Exam Tips</h2>
+                <div class="card">
+                    <h3>🧠 Personalized Strategy</h3>
+                    <button onclick="generateStrategy()">🎯 Get Strategy</button>
+                    <div id="strategyOutput" style="margin-top:16px;"></div>
+                </div>
+                <div class="card">
+                    <h3>😌 Last-Minute Pressure Busters</h3>
+                    <div id="pressureTips" style="margin-top:8px;"></div>
+                    <button onclick="showPressureTips()" class="btn-sm secondary">🔄 Refresh Tips</button>
+                </div>
+            </section>
+
+            <!-- Motivation -->
+            <section class="section" id="section-motivation">
+                <h2>🔥 Motivation Station</h2>
+                <div class="card" style="text-align:center;">
+                    <h3 style="font-size:1.5rem;" id="motivationQuote">"The only way to do great work is to love what you do."</h3>
+                    <p style="color:var(--accent);" id="motivationAuthor">— Steve Jobs</p>
+                    <button onclick="newMotivationQuote()">🔄 New Quote</button>
+                </div>
+                <div class="card">
+                    <h3>🏆 Your Achievements</h3>
+                    <div class="grid-3" id="achievementsGrid">
+                        <div class="stat-card">🌟<br><span class="lbl">First Quiz Done</span></div>
+                        <div class="stat-card">🔥<br><span class="lbl">5-Day Streak</span></div>
+                        <div class="stat-card">📒<br><span class="lbl">10 Notes Saved</span></div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Toast -->
+    <div class="toast" id="toast" style="display:none;"></div>
+
+    <script>
+        // ============ GLOBAL STATE ============
+        let state = {
+            board: 'CBSE',
+            studentClass: '10',
+            subject: 'Mathematics',
+            theme: 'dark',
+            timerSeconds: 25 * 60,
+            timerRunning: false,
+            timerInterval: null,
+            timerMode: 25,
+            sessionCount: 0,
+            flashcards: [],
+            fcIndex: 0,
+            notes: [],
+            homework: [],
+            quizScore: 0,
+            quizTotal: 0,
+            stats: { studyHours: 0, quizzes: 0, hwDone: 0, flashcardsReviewed: 0, streak: 1, notesCount: 0 },
+        };
+
+        // Load from localStorage
+        function loadState() {
+            const saved = localStorage.getItem('studyAIState');
+            if (saved) {
+                try {
+                    const parsed = JSON.parse(saved);
+                    state = { ...state, ...parsed };
+                } catch (e) { console.log('Fresh start'); }
+            }
+            document.getElementById('boardSelect').value = state.board;
+            document.getElementById('classSelect').value = state.studentClass;
+            document.getElementById('subjectSelect').value = state.subject;
+            if (state.theme === 'light') document.body.classList.add('light-mode');
+            updateDashboard();
+            renderNotes();
+            renderHomework();
+            updateFlashcardDisplay();
+            updateFormulaSubject();
+        }
+
+        function saveState() {
+            localStorage.setItem('studyAIState', JSON.stringify(state));
+        }
+
+        function showToast(msg) {
+            const t = document.getElementById('toast');
+            t.textContent = msg;
+            t.style.display = 'block';
+            setTimeout(() => { t.style.display = 'none'; }, 2400);
+        }
+
+        // ============ NAVIGATION ============
+        function showSection(name, el) {
+            document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+            const section = document.getElementById('section-' + name);
+            if (section) section.classList.add('active');
+            if (el) el.classList.add('active');
+            if (name === 'formulas') updateFormulaSubject();
+            if (name === 'dashboard') updateDashboard();
+            if (name === 'strategies') showPressureTips();
+        }
+
+        // ============ BOARD / CLASS / SUBJECT ============
+        function changeBoard() {
+            state.board = document.getElementById('boardSelect').value;
+            saveState();
+            updateDashboard();
+            updateFormulaSubject();
+            showToast('Board changed to ' + state.board);
+        }
+
+        function changeClass() {
+            state.studentClass = document.getElementById('classSelect').value;
+            saveState();
+            updateDashboard();
+            updateFormulaSubject();
+            showToast('Class changed to ' + state.studentClass);
+        }
+
+        function changeSubject() {
+            state.subject = document.getElementById('subjectSelect').value;
+            saveState();
+            updateDashboard();
+            updateFormulaSubject();
+            showToast('Subject: ' + state.subject);
+        }
+
+        function updateDashboard() {
+            document.getElementById('dashBoard').textContent = state.board;
+            document.getElementById('dashClass').textContent = 'Class ' + state.studentClass;
+            document.getElementById('dashSubject').textContent = state.subject;
+            document.getElementById('statStudyHours').textContent = (state.stats.studyHours || 0).toFixed(1);
+            document.getElementById('statQuizzes').textContent = state.stats.quizzes || 0;
+            document.getElementById('statHW').textContent = state.stats.hwDone || 0;
+            document.getElementById('statFlashcards').textContent = state.stats.flashcardsReviewed || 0;
+            document.getElementById('statStreak').textContent = state.stats.streak || 0;
+            document.getElementById('statNotes').textContent = state.notes.length || 0;
+            document.getElementById('weeklyProgress').style.width = Math.min((state.stats.studyHours || 0) * 8, 100) + '%';
+            document.getElementById('dailyFocus').textContent =
+                `Complete at least 2 study sessions and review ${Math.max(5 - (state.stats.flashcardsReviewed || 0) % 5, 1)} flashcards!`;
+            document.getElementById('sessionCount').textContent = state.sessionCount || 0;
+        }
+
+        // ============ THEME ============
+        function toggleTheme() {
+            document.body.classList.toggle('light-mode');
+            state.theme = document.body.classList.contains('light-mode') ? 'light' : 'dark';
+            saveState();
+        }
+
+        // ============ TIMER ============
+        function updateTimerDisplay() {
+            const m = Math.floor(state.timerSeconds / 60);
+            const s = state.timerSeconds % 60;
+            document.getElementById('timerDisplay').textContent =
+                String(m).padStart(2, '0') + ':' + String(s).padStart(2, '0');
+        }
+
+        function setTimerMode(min) {
+            state.timerMode = min;
+            state.timerSeconds = min * 60;
+            state.timerRunning = false;
+            clearInterval(state.timerInterval);
+            updateTimerDisplay();
+            const label = min >= 25 ? 'Focus Session 🔥' : 'Break Time ☕';
+            document.getElementById('timerLabel').textContent = label;
+            saveState();
+        }
+
+        function startTimer() {
+            if (state.timerRunning) return;
+            state.timerRunning = true;
+            document.getElementById('timerLabel').textContent =
+                state.timerMode >= 25 ? 'Focus Session 🔥 - Studying...' : 'Break Time ☕ - Relax!';
+            state.timerInterval = setInterval(() => {
+                if (state.timerSeconds > 0) {
+                    state.timerSeconds--;
+                    updateTimerDisplay();
+                } else {
+                    clearInterval(state.timerInterval);
+                    state.timerRunning = false;
+                    if (state.timerMode >= 25) {
+                        state.sessionCount = (state.sessionCount || 0) + 1;
+                        state.stats.studyHours = (state.stats.studyHours || 0) + state.timerMode / 60;
+                        showToast('🎉 Session complete! Take a break!');
+                    } else {
+                        showToast('☕ Break over! Ready to study?');
+                    }
+                    updateDashboard();
+                    saveState();
+                    document.getElementById('timerLabel').textContent = 'Done! ✅';
+                }
+            }, 1000);
+            saveState();
+        }
+
+        function pauseTimer() {
+            state.timerRunning = false;
+            clearInterval(state.timerInterval);
+            document.getElementById('timerLabel').textContent = 'Paused ⏸';
+            saveState();
+        }
+
+        function resetTimer() {
+            state.timerRunning = false;
+            clearInterval(state.timerInterval);
+            state.timerSeconds = state.timerMode * 60;
+            updateTimerDisplay();
+            document.getElementById('timerLabel').textContent =
+                state.timerMode >= 25 ? 'Focus Session' : 'Break Time';
+            saveState();
+        }
+
+        // ============ PYQ ============
+        function generatePYQ() {
+            const year = document.getElementById('pyqYear').value;
+            const type = document.getElementById('pyqType').value;
+            const board = state.board;
+            const subject = state.subject;
+            const cls = state.studentClass;
+            const pyqBank = {
+                Mathematics: [
+                    `Q1. [${board} ${year} ${type}] Solve the quadratic equation: 2x² - 7x + 3 = 0 using the factorization method. (4 marks)`,
+                    `Q2. [${board} ${year} ${type}] Find the sum of first 20 terms of the AP: 3, 7, 11, 15... (3 marks)`,
+                    `Q3. [${board} ${year} ${type}] Prove that √5 is irrational. (4 marks)`,
+                    `Q4. [${board} ${year} ${type}] A pole 6m high casts a shadow 2√3 m long. Find the angle of elevation of the sun. (3 marks)`,
+                    `Q5. [${board} ${year} ${type}] Find the area of the triangle with vertices (2,3), (4,5), and (6,2). (3 marks)`,
+                ],
+                Physics: [
+                    `Q1. [${board} ${year} ${type}] State Ohm's law and derive the relation R = V/I. (3 marks)`,
+                    `Q2. [${board} ${year} ${type}] Explain the working of an electric motor with a labeled diagram. (5 marks)`,
+                    `Q3. [${board} ${year} ${type}] A convex lens has focal length 20cm. Find its power in diopters. (2 marks)`,
+                    `Q4. [${board} ${year} ${type}] Define refractive index. A ray of light enters from air to glass (n=1.5). Find the angle of refraction if the angle of incidence is 30°. (4 marks)`,
+                ],
+                Chemistry: [
+                    `Q1. [${board} ${year} ${type}] Balance the equation: Fe + H₂O → Fe₃O₄ + H₂ (2 marks)`,
+                    `Q2. [${board} ${year} ${type}] Explain the process of electrolysis of water with a diagram. (4 marks)`,
+                    `Q3. [${board} ${year} ${type}] What is the pH range for acids? Give two examples of strong acids. (3 marks)`,
+                ],
+                Biology: [
+                    `Q1. [${board} ${year} ${type}] Describe the process of photosynthesis with a chemical equation. (4 marks)`,
+                    `Q2. [${board} ${year} ${type}] Draw a labeled diagram of the human digestive system. (5 marks)`,
+                    `Q3. [${board} ${year} ${type}] What are hormones? Name any two plant hormones and their functions. (3 marks)`,
+                ],
+                English: [
+                    `Q1. [${board} ${year} ${type}] Write a letter to the editor about the increasing pollution in your city. (6 marks)`,
+                    `Q2. [${board} ${year} ${type}] Read the passage and answer the questions that follow... (8 marks)`,
+                ],
+            };
+            const questions = pyqBank[subject] || pyqBank['Mathematics'];
+            const selected = questions.slice(0, Math.min(5, questions.length));
+            const output = document.getElementById('pyqOutput');
+            output.innerHTML = selected.map(q => `<div class="chat-msg ai">📝 ${q}</div>`).join('');
+            output.innerHTML +=
+                `<div class="chat-msg ai">✅ These are likely PYQ-style questions for <strong>${board} Class ${cls} ${subject}</strong>. Practice them well!</div>`;
+        }
+
+        function downloadPYQ() {
+            const content = document.getElementById('pyqOutput').innerText;
+            const blob = new Blob([content], { type: 'text/plain' });
+            const a = document.createElement('a');
+            a.href = URL.createObjectURL(blob);
+            a.download = `PYQ_${state.board}_${state.subject}.txt`;
+            a.click();
+            showToast('📥 Downloaded!');
+        }
+
+        // ============ PREDICTOR ============
+        function runPrediction() {
+            const output = document.getElementById('predictionOutput');
+            const predictions = [
+                `🔮 <strong>High Probability Topics for ${state.board} ${state.subject}:</strong>`,
+                `📌 Based on analysis of last 5 years' papers, these topics appear most frequently:`,
+                `1. ⭐ <strong>Top Priority:</strong> ${getPriorityTopics(state.subject)[0]}`,
+                `2. ⭐ <strong>High Chance:</strong> ${getPriorityTopics(state.subject)[1]}`,
+                `3. 🔸 <strong>Moderate:</strong> ${getPriorityTopics(state.subject)[2]}`,
+                `4. 🔸 <strong>Worth Preparing:</strong> ${getPriorityTopics(state.subject)[3]}`,
+                `📊 <strong>Predicted Question Types:</strong> 40% Application-based, 35% Conceptual, 25% Direct`,
+                `💡 <strong>Strategy:</strong> Focus on numerical problems and diagram-based questions for maximum marks.`,
+            ];
+            output.innerHTML = predictions.map(p => `<p style="margin:6px 0;">${p}</p>`).join('');
+            showToast('🔮 Prediction ready!');
+        }
+
+        function getPriorityTopics(subject) {
+            const topics = {
+                Mathematics: ['Trigonometry (Heights & Distances)',
+                    'Quadratic Equations', 'Arithmetic Progressions', 'Coordinate Geometry'
+                ],
+                Physics: ['Electricity (Ohm\'s Law & Circuits)', 'Light (Lens & Mirrors)', 'Magnetic Effects',
+                    'Force & Laws of Motion'
+                ],
+                Chemistry: ['Chemical Reactions & Equations', 'Acids, Bases & Salts', 'Carbon Compounds',
+                'Periodic Table'],
+                Biology: ['Photosynthesis', 'Human Digestive System', 'Genetics & Heredity', 'Cell Structure'],
+                English: ['Letter Writing', 'Reading Comprehension', 'Grammar (Tenses)', 'Literature Extracts'],
+            };
+            return topics[subject] || ['Key concepts review', 'Important formulas', 'Diagram practice',
+                'Previous year patterns'
+            ];
+        }
+
+        function generateCustomQuestions() {
+            const topic = document.getElementById('customTopicInput').value.trim();
+            if (!topic) { showToast('Please enter a topic!'); return; }
+            const output = document.getElementById('customQOutput');
+            const questions = [
+                `✨ <strong>Q1:</strong> Explain the concept of <em>${topic}</em> with a suitable example. (4 marks)`,
+                `✨ <strong>Q2:</strong> Derive the formula related to <em>${topic}</em> and show its application. (5 marks)`,
+                `✨ <strong>Q3:</strong> A student performs an experiment on <em>${topic}</em>. Predict the outcome and justify. (3 marks)`,
+                `✨ <strong>Q4:</strong> Compare and contrast two approaches within <em>${topic}</em>. (4 marks)`,
+                `✨ <strong>Q5 (HOTS):</strong> If a real-world scenario involves <em>${topic}</em>, how would you solve it? (6 marks)`,
+            ];
+            output.innerHTML = questions.join('<br>') +
+                `<br><br>✅ These are custom-generated for <strong>"${topic}"</strong>. Practice writing detailed answers!`;
+            showToast('✨ Custom questions generated!');
+        }
+
+        // ============ NOTES ============
+        function saveNote() {
+            const title = document.getElementById('noteTitle').value.trim();
+            const content = document.getElementById('noteContent').value.trim();
+            if (!title || !content) { showToast('Please fill both title and content!'); return; }
+            state.notes.unshift({ title, content, date: new Date().toLocaleDateString(), subject: state.subject });
+            state.stats.notesCount = state.notes.length;
+            saveState();
+            renderNotes();
+            clearNoteForm();
+            updateDashboard();
+            showToast('📒 Note saved!');
+        }
+
+        function clearNoteForm() {
+            document.getElementById('noteTitle').value = '';
+            document.getElementById('noteContent').value = '';
+        }
+
+        function renderNotes() {
+            const container = document.getElementById('notesList');
+            if (state.notes.length === 0) {
+                container.innerHTML =
+                    '<div class="empty-state"><div class="icon">📒</div><p>No notes yet. Start writing!</p></div>';
+                return;
+            }
+            container.innerHTML = state.notes.map((n, i) => `
+            <div class="card" style="position:relative;">
+              <small style="color:var(--text2);">${n.date} • ${n.subject}</small>
+              <h4>${n.title}</h4>
+              <p style="white-space:pre-wrap;">${n.content.substring(0, 200)}${n.content.length > 200 ? '...' : ''}</p>
+              <button class="btn-sm danger" onclick="deleteNote(${i})" style="position:absolute;top:10px;right:10px;">🗑</button>
+            </div>`).join('');
+        }
+
+        function deleteNote(i) {
+            state.notes.splice(i, 1);
+            state.stats.notesCount = state.notes.length;
+            saveState();
+            renderNotes();
+            updateDashboard();
+            showToast('Note deleted');
+        }
+
+        function exportNotes() {
+            const text = state.notes.map(n => `## ${n.title}\n${n.content}\n---`).join('\n\n');
+            const blob = new Blob([text], { type: 'text/plain' });
+            const a = document.createElement('a');
+            a.href = URL.createObjectURL(blob);
+            a.download = 'StudyAI_Notes.txt';
+            a.click();
+            showToast('📥 Notes exported!');
+        }
+
+        // ============ MIND MAP ============
+        function generateMindMap() {
+            const topic = document.getElementById('mindmapTopic').value.trim() || state.subject;
+            const canvas = document.getElementById('mindmapCanvas');
+            const branches = getMindMapBranches(topic);
+            const leaves = getMindMapLeaves(topic);
+            let html = '';
+            // Central node
+            html +=
+                `<div class="mind-node central" style="top:45%;left:42%;transform:translate(-50%,-50%);">🧠 ${topic}</div>`;
+            // Branches
+            const positions = [
+                { top: '10%', left: '5%' }, { top: '10%', left: '65%' }, { top: '60%', left: '5%' },
+                { top: '60%', left: '65%' }, { top: '35%', left: '80%' }, { top: '35%', left: '0%' }
+            ];
+            branches.forEach((b, i) => {
+                const pos = positions[i] || { top: '20%', left: '50%' };
+                html +=
+                    `<div class="mind-node branch" style="top:${pos.top};left:${pos.left};">📌 ${b}</div>`;
+            });
+            // Leaves
+            const leafPos = [
+                { top: '22%', left: '15%' }, { top: '22%', left: '70%' }, { top: '72%', left: '15%' },
+                { top: '72%', left: '70%' }
+            ];
+            leaves.forEach((l, i) => {
+                const pos = leafPos[i] || { top: '50%', left: '50%' };
+                html +=
+                    `<div class="mind-node leaf" style="top:${pos.top};left:${pos.left};">🍃 ${l}</div>`;
+            });
+            canvas.innerHTML = html;
+            showToast('🧩 Mind map generated!');
+        }
+
+        function getMindMapBranches(topic) {
+            const map = {
+                Mathematics: ['Algebra', 'Geometry', 'Trigonometry', 'Statistics'],
+                Physics: ['Mechanics', 'Optics', 'Electricity', 'Thermodynamics'],
+                Chemistry: ['Organic', 'Inorganic', 'Physical', 'Biochemistry'],
+                Biology: ['Botany', 'Zoology', 'Genetics', 'Ecology'],
+            };
+            return map[topic] || ['Concept 1', 'Concept 2', 'Concept 3', 'Concept 4'];
+        }
+
+        function getMindMapLeaves(topic) {
+            const map = {
+                Mathematics: ['Quadratic Eq.', 'Triangles', 'Sin/Cos', 'Mean/Median'],
+                Physics: ['Newton Laws', 'Lenses', 'Ohm Law', 'Heat'],
+                Chemistry: ['Hydrocarbons', 'Salts', 'Equilibrium', 'Enzymes'],
+                Biology: ['Photosynth.', 'Digestion', 'DNA', 'Food Chain'],
+            };
+            return map[topic] || ['Detail A', 'Detail B', 'Detail C', 'Detail D'];
+        }
+
+        // ============ QUIZ ============
+        function startQuiz() {
+            const quizQuestions = getQuizQuestions();
+            state.quizTotal = quizQuestions.length;
+            state.quizScore = 0;
+            let currentQ = 0;
+            const area = document.getElementById('quizArea');
+            const result = document.getElementById('quizResult');
+            result.innerHTML = '';
+
+            function showQuestion() {
+                if (currentQ >= quizQuestions.length) {
+                    area.innerHTML = '<h3>🎉 Quiz Complete!</h3>';
+                    result.innerHTML =
+                        `Your Score: <strong>${state.quizScore} / ${state.quizTotal}</strong> (${Math.round(state.quizScore/state.quizTotal*100)}%)`;
+                    state.stats.quizzes = (state.stats.quizzes || 0) + 1;
+                    saveState();
+                    updateDashboard();
+                    return;
+                }
+                const q = quizQuestions[currentQ];
+                area.innerHTML = `
+              <h4>Q${currentQ+1}: ${q.question}</h4>
+              ${q.options.map((o,i) => `<button onclick="answerQuiz(${i},${q.correct},${currentQ})" style="display:block;width:100%;margin:6px 0;text-align:left;" class="secondary">${String.fromCharCode(65+i)}. ${o}</button>`).join('')}
+            `;
+            }
+            window.answerQuiz = function(selected, correct, qIndex) {
+                if (selected === correct) state.quizScore++;
+                currentQ = qIndex + 1;
+                showQuestion();
+            };
+            showQuestion();
+        }
+
+        function getQuizQuestions() {
+            const bank = {
+                Mathematics: [
+                    { question: 'What is the discriminant of 2x² - 4x + 2 = 0?', options: ['0', '4', '8', '16'],
+                        correct: 0 },
+                    { question: 'Sin 30° = ?', options: ['0', '1/2', '1', '√3/2'], correct: 1 },
+                    { question: 'Area of circle formula?', options: ['πr', '2πr', 'πr²', '2πr²'], correct: 2 },
+                ],
+                Physics: [
+                    { question: 'SI unit of current?', options: ['Volt', 'Ampere', 'Ohm', 'Watt'], correct: 1 },
+                    { question: 'Speed of light in vacuum?', options: ['3×10⁶ m/s', '3×10⁸ m/s', '3×10¹⁰ m/s',
+                            '3×10⁴ m/s'
+                        ], correct: 1 },
+                ],
+                Chemistry: [
+                    { question: 'pH of pure water?', options: ['0', '5', '7', '14'], correct: 2 },
+                    { question: 'Chemical symbol of Gold?', options: ['Ag', 'Au', 'Fe', 'Go'], correct: 1 },
+                ],
+                Biology: [
+                    { question: 'Powerhouse of the cell?', options: ['Nucleus', 'Ribosome', 'Mitochondria', 'Golgi'],
+                        correct: 2 },
+                    { question: 'Photosynthesis produces?', options: ['CO₂', 'O₂', 'N₂', 'H₂'], correct: 1 },
+                ],
+            };
+            return bank[state.subject] || bank['Mathematics'];
+        }
+
+        // ============ FLASHCARDS ============
+        function addFlashcard() {
+            const front = document.getElementById('fcFront').value.trim();
+            const back = document.getElementById('fcBack').value.trim();
+            if (!front || !back) { showToast('Fill both sides!'); return; }
+            state.flashcards.push({ front, back });
+            state.fcIndex = state.flashcards.length - 1;
+            document.getElementById('fcFront').value = '';
+            document.getElementById('fcBack').value = '';
+            saveState();
+            updateFlashcardDisplay();
+            showToast('🃏 Card added!');
+        }
+
+        function updateFlashcardDisplay() {
+            if (state.flashcards.length === 0) {
+                document.getElementById('fcFrontText').textContent = '🧠 No cards yet! Add some above.';
+                document.getElementById('fcBackText').textContent = '✨ Answer appears here';
+                document.getElementById('fcCounter').textContent = '0 / 0';
+                return;
+            }
+            const card = state.flashcards[state.fcIndex] || state.flashcards[0];
+            document.getElementById('fcFrontText').textContent = card.front;
+            document.getElementById('fcBackText').textContent = card.back;
+            document.getElementById('fcCounter').textContent = `${state.fcIndex + 1} / ${state.flashcards.length}`;
+            document.getElementById('flashcardDisplay').classList.remove('flipped');
+            state.stats.flashcardsReviewed = (state.stats.flashcardsReviewed || 0) + 1;
+            saveState();
+            updateDashboard();
+        }
+
+        function flipFlashcard() {
+            document.getElementById('flashcardDisplay').classList.toggle('flipped');
+        }
+
+        function nextFlashcard() {
+            if (state.flashcards.length === 0) return;
+            state.fcIndex = (state.fcIndex + 1) % state.flashcards.length;
+            updateFlashcardDisplay();
+        }
+
+        function prevFlashcard() {
+            if (state.flashcards.length === 0) return;
+            state.fcIndex = (state.fcIndex - 1 + state.flashcards.length) % state.flashcards.length;
+            updateFlashcardDisplay();
+        }
+
+        function shuffleFlashcards() {
+            state.flashcards.sort(() => Math.random() - 0.5);
+            state.fcIndex = 0;
+            updateFlashcardDisplay();
+            showToast('🔀 Shuffled!');
+        }
+
+        // ============ FORMULAS ============
+        function updateFormulaSubject() {
+            document.getElementById('formulaSubject').textContent = state.subject;
+        }
+
+        function generateFormulaSheet() {
+            const formulas = getFormulas();
+            document.getElementById('formulaOutput').textContent = formulas;
+            showToast('📐 Formula sheet ready!');
+        }
+
+        function getFormulas() {
+            const sheets = {
+                Mathematics: `📐 MATHEMATICS FORMULAS (${state.board} Class ${state.studentClass})
+        ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+        🔹 ALGEBRA:
+          • (a+b)² = a² + 2ab + b²
+          • (a-b)² = a² - 2ab + b²
+          • a² - b² = (a+b)(a-b)
+          • Quadratic Formula: x = [-b ± √(b²-4ac)] / 2a
+          • Sum of AP: Sₙ = n/2[2a + (n-1)d]
+        🔹 TRIGONOMETRY:
+          • sin²θ + cos²θ = 1
+          • tan θ = sin θ / cos θ
+          • sin(90°-θ) = cos θ
+          • Area of triangle = ½ × base × height
+        🔹 GEOMETRY:
+          • Circle Area = πr²
+          • Circle Circumference = 2πr
+          • Pythagoras: a² + b² = c²
+        🔹 STATISTICS:
+          • Mean = Σx / n
+          • Median = Middle value (or avg of two middle)
+          • Mode = Most frequent value`,
+
+                Physics: `⚡ PHYSICS FORMULAS (${state.board} Class ${state.studentClass})
+        ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+        🔹 ELECTRICITY:
+          • V = IR (Ohm's Law)
+          • P = VI = I²R = V²/R
+          • Rₛ = R₁ + R₂ (Series)
+          • 1/Rₚ = 1/R₁ + 1/R₂ (Parallel)
+        🔹 LIGHT:
+          • Mirror Formula: 1/f = 1/v + 1/u
+          • Lens Formula: 1/f = 1/v - 1/u
+          • Power of lens: P = 1/f (in meters)
+          • Refractive Index: n = c/v = sin i / sin r
+        🔹 MOTION:
+          • v = u + at
+          • s = ut + ½at²
+          • v² = u² + 2as
+          • F = ma`,
+
+                Chemistry: `🧪 CHEMISTRY FORMULAS (${state.board} Class ${state.studentClass})
+        ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+        🔹 MOLE CONCEPT:
+          • n = m/M (moles = mass/molar mass)
+          • N = n × Nₐ (Nₐ = 6.022×10²³)
+        🔹 SOLUTIONS:
+          • Molarity = moles/volume(L)
+          • pH = -log[H⁺]
+          • pOH = -log[OH⁻]
+          • pH + pOH = 14
+        🔹 GAS LAWS:
+          • PV = nRT
+          • P₁V₁/T₁ = P₂V₂/T₂`,
+            };
+            return sheets[state.subject] || sheets['Mathematics'];
+        }
+
+        function copyFormulas() {
+            const text = document.getElementById('formulaOutput').textContent;
+            navigator.clipboard.writeText(text).then(() => showToast('📋 Formulas copied!'));
+        }
+
+        // ============ HOMEWORK ============
+        function addHomework() {
+            const task = document.getElementById('hwInput').value.trim();
+            const date = document.getElementById('hwDate').value || new Date().toISOString().split('T')[0];
+            if (!task) { showToast('Enter a task!'); return; }
+            state.homework.unshift({ task, date, done: false });
+            document.getElementById('hwInput').value = '';
+            saveState();
+            renderHomework();
+            showToast('✅ Task added!');
+        }
+
+        function toggleHW(i) {
+            state.homework[i].done = !state.homework[i].done;
+            if (state.homework[i].done) state.stats.hwDone = (state.stats.hwDone || 0) + 1;
+            else state.stats.hwDone = Math.max((state.stats.hwDone || 0) - 1, 0);
+            saveState();
+            renderHomework();
+            updateDashboard();
+        }
+
+        function deleteHW(i) {
+            if (state.homework[i].done) state.stats.hwDone = Math.max((state.stats.hwDone || 0) - 1, 0);
+            state.homework.splice(i, 1);
+            saveState();
+            renderHomework();
+            updateDashboard();
+        }
+
+        function renderHomework() {
+            const container = document.getElementById('hwList');
+            if (state.homework.length === 0) {
+                container.innerHTML =
+                    '<div class="empty-state"><div class="icon">✅</div><p>No homework yet. Add tasks above!</p></div>';
+            } else {
+                container.innerHTML = state.homework.map((h, i) => `
+              <div class="checklist-item ${h.done ? 'done' : ''}">
+                <input type="checkbox" ${h.done ? 'checked' : ''} onchange="toggleHW(${i})">
+                <span style="flex:1;"><strong>${h.task}</strong> <small style="color:var(--text2);">📅 ${h.date}</small></span>
+                <button class="btn-sm danger" onclick="deleteHW(${i})">🗑</button>
+              </div>`).join('');
+            }
+            document.getElementById('hwDoneCount').textContent = state.homework.filter(h => h.done).length;
+            document.getElementById('hwPendingCount').textContent = state.homework.filter(h => !h.done).length;
+        }
+
+        // ============ DOUBT SOLVER ============
+        function askDoubt() {
+            const input = document.getElementById('doubtInput');
+            const question = input.value.trim();
+            if (!question) return;
+            const chat = document.getElementById('doubtChat');
+            chat.innerHTML += `<div class="chat-msg user">🧑‍🎓 ${question}</div>`;
+            input.value = '';
+            // Simulated AI response
+            const responses = [
+                `Great question! Let me explain: Based on the ${state.subject} curriculum for ${state.board}, this concept is important. Here's a breakdown:\n\n📌 <strong>Key Point:</strong> Understanding the fundamentals is crucial.\n📝 <strong>Tip:</strong> Try solving similar problems from PYQs.\n🔗 <strong>Related Topic:</strong> This connects to broader concepts in ${state.subject}.`,
+                `I understand your doubt! Let's clarify:\n\n🧠 <strong>Concept:</strong> Think of it step-by-step. First, identify what's given, then apply the relevant formula.\n📚 <strong>Recommendation:</strong> Review the NCERT textbook section on this topic.\n💡 <strong>Hint:</strong> Practice with numerical examples to solidify understanding.`,
+                `Here's the solution approach:\n\n1️⃣ Identify the known values\n2️⃣ Choose the correct formula\n3️⃣ Substitute and solve\n4️⃣ Verify your answer\n\n📖 Would you like me to generate practice questions on this topic?`,
+            ];
+            const response = responses[Math.floor(Math.random() * responses.length)];
+            setTimeout(() => {
+                chat.innerHTML += `<div class="chat-msg ai">🤖 ${response}</div>`;
+                chat.scrollTop = chat.scrollHeight;
+            }, 600);
+            chat.scrollTop = chat.scrollHeight;
+        }
+
+        // ============ STRATEGIES ============
+        function generateStrategy() {
+            const output = document.getElementById('strategyOutput');
+            const strategies = [
+                `🎯 <strong>Your Personalized Strategy for ${state.board} ${state.subject}:</strong>`,
+                `📅 <strong>Week 1-2:</strong> Complete NCERT thoroughly. Make notes for each chapter.`,
+                `📅 <strong>Week 3:</strong> Solve PYQs from last 5 years. Identify weak areas.`,
+                `📅 <strong>Week 4:</strong> Take mock tests under timed conditions.`,
+                `📝 <strong>Daily Routine:</strong> 2 hours focused study + 25 min revision + 10 min meditation.`,
+                `💡 <strong>Exam Tip:</strong> In ${state.board} exams, presentation matters! Use diagrams, flowcharts, and bullet points.`,
+                `🔑 <strong>Key:</strong> Don't just memorize—understand the 'why' behind each concept.`,
+            ];
+            output.innerHTML = strategies.join('<br>');
+            showToast('🎯 Strategy generated!');
+        }
+
+        function showPressureTips() {
+            const tips = [
+                '😌 <strong>Deep Breathing:</strong> Inhale 4 sec, hold 4 sec, exhale 4 sec. Repeat 5 times.',
+                '📋 <strong>Quick Revision:</strong> Use flash cards for last-minute review instead of thick books.',
+                '💧 <strong>Stay Hydrated:</strong> Drink water. Dehydration increases anxiety.',
+                '🎵 <strong>Calm Music:</strong> Listen to instrumental music while reviewing.',
+                '🗣 <strong>Talk It Out:</strong> Explain concepts to a friend or even to yourself aloud.',
+                '✍️ <strong>Scribble Sheet:</strong> Write down everything you remember about a topic in 2 minutes.',
+                '🚶 <strong>Quick Walk:</strong> 5-minute walks between study sessions reset your brain.',
+            ];
+            document.getElementById('pressureTips').innerHTML = tips.join('<br>');
+        }
+
+        // ============ MOTIVATION ============
+        const quotes = [
+            { q: 'The only way to do great work is to love what you do.', a: 'Steve Jobs' },
+            { q: 'Success is not final, failure is not fatal: it is the courage to continue that counts.',
+            a: 'Winston Churchill' },
+            { q: 'The future belongs to those who believe in the beauty of their dreams.', a: 'Eleanor Roosevelt' },
+            { q: 'Don\'t watch the clock; do what it does. Keep going.', a: 'Sam Levenson' },
+            { q: 'You are never too old to set another goal or to dream a new dream.', a: 'C.S. Lewis' },
+            { q: 'Believe you can and you\'re halfway there.', a: 'Theodore Roosevelt' },
+            { q: 'The expert in anything was once a beginner.', a: 'Helen Hayes' },
+            { q: 'Push yourself, because no one else is going to do it for you.', a: 'Unknown' },
+            { q: 'Study while others are sleeping; work while others are loafing.', a: 'William A. Ward' },
+            { q: 'Exams are not a test of your worth, but a test of your preparation. You\'ve got this!', a: 'StudyAI 💪' },
+        ];
+
+        function newMotivationQuote() {
+            const random = quotes[Math.floor(Math.random() * quotes.length)];
+            document.getElementById('motivationQuote').textContent = '"' + random.q + '"';
+            document.getElementById('motivationAuthor').textContent = '— ' + random.a;
+        }
+
+        // ============ RESET ============
+        function resetAllData() {
+            if (confirm('⚠️ This will delete ALL your data including notes, flashcards, and progress. Continue?')) {
+                localStorage.removeItem('studyAIState');
+                state = {
+                    board: 'CBSE',
+                    studentClass: '10',
+                    subject: 'Mathematics',
+                    theme: 'dark',
+                    timerSeconds: 25 * 60,
+                    timerRunning: false,
+                    timerInterval: null,
+                    timerMode: 25,
+                    sessionCount: 0,
+                    flashcards: [],
+                    fcIndex: 0,
+                    notes: [],
+                    homework: [],
+                    quizScore: 0,
+                    quizTotal: 0,
+                    stats: { studyHours: 0, quizzes: 0, hwDone: 0, flashcardsReviewed: 0, streak: 1, notesCount: 0 },
+                };
+                document.getElementById('boardSelect').value = 'CBSE';
+                document.getElementById('classSelect').value = '10';
+                document.getElementById('subjectSelect').value = 'Mathematics';
+                document.body.classList.remove('light-mode');
+                updateDashboard();
+                renderNotes();
+                renderHomework();
+                updateFlashcardDisplay();
+                document.getElementById('pyqOutput').innerHTML =
+                    '<div class="chat-msg ai">👋 Select options and click generate...</div>';
+                document.getElementById('predictionOutput').innerHTML = '';
+                document.getElementById('customQOutput').innerHTML = '';
+                document.getElementById('formulaOutput').textContent = '';
+                document.getElementById('doubtChat').innerHTML =
+                    '<div class="chat-msg ai">👋 Hello! Ask me any study-related doubt...</div>';
+                document.getElementById('strategyOutput').innerHTML = '';
+                document.getElementById('mindmapCanvas').innerHTML = '';
+                showToast('🔄 All data reset!');
+            }
+        }
+
+        // ============ INITIALIZATION ============
+        function init() {
+            loadState();
+            updateTimerDisplay();
+            updateDashboard();
+            renderNotes();
+            renderHomework();
+            updateFlashcardDisplay();
+            updateFormulaSubject();
+            showPressureTips();
+            document.getElementById('mindmapTopic').value = state.subject;
+            document.getElementById('formulaOutput').textContent = getFormulas();
+            newMotivationQuote();
+        }
+
+        // Handle page unload - pause timer if running
+        window.addEventListener('beforeunload', () => {
+            if (state.timerRunning) {
+                clearInterval(state.timerInterval);
+                state.timerRunning = false;
+                saveState();
+            }
+        });
+
+        init();
+        console.log('🧠 StudyAI Pro Ready! | Board:', state.board, '| Class:', state.studentClass, '| Subject:', state
+            .subject);
+        console.log('📋 Features: PYQ | Predictor | Notes | Mind Maps | Quiz | Flashcards | Formulas | Homework | Doubts | Strategies | Motivation');
+        console.log('💾 Data saved in localStorage. Your progress persists!');
+    </script>
+</body>
+</html>
