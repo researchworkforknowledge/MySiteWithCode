@@ -171,6 +171,7 @@
         .quick-task-item,.hw-item{display:flex;gap:8px;align-items:center;background:rgba(255,255,255,0.04);padding:8px 10px;border-radius:8px;margin-bottom:3px;transition:var(--transition);}
         .quick-task-item:hover,.hw-item:hover{background:rgba(255,255,255,0.08);}
         .quick-task-item.done span,.hw-item.done span{text-decoration:line-through;opacity:0.55;}
+        .music-meta{font-size:0.7rem;color:var(--accent);margin-top:4px;text-align:center;}
         @media(max-width:1024px){.sidebar{width:230px;}.content{margin-left:230px;}.content.expanded{margin-left:0;}}
         @media(max-width:768px){
             .sidebar{width:270px;transform:translateX(-100%);z-index:250;padding-top:60px;}
@@ -249,39 +250,25 @@
                 <div style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap;"><button onclick="startTimer()">▶ Start</button><button onclick="pauseTimer()" class="secondary">⏸ Pause</button><button onclick="resetTimer()" class="secondary">↺ Reset</button></div>
                 <div style="margin-top:8px;"><button class="btn-sm secondary" onclick="setTimerMode(25)">25m</button><button class="btn-sm secondary" onclick="setTimerMode(5)">5m</button><button class="btn-sm secondary" onclick="setTimerMode(15)">15m</button><button class="btn-sm secondary" onclick="setTimerMode(50)">50m</button></div>
                 <p>Sessions: <span id="sessionCount">0</span></p>
-                <button id="lofiInlineBtn" onclick="toggleMusic()" class="btn-sm accent">🎵 Lo‑Fi</button>
+                <div style="margin-top:8px;">
+                    <button id="lofiInlineBtn" onclick="toggleMusic()" class="btn-sm accent">🎵 Lo‑Fi</button>
+                    <button id="nextTrackBtn" onclick="nextTrack()" class="btn-sm secondary" style="margin-left:4px;" title="Next Track">⏭️</button>
+                </div>
+                <div class="music-meta" id="nowPlaying">Click 🎵 to start music</div>
             </div>
         </section>
 
-        <section class="page-section" id="page-pyq">
-            <h2>📝 PYQ & Papers</h2>
-            <div class="card"><p>Board: <strong id="pyqBoardLabel"></strong></p><div style="display:flex;gap:6px;flex-wrap:wrap;margin:8px 0;"><select id="pyqYear"><option>2024</option><option>2023</option></select><select id="pyqType"><option>Board Exam</option><option>Sample</option></select><button onclick="generatePYQ()">Generate</button></div><div id="pyqOutput" class="chat-box"></div><button onclick="downloadPYQ('txt')" class="btn-sm secondary">.txt</button><button onclick="downloadPYQ('pdf')" class="btn-sm accent" style="margin-left:6px;">PDF</button></div>
-        </section>
+        <section class="page-section" id="page-pyq"><h2>📝 PYQ & Papers</h2><div class="card"><p>Board: <strong id="pyqBoardLabel"></strong></p><div style="display:flex;gap:6px;flex-wrap:wrap;margin:8px 0;"><select id="pyqYear"><option>2024</option><option>2023</option></select><select id="pyqType"><option>Board Exam</option><option>Sample</option></select><button onclick="generatePYQ()">Generate</button></div><div id="pyqOutput" class="chat-box"></div><button onclick="downloadPYQ('txt')" class="btn-sm secondary">.txt</button><button onclick="downloadPYQ('pdf')" class="btn-sm accent" style="margin-left:6px;">PDF</button></div></section>
 
-        <section class="page-section" id="page-predictor">
-            <h2>🔮 CBQ Predictor</h2>
-            <div class="card"><button onclick="runPrediction()">Run Prediction</button><div id="predictionOutput" style="margin-top:10px;"></div></div>
-            <div class="card"><textarea id="customTopicInput" placeholder="Topic..."></textarea><button onclick="generateCustomQuestions()">Generate CBQs</button><div id="customQOutput" style="margin-top:8px;"></div></div>
-        </section>
+        <section class="page-section" id="page-predictor"><h2>🔮 CBQ Predictor</h2><div class="card"><button onclick="runPrediction()">Run Prediction</button><div id="predictionOutput" style="margin-top:10px;"></div></div><div class="card"><textarea id="customTopicInput" placeholder="Topic..."></textarea><button onclick="generateCustomQuestions()">Generate CBQs</button><div id="customQOutput" style="margin-top:8px;"></div></div></section>
 
-        <section class="page-section" id="page-notes">
-            <h2>📒 Notes</h2>
-            <div class="card"><input type="text" id="noteTitle" placeholder="Title"><textarea id="noteContent" placeholder="Write..."></textarea><div style="display:flex;gap:6px;margin-top:8px;"><button onclick="saveNote()">💾</button><button onclick="clearNoteForm()" class="secondary">Clear</button><button onclick="exportNotesPDF()" class="accent btn-sm">PDF</button><button onclick="notesToQuiz()" class="accent btn-sm">→Quiz</button><button onclick="readNoteAloud()" class="btn-sm secondary">🔊</button></div></div>
-            <div id="notesList" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px;"></div>
-        </section>
+        <section class="page-section" id="page-notes"><h2>📒 Notes</h2><div class="card"><input type="text" id="noteTitle" placeholder="Title"><textarea id="noteContent" placeholder="Write..."></textarea><div style="display:flex;gap:6px;margin-top:8px;"><button onclick="saveNote()">💾</button><button onclick="clearNoteForm()" class="secondary">Clear</button><button onclick="exportNotesPDF()" class="accent btn-sm">PDF</button><button onclick="notesToQuiz()" class="accent btn-sm">→Quiz</button><button onclick="readNoteAloud()" class="btn-sm secondary">🔊</button></div></div><div id="notesList" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px;"></div></section>
 
-        <section class="page-section" id="page-mindmap">
-            <h2>🧩 Mind Map</h2>
-            <div class="card"><input type="text" id="mindmapTopic" placeholder="Central topic"><button onclick="generateMindMap()">Generate</button><div id="mindmapCanvas" style="position:relative;min-height:300px;border:1px dashed rgba(255,255,255,0.15);margin-top:10px;border-radius:16px;overflow:hidden;"></div></div>
-        </section>
+        <section class="page-section" id="page-mindmap"><h2>🧩 Mind Map</h2><div class="card"><input type="text" id="mindmapTopic" placeholder="Central topic"><button onclick="generateMindMap()">Generate</button><div id="mindmapCanvas" style="position:relative;min-height:300px;border:1px dashed rgba(255,255,255,0.15);margin-top:10px;border-radius:16px;overflow:hidden;"></div></div></section>
 
         <section class="page-section" id="page-quiz"><div class="card"><button onclick="startQuiz()">▶ Start Quiz</button><div id="quizArea" style="margin-top:10px;"></div><div id="quizResult"></div></div></section>
 
-        <section class="page-section" id="page-flashcards">
-            <div class="card"><div style="display:flex;gap:6px;"><input type="text" id="fcFront" placeholder="Front"><input type="text" id="fcBack" placeholder="Back"><button onclick="addFlashcard()">➕</button></div></div>
-            <div class="flashcard" id="flashcardDisplay" onclick="flipFlashcard()"><div class="flashcard-inner"><div class="flashcard-front" id="fcFrontText">Add cards</div><div class="flashcard-back" id="fcBackText">Answer</div></div></div>
-            <div style="display:flex;gap:6px;justify-content:center;margin-top:6px;"><button onclick="prevFlashcard()" class="secondary btn-sm">◀</button><span id="fcCounter">0/0</span><button onclick="nextFlashcard()" class="secondary btn-sm">▶</button><button onclick="shuffleFlashcards()" class="btn-sm secondary">🔀</button></div>
-        </section>
+        <section class="page-section" id="page-flashcards"><div class="card"><div style="display:flex;gap:6px;"><input type="text" id="fcFront" placeholder="Front"><input type="text" id="fcBack" placeholder="Back"><button onclick="addFlashcard()">➕</button></div></div><div class="flashcard" id="flashcardDisplay" onclick="flipFlashcard()"><div class="flashcard-inner"><div class="flashcard-front" id="fcFrontText">Add cards</div><div class="flashcard-back" id="fcBackText">Answer</div></div></div><div style="display:flex;gap:6px;justify-content:center;margin-top:6px;"><button onclick="prevFlashcard()" class="secondary btn-sm">◀</button><span id="fcCounter">0/0</span><button onclick="nextFlashcard()" class="secondary btn-sm">▶</button><button onclick="shuffleFlashcards()" class="btn-sm secondary">🔀</button></div></section>
 
         <section class="page-section" id="page-formulas"><div class="card"><h3>Subject: <strong id="formulaSubject"></strong></h3><button onclick="generateFormulaSheet()">Refresh</button><div id="formulaOutput" style="white-space:pre-wrap;font-family:'Courier New',monospace;background:rgba(255,255,255,0.05);padding:12px;border-radius:10px;max-height:380px;overflow-y:auto;margin-top:8px;"></div><button onclick="copyFormulas()" class="btn-sm secondary" style="margin-top:6px;">📋 Copy</button></div></section>
 
@@ -301,7 +288,7 @@
     <div class="focus-overlay" id="focusOverlay">
         <button class="exit-focus danger" onclick="toggleFocusMode()" style="position:absolute;top:16px;right:16px;">✕</button>
         <div class="timer-display" id="focusTimerDisplay">25:00</div>
-        <textarea id="focusTaskInput" placeholder="What are you focusing on?"></textarea>
+        <textarea id="focusTaskInput" placeholder="What are you focusing on?" oninput="saveFocusTask()"></textarea>
     </div>
     <div class="modal" id="examModal"><div class="modal-content"><h3>Set Exam Date</h3><input type="date" id="examDateInput" style="width:100%;margin:12px 0;"><button onclick="saveExamDate()">Save</button><button onclick="closeExamModal()" class="secondary">Cancel</button></div></div>
     <audio id="lofiAudio" loop preload="auto" style="display:none;"></audio>
@@ -309,13 +296,85 @@
 
     <script>
         (function(){
-            const DEF={board:'CBSE',studentClass:'10',subject:'Mathematics',theme:'dark',timer:{seconds:1500,mode:25,running:false,interval:null,sessionsToday:0},stats:{studyHours:0,quizzes:0,hwDone:0,streak:0},dailySessions:{},lastActiveDate:null,lofiPlaying:false,notes:[],homework:[],flashcards:[],examDate:null,weakTopics:[],quickTasks:[],fcIndex:0,focusTask:''};
+            const DEF={board:'CBSE',studentClass:'10',subject:'Mathematics',theme:'dark',timer:{seconds:1500,mode:25,running:false,interval:null,sessionsToday:0},stats:{studyHours:0,quizzes:0,hwDone:0,streak:0},dailySessions:{},lastActiveDate:null,lofiPlaying:false,notes:[],homework:[],flashcards:[],examDate:null,weakTopics:[],quickTasks:[],fcIndex:0,focusTask:'',currentTrackIndex:0};
             let S=JSON.parse(localStorage.getItem('studyAIState'))||DEF;
             S.stats={...DEF.stats,...S.stats};S.timer={...DEF.timer,...S.timer};S.dailySessions=S.dailySessions||{};S.notes=S.notes||[];S.homework=S.homework||[];S.flashcards=S.flashcards||[];S.weakTopics=S.weakTopics||[];S.quickTasks=S.quickTasks||[];
             const save=()=>{try{localStorage.setItem('studyAIState',JSON.stringify(S));}catch(e){}};
             const $=id=>document.getElementById(id);
             let toastTimer;
             const toast=msg=>{const t=$('toast');t.textContent=msg;t.style.display='block';t.style.animation='none';t.offsetHeight;t.style.animation='toastIn 0.35s ease,toastOut 0.35s ease 2.2s forwards';clearTimeout(toastTimer);toastTimer=setTimeout(()=>{t.style.display='none';},2400);};
+
+            // Music playlist (royalty-free Lo-Fi tracks)
+            const playlist = [
+                { title: "Lofi Study", src: "https://cdn.pixabay.com/download/audio/2022/05/27/audio_1808fbf07a.mp3" },
+                { title: "Ambient Flow", src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" },
+                { title: "Chill Beat", src: "https://cdn.pixabay.com/download/audio/2022/01/18/audio_69cc1e5c6d.mp3" },
+                { title: "Gentle Rain", src: "https://cdn.pixabay.com/download/audio/2022/03/15/audio_9b3c6e9e2d.mp3" }
+            ];
+
+            const audio=$('lofiAudio');
+            let currentTrack = S.currentTrackIndex || 0;
+
+            function loadTrack(index) {
+                if (index >= playlist.length) index = 0;
+                if (index < 0) index = playlist.length - 1;
+                currentTrack = index;
+                S.currentTrackIndex = index;
+                const track = playlist[index];
+                audio.src = track.src;
+                audio.load();
+                $('nowPlaying').textContent = '🎧 ' + track.title;
+                save();
+            }
+
+            function playTrackWithRetry() {
+                audio.play().then(() => {
+                    S.lofiPlaying = true;
+                    $('musicToggleBtn').textContent = '⏸️';
+                    $('lofiInlineBtn').textContent = '⏸️ Lo‑Fi';
+                    $('nowPlaying').textContent = '🎧 ' + playlist[currentTrack].title;
+                }).catch(() => {
+                    // fallback to next track
+                    toast('⚠️ Track failed, trying next...');
+                    nextTrack();
+                });
+            }
+
+            window.toggleMusic = () => {
+                if (S.lofiPlaying) {
+                    audio.pause();
+                    S.lofiPlaying = false;
+                    $('musicToggleBtn').textContent = '🎵';
+                    $('lofiInlineBtn').textContent = '🎵 Lo‑Fi';
+                    $('nowPlaying').textContent = 'Music paused';
+                } else {
+                    if (!audio.src || audio.src === window.location.href) {
+                        loadTrack(currentTrack);
+                    }
+                    playTrackWithRetry();
+                }
+                save();
+            };
+
+            window.nextTrack = () => {
+                currentTrack = (currentTrack + 1) % playlist.length;
+                loadTrack(currentTrack);
+                if (S.lofiPlaying) {
+                    playTrackWithRetry();
+                }
+            };
+
+            // When a track ends, play the next one automatically
+            audio.addEventListener('ended', () => {
+                currentTrack = (currentTrack + 1) % playlist.length;
+                loadTrack(currentTrack);
+                if (S.lofiPlaying) {
+                    playTrackWithRetry();
+                }
+            });
+
+            // Preload first track
+            loadTrack(currentTrack);
 
             function updateStreak(){const today=new Date().toLocaleDateString();const sessions=S.dailySessions[today]||0;if(sessions>=1){if(!S.lastActiveDate||S.lastActiveDate!==today){const yd=new Date(Date.now()-86400000).toLocaleDateString();S.stats.streak=(S.lastActiveDate===yd)?(S.stats.streak||0)+1:1;S.lastActiveDate=today;}}else if(S.lastActiveDate&&S.lastActiveDate!==today){const yd=new Date(Date.now()-86400000).toLocaleDateString();if(S.lastActiveDate!==yd) S.stats.streak=0;}save();}
             function addStudyHours(h){const today=new Date().toLocaleDateString();S.dailySessions[today]=(S.dailySessions[today]||0)+1;S.stats.studyHours=(S.stats.studyHours||0)+h;updateStreak();save();refreshDashboard();updateChart();}
@@ -331,7 +390,21 @@
 
             window.toggleSidebar=()=>{const sb=$('sidebar'),bd=$('backdrop'),ct=$('contentArea');const isHidden=sb.classList.contains('hidden');if(isHidden){sb.classList.remove('hidden');ct.classList.remove('expanded');if(window.innerWidth<=768){bd.classList.add('show');sb.classList.add('open');}}else{sb.classList.add('hidden');ct.classList.add('expanded');bd.classList.remove('show');sb.classList.remove('open');}};
             window.closeSidebar=()=>{$('sidebar').classList.add('hidden');$('contentArea').classList.add('expanded');$('backdrop').classList.remove('show');$('sidebar').classList.remove('open');};
-            window.showPage=name=>{document.querySelectorAll('.page-section').forEach(s=>s.classList.remove('active'));document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));const sec=$('page-'+name);if(sec)sec.classList.add('active');const nav=document.querySelector(`.nav-item[data-page="${name}"]`);if(nav)nav.classList.add('active');if(name==='dashboard')refreshDashboard();if(name==='formulas')updateFormulaSubject();if(name==='pyq')$('pyqBoardLabel').textContent=S.board+' Class '+S.studentClass;if(name==='weaknesses')renderWeakTopics();if(name==='resources')renderBoardResources();$('contentArea').scrollTop=0;if(window.innerWidth<768)closeSidebar();};
+            window.showPage=name=>{
+                document.querySelectorAll('.page-section').forEach(s=>s.classList.remove('active'));
+                document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+                const sec=$('page-'+name);if(sec)sec.classList.add('active');
+                const nav=document.querySelector(`.nav-item[data-page="${name}"]`);if(nav)nav.classList.add('active');
+                if(name==='dashboard')refreshDashboard();
+                if(name==='formulas')updateFormulaSubject();
+                if(name==='pyq')$('pyqBoardLabel').textContent=S.board+' Class '+S.studentClass;
+                if(name==='weaknesses')renderWeakTopics();
+                if(name==='resources')renderBoardResources();
+                $('contentArea').scrollTop=0;
+                if(window.innerWidth<768)closeSidebar();
+                // Resize chart after sidebar transition
+                setTimeout(()=>{if(weeklyChart)weeklyChart.resize();},350);
+            };
 
             window.saveBoard=()=>{S.board=$('boardSelect').value;save();refreshDashboard();updateFormulaSubject();};
             window.saveClass=()=>{S.studentClass=$('classSelect').value;save();refreshDashboard();};
@@ -340,40 +413,6 @@
             function refreshDashboard(){$('dashBoard').textContent=S.board;$('dashClass').textContent='Class '+S.studentClass;$('dashSubject').textContent=S.subject;$('statsGrid').innerHTML=`<div class="stat-card"><div class="num">${(S.stats.studyHours||0).toFixed(1)}</div><div class="lbl">📖 Hours</div></div><div class="stat-card"><div class="num">${S.stats.quizzes||0}</div><div class="lbl">❓ Quizzes</div></div><div class="stat-card"><div class="num">${S.stats.hwDone||0}</div><div class="lbl">✅ HW</div></div><div class="stat-card"><div class="num">${S.stats.streak||0}</div><div class="lbl">🔥 Streak</div></div><div class="stat-card"><div class="num">${S.notes.length||0}</div><div class="lbl">📒 Notes</div></div>`;$('sessionCount').textContent=S.timer.sessionsToday||0;renderQuickTasks();updateExamCountdown();}
 
             window.toggleTheme=()=>{document.body.classList.toggle('light-mode');S.theme=document.body.classList.contains('light-mode')?'light':'dark';save();};
-
-            // Music engine – MP3 + Web Audio fallback
-            const audio=$('lofiAudio');
-            const LOFI_MP3='https://cdn.pixabay.com/download/audio/2022/05/27/audio_1808fbf07a.mp3';
-            let audioCtxFallback=null;
-            function stopWebAudio(){if(audioCtxFallback){audioCtxFallback.close();audioCtxFallback=null;}}
-            function playWebAudioTone(){
-                stopWebAudio();
-                try{
-                    audioCtxFallback=new(window.AudioContext||window.webkitAudioContext)();
-                    const gain=audioCtxFallback.createGain();gain.gain.value=0.08;gain.connect(audioCtxFallback.destination);
-                    const osc=audioCtxFallback.createOscillator();osc.type='sine';osc.frequency.value=60;
-                    const lfo=audioCtxFallback.createOscillator();lfo.frequency.value=0.25;
-                    const lfoGain=audioCtxFallback.createGain();lfoGain.gain.value=5;
-                    lfo.connect(lfoGain);lfoGain.connect(osc.frequency);
-                    osc.connect(gain);osc.start();
-                    return true;
-                }catch(e){return false;}
-            }
-            window.toggleMusic=()=>{
-                if(S.lofiPlaying){
-                    audio.pause();stopWebAudio();S.lofiPlaying=false;$('musicToggleBtn').textContent='🎵';$('lofiInlineBtn').textContent='🎵 Lo‑Fi';
-                }else{
-                    audio.src=LOFI_MP3;audio.load();
-                    audio.play().then(()=>{
-                        S.lofiPlaying=true;$('musicToggleBtn').textContent='⏸️';$('lofiInlineBtn').textContent='⏸️ Lo‑Fi';
-                    }).catch(()=>{
-                        if(playWebAudioTone()){
-                            S.lofiPlaying=true;$('musicToggleBtn').textContent='⏸️';$('lofiInlineBtn').textContent='⏸️ Ambient';
-                        }else toast('⚠️ Audio unavailable');
-                    });
-                }
-                save();
-            };
 
             function updateTimerDisplay(){const m=Math.floor(S.timer.seconds/60),s=S.timer.seconds%60;const str=String(m).padStart(2,'0')+':'+String(s).padStart(2,'0');$('timerDisplay').textContent=str;$('focusTimerDisplay').textContent=str;}
             window.setTimerMode=min=>{S.timer.mode=min;S.timer.seconds=min*60;S.timer.running=false;clearInterval(S.timer.interval);updateTimerDisplay();$('timerLabel').textContent=min>=25?'Focus Session 🔥':'Break Time ☕';save();};
@@ -391,6 +430,7 @@
                     S.focusTask=$('focusTaskInput').value;save();
                 }
             };
+            window.saveFocusTask=()=>{S.focusTask=$('focusTaskInput').value;save();};
             document.addEventListener('keydown',e=>{if(e.ctrlKey&&e.shiftKey&&e.key==='Z'){e.preventDefault();toggleFocusMode();}});
 
             window.addQuickTask=()=>{const v=$('quickTaskInput').value.trim();if(!v)return;S.quickTasks.push({text:v,done:false});$('quickTaskInput').value='';save();renderQuickTasks();};
