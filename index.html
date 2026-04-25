@@ -3,36 +3,49 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>StudyAI Pro - Your AI Study Assistant | All Indian Boards</title>
+    <meta name="theme-color" content="#0f0f1a">
+    <meta name="description" content="StudyAI Pro - The #1 AI Study Hub for Indian Students | CBSE, ICSE, State Boards">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <link rel="manifest" href="data:application/json;base64,ewogICJuYW1lIjogIlN0dWR5QUkgUHJvIiwKICAic2hvcnRfbmFtZSI6ICJTdHVkeUFJIiwKICAic3RhcnRfdXJsIjogIi4iLAogICJkaXNwbGF5IjogInN0YW5kYWxvbmUiLAogICJiYWNrZ3JvdW5kX2NvbG9yIjogIiMwZjBmMWEiLAogICJ0aGVtZV9jb2xvciI6ICIjMGYwZjFhIiwKICAiaWNvbnMiOiBbCiAgICB7CiAgICAgICJzcmMiOiAiZGF0YTppbWFnZS9zdmcreG1sO2Jhc2U2NCxQSE4yWnlCNGJXeHVjejBpYUhSMGNEb3ZMM2QzZHk1M015NXZjbWN2TWpBd01DOXpkbWNpSUhkcFpIUm9QU0l4TlNJZ2FHVnBaMmgwUFNJeE5TSWdhR1ZwWjJoMFBTSXhOU0lnZG1sbGQwSnZlRDBpTVR3OElpQmpiR0Z6Y3owaWRHVnVaM1JvSWlBOGRHVjRkQ0I0Yld4dWN6MGlhSFIwY0RvdkwzZDNkeTUzTXk1dmNtY3ZNVEl3TUM5emRtY2lJSFpsY25OcGIyNDlJakV1TWpBaUlITjBlV3hsUFNKbGJtRmliM1JvSWlCNGJXeHVjenBpWVhObGJtRmliM1JvUFNKaFpHUWlQanh5WldOMElIZHBaSFJvUFNJeE1DSWdhR1ZwWjJoMFBTSXhNQ0lnYzNSeWIyNW5QU0p5WldOMElpQmtaV3hwYm1VOUltNXZibVVpUGp4eVpXTjBJSE5qY21sd2RDSTZJbk4wY205dVp5SWdabWxzYkQwaU5TQStQSEpsWTNRZ2J6MGlJMFpHUmlBZ1lXNWtJSEJ5YjI4Z1UzVmtkSGxCSVNJZ1BqeDBaWGgwSUdROUlrWkdSaUlnWm1sc2JEMGlOU0ErUEM5MFpYaDBQand2Y21WamREd3ZjblZ6YVc1blBnPT0iLAogICAgICAic2l6ZXMiOiAiMTkyeDE5MiIsCiAgICAgICJ0eXBlIjogImltYWdlL3N2ZyIociAgICB9CiAgXQp9">
+    <title>StudyAI Pro | #1 AI Study Hub for Indian Students</title>
     <style>
         :root {
-            --bg: #0f0f1a;
-            --surface: #1a1a2e;
-            --surface2: #222240;
+            --bg: #0a0a14;
+            --glass-bg: rgba(20, 20, 40, 0.55);
+            --glass-border: rgba(255, 255, 255, 0.08);
+            --glass-glow: rgba(108, 92, 231, 0.3);
+            --surface: rgba(26, 26, 46, 0.7);
+            --surface2: rgba(34, 34, 64, 0.6);
             --primary: #6c5ce7;
             --primary2: #a29bfe;
             --accent: #00cec9;
             --accent2: #fd79a8;
             --gold: #fdcb6e;
-            --text: #e0e0f0;
-            --text2: #b0b0c8;
+            --text: #e8e8f8;
+            --text2: #a0a0c0;
             --danger: #e74c3c;
             --success: #2ecc71;
             --warning: #f39c12;
-            --border: #2a2a45;
-            --shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
-            --radius: 16px;
-            --radius-sm: 10px;
-            --transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            --border: rgba(255, 255, 255, 0.06);
+            --shadow: 0 8px 40px rgba(0, 0, 0, 0.5);
+            --radius: 20px;
+            --radius-sm: 12px;
+            --transition: 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+            --blur: blur(18px);
         }
         .light-mode {
-            --bg: #f5f6fa;
-            --surface: #ffffff;
-            --surface2: #eef0f7;
+            --bg: #eef0f7;
+            --glass-bg: rgba(255, 255, 255, 0.65);
+            --glass-border: rgba(0, 0, 0, 0.08);
+            --glass-glow: rgba(108, 92, 231, 0.2);
+            --surface: rgba(255, 255, 255, 0.75);
+            --surface2: rgba(240, 242, 250, 0.7);
             --text: #1a1a2e;
-            --text2: #555;
-            --border: #dde;
-            --shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            --text2: #4a4a6a;
+            --border: rgba(0, 0, 0, 0.06);
+            --shadow: 0 4px 24px rgba(0, 0, 0, 0.1);
+            --blur: blur(14px);
         }
         * {
             margin: 0;
@@ -40,36 +53,44 @@
             box-sizing: border-box;
         }
         body {
-            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            font-family: 'Segoe UI', 'Inter', system-ui, -apple-system, sans-serif;
             background: var(--bg);
+            background-image: radial-gradient(ellipse at 20% 10%, rgba(108, 92, 231, 0.12) 0%, transparent 55%), radial-gradient(ellipse at 80% 90%, rgba(0, 206, 201, 0.1) 0%, transparent 55%), radial-gradient(ellipse at 50% 50%, rgba(253, 121, 168, 0.06) 0%, transparent 60%);
+            background-attachment: fixed;
             color: var(--text);
             min-height: 100vh;
             transition: var(--transition);
             line-height: 1.6;
+            -webkit-tap-highlight-color: transparent;
+            user-select: none;
         }
         ::-webkit-scrollbar {
-            width: 6px;
+            width: 5px;
         }
         ::-webkit-scrollbar-track {
-            background: var(--bg);
+            background: transparent;
         }
         ::-webkit-scrollbar-thumb {
             background: var(--primary);
             border-radius: 10px;
         }
+        /* ===== HEADER ===== */
         .header {
-            background: var(--surface);
-            border-bottom: 1px solid var(--border);
-            padding: 14px 24px;
+            background: var(--glass-bg);
+            backdrop-filter: var(--blur);
+            -webkit-backdrop-filter: var(--blur);
+            border-bottom: 1px solid var(--glass-border);
+            padding: 12px 22px;
             display: flex;
             align-items: center;
             justify-content: space-between;
             flex-wrap: wrap;
-            gap: 12px;
+            gap: 10px;
             position: sticky;
             top: 0;
-            z-index: 100;
-            box-shadow: var(--shadow);
+            z-index: 200;
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.3);
+            transition: var(--transition);
         }
         .logo-area {
             display: flex;
@@ -78,50 +99,46 @@
             flex-wrap: wrap;
         }
         .logo {
-            font-size: 1.6rem;
-            font-weight: 800;
+            font-size: 1.5rem;
+            font-weight: 900;
             background: linear-gradient(135deg, var(--primary2), var(--accent));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             letter-spacing: -0.5px;
-        }
-        .logo span.board-tag {
-            font-size: 0.7rem;
-            background: var(--surface2);
-            padding: 3px 10px;
-            border-radius: 20px;
-            -webkit-text-fill-color: var(--text2);
-            margin-left: 4px;
-            letter-spacing: 0;
+            cursor: pointer;
         }
         .built-by {
-            font-size: 0.8rem;
+            font-size: 0.72rem;
             font-weight: 400;
             color: var(--text2);
-            background: rgba(108, 92, 231, 0.1);
+            background: rgba(108, 92, 231, 0.12);
             padding: 4px 14px;
             border-radius: 20px;
-            border: 1px solid var(--primary2);
+            border: 1px solid rgba(108, 92, 231, 0.25);
             font-style: italic;
             white-space: nowrap;
+            letter-spacing: 0.3px;
         }
         .header-actions {
             display: flex;
-            gap: 10px;
+            gap: 8px;
             align-items: center;
             flex-wrap: wrap;
         }
         select,
-        button {
-            padding: 10px 16px;
+        button,
+        input {
+            padding: 10px 15px;
             border-radius: 25px;
-            border: 1px solid var(--border);
+            border: 1px solid var(--glass-border);
             background: var(--surface2);
+            backdrop-filter: blur(8px);
             color: var(--text);
             cursor: pointer;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             transition: var(--transition);
             font-family: inherit;
+            outline: none;
         }
         button {
             background: var(--primary);
@@ -130,49 +147,100 @@
             font-weight: 600;
             display: flex;
             align-items: center;
-            gap: 6px;
+            gap: 5px;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(108, 92, 231, 0.3);
         }
         button:hover {
             transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(108, 92, 231, 0.4);
+            box-shadow: 0 8px 28px rgba(108, 92, 231, 0.5);
+        }
+        button:active {
+            transform: scale(0.96);
         }
         button.secondary {
             background: var(--surface2);
             color: var(--text);
-            border: 1px solid var(--border);
+            border: 1px solid var(--glass-border);
+            box-shadow: none;
         }
         button.accent {
             background: var(--accent);
             color: #000;
+            box-shadow: 0 4px 15px rgba(0, 206, 201, 0.3);
         }
         button.danger {
             background: var(--danger);
+            box-shadow: 0 4px 15px rgba(231, 76, 60, 0.3);
         }
         .btn-sm {
-            padding: 6px 14px;
-            font-size: 0.8rem;
-            border-radius: 20px;
+            padding: 6px 13px;
+            font-size: 0.75rem;
+            border-radius: 18px;
         }
+        .btn-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1rem;
+        }
+        /* Global Search */
+        .global-search {
+            position: relative;
+            max-width: 220px;
+        }
+        .global-search input {
+            width: 100%;
+            padding: 10px 16px 10px 36px;
+            border-radius: 25px;
+            font-size: 0.82rem;
+            background: var(--surface2);
+            border: 1px solid var(--glass-border);
+        }
+        .global-search .search-icon {
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text2);
+            pointer-events: none;
+        }
+        /* ===== SIDEBAR ===== */
         .main-container {
             display: flex;
-            min-height: calc(100vh - 70px);
+            min-height: calc(100vh - 66px);
         }
         .sidebar {
-            width: 260px;
-            background: var(--surface);
-            border-right: 1px solid var(--border);
-            padding: 16px 10px;
+            width: 250px;
+            background: var(--glass-bg);
+            backdrop-filter: var(--blur);
+            -webkit-backdrop-filter: var(--blur);
+            border-right: 1px solid var(--glass-border);
+            padding: 14px 8px;
             display: flex;
             flex-direction: column;
-            gap: 4px;
+            gap: 3px;
             overflow-y: auto;
             position: sticky;
-            top: 70px;
-            height: calc(100vh - 70px);
+            top: 66px;
+            height: calc(100vh - 66px);
             flex-shrink: 0;
+            transition: all 0.4s ease;
+            z-index: 50;
+        }
+        .sidebar.hidden {
+            width: 0;
+            padding: 0;
+            overflow: hidden;
+            border: none;
+            opacity: 0;
         }
         .sidebar .nav-item {
-            padding: 12px 16px;
+            padding: 11px 14px;
             border-radius: var(--radius-sm);
             cursor: pointer;
             transition: var(--transition);
@@ -181,32 +249,65 @@
             gap: 10px;
             font-weight: 500;
             color: var(--text2);
-            font-size: 0.9rem;
+            font-size: 0.84rem;
             white-space: nowrap;
+            position: relative;
+            border: 1px solid transparent;
         }
-        .sidebar .nav-item:hover,
+        .sidebar .nav-item:hover {
+            background: rgba(108, 92, 231, 0.15);
+            color: var(--text);
+            border: 1px solid rgba(108, 92, 231, 0.3);
+        }
         .sidebar .nav-item.active {
-            background: var(--primary);
+            background: rgba(108, 92, 231, 0.25);
             color: #fff;
+            border: 1px solid rgba(108, 92, 231, 0.5);
+            box-shadow: 0 0 20px rgba(108, 92, 231, 0.25), inset 0 0 10px rgba(108, 92, 231, 0.1);
+            font-weight: 700;
+        }
+        .sidebar .nav-item.active::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 8px;
+            bottom: 8px;
+            width: 3px;
+            background: var(--accent);
+            border-radius: 0 4px 4px 0;
+            box-shadow: 0 0 12px var(--accent);
         }
         .sidebar .nav-item .icon {
-            font-size: 1.2rem;
+            font-size: 1.15rem;
             width: 24px;
             text-align: center;
         }
         .sidebar .badge {
             background: var(--accent2);
             color: #fff;
-            font-size: 0.7rem;
+            font-size: 0.65rem;
             padding: 2px 8px;
             border-radius: 10px;
             margin-left: auto;
+            font-weight: 700;
         }
+        /* ===== CONTENT ===== */
         .content {
             flex: 1;
-            padding: 24px;
+            padding: 22px;
             overflow-y: auto;
-            max-width: 1100px;
+            max-width: 1150px;
+            animation: fadeSlideIn 0.4s ease;
+        }
+        @keyframes fadeSlideIn {
+            from {
+                opacity: 0;
+                transform: translateY(18px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
         .section {
             display: none;
@@ -215,62 +316,95 @@
             display: block;
             animation: fadeSlideIn 0.4s ease;
         }
-        @keyframes fadeSlideIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
         .card {
-            background: var(--surface);
+            background: var(--glass-bg);
+            backdrop-filter: var(--blur);
+            -webkit-backdrop-filter: var(--blur);
             border-radius: var(--radius);
-            padding: 20px;
-            border: 1px solid var(--border);
+            padding: 20px 22px;
+            border: 1px solid var(--glass-border);
             box-shadow: var(--shadow);
-            margin-bottom: 20px;
+            margin-bottom: 18px;
             transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+        }
+        .card::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle at 30% 20%, rgba(108, 92, 231, 0.04) 0%, transparent 50%);
+            pointer-events: none;
         }
         .card:hover {
-            border-color: var(--primary2);
+            border-color: rgba(108, 92, 231, 0.3);
+            box-shadow: 0 12px 48px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(108, 92, 231, 0.15);
         }
         .card h3 {
-            margin-bottom: 12px;
+            margin-bottom: 10px;
             display: flex;
             align-items: center;
             gap: 8px;
+            font-size: 1.1rem;
+            position: relative;
+            z-index: 1;
+        }
+        .card p,
+        .card div {
+            position: relative;
+            z-index: 1;
         }
         .grid-2 {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 16px;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 14px;
         }
         .grid-3 {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 14px;
+            grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+            gap: 12px;
         }
         .stat-card {
-            background: var(--surface2);
+            background: var(--glass-bg);
+            backdrop-filter: var(--blur);
             border-radius: var(--radius-sm);
-            padding: 18px;
+            padding: 16px;
             text-align: center;
-            border: 1px solid var(--border);
+            border: 1px solid var(--glass-border);
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+        }
+        .stat-card:hover {
+            border-color: rgba(108, 92, 231, 0.4);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(108, 92, 231, 0.2);
         }
         .stat-card .num {
-            font-size: 2.5rem;
-            font-weight: 800;
+            font-size: 2.4rem;
+            font-weight: 900;
             background: linear-gradient(135deg, var(--primary2), var(--accent));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
         .stat-card .lbl {
-            font-size: 0.85rem;
+            font-size: 0.8rem;
             color: var(--text2);
+            margin-top: 2px;
         }
         .timer-display {
-            font-size: 4rem;
-            font-weight: 800;
+            font-size: 5rem;
+            font-weight: 900;
             text-align: center;
             font-variant-numeric: tabular-nums;
-            letter-spacing: 4px;
+            letter-spacing: 6px;
+            background: linear-gradient(135deg, var(--accent), var(--primary2));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 40px rgba(0, 206, 201, 0.3);
         }
         .timer-controls {
             display: flex;
@@ -279,40 +413,50 @@
             flex-wrap: wrap;
             margin-top: 12px;
         }
-        input[type="text"],
-        input[type="number"],
         textarea {
             width: 100%;
             padding: 12px;
             border-radius: var(--radius-sm);
-            border: 1px solid var(--border);
+            border: 1px solid var(--glass-border);
             background: var(--surface2);
             color: var(--text);
             font-family: inherit;
-            font-size: 0.95rem;
+            font-size: 0.9rem;
             transition: var(--transition);
             resize: vertical;
+            min-height: 90px;
         }
-        textarea {
-            min-height: 100px;
+        input[type="text"],
+        input[type="number"],
+        input[type="date"] {
+            width: 100%;
+            padding: 11px;
+            border-radius: 25px;
+            border: 1px solid var(--glass-border);
+            background: var(--surface2);
+            color: var(--text);
+            font-family: inherit;
+            font-size: 0.88rem;
+            transition: var(--transition);
         }
         input:focus,
         textarea:focus {
             outline: none;
             border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(108, 92, 231, 0.15);
+            box-shadow: 0 0 0 4px rgba(108, 92, 231, 0.12);
         }
+        /* Flashcard 3D */
         .flashcard {
-            perspective: 1000px;
-            height: 200px;
+            perspective: 1200px;
+            height: 210px;
             cursor: pointer;
-            margin-bottom: 12px;
+            margin-bottom: 10px;
         }
         .flashcard-inner {
             position: relative;
             width: 100%;
             height: 100%;
-            transition: transform 0.6s;
+            transition: transform 0.7s cubic-bezier(0.4, 0, 0.2, 1);
             transform-style: preserve-3d;
         }
         .flashcard.flipped .flashcard-inner {
@@ -328,44 +472,50 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            padding: 20px;
+            padding: 22px;
             text-align: center;
             font-weight: 600;
-            font-size: 1.1rem;
+            font-size: 1.05rem;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
         }
         .flashcard-front {
-            background: var(--primary);
+            background: linear-gradient(135deg, var(--primary), #4a3db5);
             color: #fff;
+            border: 1px solid rgba(255, 255, 255, 0.15);
         }
         .flashcard-back {
-            background: var(--surface2);
+            background: var(--surface);
             color: var(--text);
             transform: rotateY(180deg);
             border: 2px solid var(--primary2);
         }
+        /* Mind Map */
         .mindmap-container {
             position: relative;
-            min-height: 350px;
-            border: 1px dashed var(--border);
+            min-height: 330px;
+            border: 1px dashed var(--glass-border);
             border-radius: var(--radius);
             overflow: hidden;
             background: var(--surface2);
+            backdrop-filter: blur(6px);
         }
         .mind-node {
             position: absolute;
-            padding: 10px 16px;
-            border-radius: 20px;
+            padding: 9px 15px;
+            border-radius: 22px;
             cursor: pointer;
             font-weight: 600;
-            font-size: 0.85rem;
+            font-size: 0.82rem;
             transition: var(--transition);
             white-space: nowrap;
+            backdrop-filter: blur(6px);
         }
         .mind-node.central {
             background: var(--primary);
             color: #fff;
-            font-size: 1rem;
+            font-size: 0.95rem;
             z-index: 2;
+            box-shadow: 0 0 30px rgba(108, 92, 231, 0.4);
         }
         .mind-node.branch {
             background: var(--surface);
@@ -375,12 +525,12 @@
         .mind-node.leaf {
             background: var(--accent2);
             color: #fff;
-            font-size: 0.75rem;
-            padding: 6px 12px;
+            font-size: 0.72rem;
+            padding: 5px 11px;
         }
         .progress-bar {
-            height: 10px;
-            background: var(--surface2);
+            height: 8px;
+            background: rgba(255, 255, 255, 0.06);
             border-radius: 10px;
             overflow: hidden;
             margin: 8px 0;
@@ -389,7 +539,8 @@
             height: 100%;
             background: linear-gradient(90deg, var(--primary), var(--accent));
             border-radius: 10px;
-            transition: width 0.6s ease;
+            transition: width 0.7s ease;
+            box-shadow: 0 0 12px rgba(0, 206, 201, 0.3);
         }
         .chat-box {
             max-height: 350px;
@@ -398,16 +549,17 @@
             flex-direction: column;
             gap: 10px;
             padding: 10px;
-            background: var(--surface2);
+            background: rgba(0, 0, 0, 0.15);
             border-radius: var(--radius-sm);
             margin-bottom: 12px;
         }
         .chat-msg {
             padding: 10px 14px;
             border-radius: 18px;
-            max-width: 80%;
-            font-size: 0.9rem;
+            max-width: 82%;
+            font-size: 0.88rem;
             line-height: 1.5;
+            backdrop-filter: blur(6px);
         }
         .chat-msg.user {
             background: var(--primary);
@@ -420,58 +572,132 @@
             color: var(--text);
             align-self: flex-start;
             border-bottom-left-radius: 4px;
-            border: 1px solid var(--border);
+            border: 1px solid var(--glass-border);
         }
         .tag {
             display: inline-block;
-            padding: 4px 12px;
-            border-radius: 15px;
-            font-size: 0.75rem;
+            padding: 4px 11px;
+            border-radius: 14px;
+            font-size: 0.7rem;
             font-weight: 600;
-            margin: 3px;
+            margin: 2px;
         }
-        .tag.purple { background: rgba(108,92,231,0.2); color: var(--primary2); }
-        .tag.green { background: rgba(46,204,113,0.2); color: var(--success); }
-        .tag.orange { background: rgba(243,156,18,0.2); color: var(--warning); }
+        .tag.purple {
+            background: rgba(108, 92, 231, 0.2);
+            color: var(--primary2);
+        }
+        .tag.green {
+            background: rgba(46, 204, 113, 0.2);
+            color: var(--success);
+        }
+        .tag.orange {
+            background: rgba(243, 156, 18, 0.2);
+            color: var(--warning);
+        }
         .checklist-item {
             display: flex;
             align-items: center;
             gap: 10px;
             padding: 10px;
-            border-radius: 8px;
+            border-radius: 10px;
             background: var(--surface2);
-            margin-bottom: 6px;
+            margin-bottom: 5px;
             transition: var(--transition);
         }
         .checklist-item.done {
-            opacity: 0.6;
+            opacity: 0.5;
             text-decoration: line-through;
         }
         .checklist-item input[type="checkbox"] {
-            width: 18px;
-            height: 18px;
+            width: 17px;
+            height: 17px;
             accent-color: var(--success);
             cursor: pointer;
         }
         .toast {
             position: fixed;
-            bottom: 30px;
-            right: 30px;
+            bottom: 28px;
+            right: 28px;
             background: var(--success);
             color: #fff;
-            padding: 12px 24px;
-            border-radius: 25px;
+            padding: 12px 22px;
+            border-radius: 28px;
             font-weight: 600;
             z-index: 999;
-            animation: slideUp 0.4s ease, fadeOut 0.4s ease 2s forwards;
-            box-shadow: var(--shadow);
+            animation: slideUp 0.4s ease, fadeOut 0.4s ease 2.2s forwards;
+            box-shadow: 0 8px 30px rgba(46, 204, 113, 0.4);
         }
         @keyframes slideUp {
-            from { transform: translateY(60px); opacity: 0; }
-            to { transform: translateY(0); opacity: 1; }
+            from {
+                transform: translateY(50px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
         }
         @keyframes fadeOut {
-            to { opacity: 0; transform: translateY(20px); }
+            to {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+        }
+        .highlight-box {
+            background: linear-gradient(135deg, rgba(108, 92, 231, 0.08), rgba(0, 206, 201, 0.08));
+            border: 1px solid rgba(108, 92, 231, 0.25);
+            border-radius: var(--radius);
+            padding: 18px;
+            margin: 14px 0;
+            backdrop-filter: blur(6px);
+        }
+        .cbq-badge {
+            background: var(--accent);
+            color: #000;
+            font-size: 0.65rem;
+            font-weight: 700;
+            padding: 2px 9px;
+            border-radius: 14px;
+            margin-left: 6px;
+            text-transform: uppercase;
+            letter-spacing: 0.4px;
+        }
+        .empty-state {
+            text-align: center;
+            padding: 35px;
+            color: var(--text2);
+        }
+        .empty-state .icon {
+            font-size: 3.5rem;
+            margin-bottom: 10px;
+        }
+        /* Deep Work Overlay */
+        .deep-work-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            z-index: 300;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(8px);
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            gap: 16px;
+        }
+        .deep-work-overlay.active {
+            display: flex;
+        }
+        .deep-work-overlay iframe {
+            border-radius: var(--radius);
+            box-shadow: 0 0 60px rgba(0, 0, 0, 0.6);
+            width: 90%;
+            max-width: 500px;
+            height: 200px;
+            border: none;
+        }
+        .deep-work-overlay h2 {
+            color: #fff;
+            text-shadow: 0 0 20px rgba(255, 255, 255, 0.4);
         }
         @media (max-width: 768px) {
             .sidebar {
@@ -482,51 +708,77 @@
                 flex-direction: row;
                 flex-wrap: wrap;
                 justify-content: center;
-                gap: 6px;
+                gap: 4px;
+                padding: 8px;
+                border-right: none;
+                border-bottom: 1px solid var(--glass-border);
+            }
+            .sidebar.hidden {
+                width: 100%;
+                height: 0;
+                padding: 0;
+                opacity: 0;
+            }
+            .sidebar .nav-item {
+                padding: 7px 10px;
+                font-size: 0.7rem;
+                border-radius: 16px;
+            }
+            .sidebar .badge {
+                display: none;
+            }
+            .main-container {
+                flex-direction: column;
+            }
+            .content {
                 padding: 10px;
             }
-            .sidebar .nav-item { padding: 8px 12px; font-size: 0.75rem; }
-            .sidebar .badge { display: none; }
-            .main-container { flex-direction: column; }
-            .content { padding: 12px; }
-            .timer-display { font-size: 2.5rem; }
-            .header { padding: 10px 14px; }
-            .logo { font-size: 1.2rem; }
+            .timer-display {
+                font-size: 3rem;
+            }
+            .header {
+                padding: 8px 10px;
+            }
+            .logo {
+                font-size: 1.2rem;
+            }
+            .global-search {
+                max-width: 140px;
+            }
         }
-        .empty-state {
-            text-align: center;
-            padding: 40px;
-            color: var(--text2);
-        }
-        .empty-state .icon { font-size: 4rem; margin-bottom: 12px; }
-        .highlight-box {
-            background: linear-gradient(135deg, rgba(108,92,231,0.1), rgba(0,206,201,0.1));
-            border: 1px solid var(--primary2);
-            border-radius: var(--radius);
-            padding: 20px;
-            margin: 16px 0;
-        }
-        .cbq-badge {
-            background: var(--accent);
-            color: #000;
-            font-size: 0.7rem;
-            font-weight: 700;
-            padding: 2px 10px;
-            border-radius: 15px;
-            margin-left: 8px;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            border: 0;
         }
     </style>
 </head>
 <body>
+    <!-- Deep Work Overlay -->
+    <div class="deep-work-overlay" id="deepWorkOverlay">
+        <h2>🧘 Deep Work Mode</h2>
+        <p style="color:#ccc;">Lo-Fi beats to help you focus</p>
+        <iframe src="https://www.youtube.com/embed/jfKfPfyJRdk?autoplay=1&loop=1&controls=0&modestbranding=1" title="Lo-Fi" allow="autoplay" loading="lazy"></iframe>
+        <button onclick="toggleDeepWork()" class="danger" style="font-size:1rem;padding:12px 28px;">✕ Exit Deep Work</button>
+    </div>
+
+    <!-- Header -->
     <header class="header">
         <div class="logo-area">
-            <div class="logo">🧠 StudyAI Pro <span class="board-tag">All Boards</span></div>
+            <div class="logo" onclick="showSection('dashboard',document.querySelector('[data-section=dashboard]'))">🧠 StudyAI Pro</div>
             <span class="built-by">✨ Built by Master Arhan</span>
         </div>
         <div class="header-actions">
-            <select id="boardSelect" onchange="changeBoard()">
+            <div class="global-search">
+                <span class="search-icon">🔍</span>
+                <input type="text" id="globalSearch" placeholder="Search formulas, notes, topics..." oninput="handleGlobalSearch()">
+            </div>
+            <select id="boardSelect" onchange="changeBoard()" aria-label="Select Board">
                 <option value="CBSE">🇮🇳 CBSE</option>
                 <option value="ICSE">📚 ICSE</option>
                 <option value="State-MH">🏛️ Maharashtra State</option>
@@ -539,49 +791,38 @@
                 <option value="State-BR">🏛️ Bihar State</option>
                 <option value="State-Others">🏛️ Other Boards</option>
             </select>
-            <select id="classSelect" onchange="changeClass()">
-                <option value="10">Class 10</option>
-                <option value="12">Class 12</option>
-                <option value="9">Class 9</option>
-                <option value="11">Class 11</option>
-            </select>
-            <select id="subjectSelect" onchange="changeSubject()">
-                <option value="Mathematics">📐 Mathematics</option>
-                <option value="Physics">⚡ Physics</option>
-                <option value="Chemistry">🧪 Chemistry</option>
-                <option value="Biology">🧬 Biology</option>
-                <option value="English">📖 English</option>
-                <option value="History">🏛️ History</option>
-                <option value="Geography">🌍 Geography</option>
-                <option value="ComputerScience">💻 Computer Science</option>
-            </select>
-            <button onclick="toggleTheme()" class="secondary btn-sm" title="Toggle Dark/Light Mode">🌓</button>
-            <button onclick="resetAllData()" class="danger btn-sm" title="Reset All Data">🔄 Reset</button>
+            <select id="classSelect" onchange="changeClass()" aria-label="Select Class"><option value="10">Class 10</option><option value="12">Class 12</option><option value="9">Class 9</option><option value="11">Class 11</option></select>
+            <select id="subjectSelect" onchange="changeSubject()" aria-label="Select Subject"><option value="Mathematics">📐 Mathematics</option><option value="Physics">⚡ Physics</option><option value="Chemistry">🧪 Chemistry</option><option value="Biology">🧬 Biology</option><option value="English">📖 English</option><option value="History">🏛️ History</option><option value="Geography">🌍 Geography</option><option value="ComputerScience">💻 Computer Science</option></select>
+            <button onclick="toggleTheme()" class="btn-icon secondary" title="Toggle Dark/Light Mode" aria-label="Toggle theme">🌓</button>
+            <button onclick="toggleDeepWork()" class="btn-icon accent" title="Deep Work Mode" aria-label="Deep Work">🧘</button>
+            <button onclick="resetAllData()" class="btn-icon danger" title="Reset All Data" aria-label="Reset data">🔄</button>
         </div>
     </header>
 
+    <!-- Main Layout -->
     <div class="main-container">
         <nav class="sidebar" id="sidebar">
-            <div class="nav-item active" data-section="dashboard" onclick="showSection('dashboard', this)"><span class="icon">📊</span> Dashboard</div>
-            <div class="nav-item" data-section="timer" onclick="showSection('timer', this)"><span class="icon">⏱️</span> Study Timer <span class="badge">Pomodoro</span></div>
-            <div class="nav-item" data-section="pyq" onclick="showSection('pyq', this)"><span class="icon">📝</span> PYQ & Papers</div>
-            <div class="nav-item" data-section="predictor" onclick="showSection('predictor', this)"><span class="icon">🔮</span> CBQ Predictor <span class="badge">NEW</span></div>
-            <div class="nav-item" data-section="notes" onclick="showSection('notes', this)"><span class="icon">📒</span> Notes Maker</div>
-            <div class="nav-item" data-section="mindmap" onclick="showSection('mindmap', this)"><span class="icon">🧩</span> Mind Maps</div>
-            <div class="nav-item" data-section="quiz" onclick="showSection('quiz', this)"><span class="icon">❓</span> Quizzes</div>
-            <div class="nav-item" data-section="flashcards" onclick="showSection('flashcards', this)"><span class="icon">🃏</span> Flash Cards</div>
-            <div class="nav-item" data-section="formulas" onclick="showSection('formulas', this)"><span class="icon">📐</span> Formula Sheets</div>
-            <div class="nav-item" data-section="homework" onclick="showSection('homework', this)"><span class="icon">✅</span> Homework Tracker</div>
-            <div class="nav-item" data-section="doubts" onclick="showSection('doubts', this)"><span class="icon">💬</span> Clear Doubts</div>
-            <div class="nav-item" data-section="strategies" onclick="showSection('strategies', this)"><span class="icon">🎯</span> Strategies & Tips</div>
-            <div class="nav-item" data-section="motivation" onclick="showSection('motivation', this)"><span class="icon">🔥</span> Motivation</div>
+            <div class="nav-item active" data-section="dashboard" onclick="showSection('dashboard', this)"><span class="icon">📊</span>Dashboard</div>
+            <div class="nav-item" data-section="timer" onclick="showSection('timer', this)"><span class="icon">⏱️</span>Study Timer<span class="badge">Pomodoro</span></div>
+            <div class="nav-item" data-section="pyq" onclick="showSection('pyq', this)"><span class="icon">📝</span>PYQ & Papers</div>
+            <div class="nav-item" data-section="predictor" onclick="showSection('predictor', this)"><span class="icon">🔮</span>CBQ Predictor<span class="badge">NEW</span></div>
+            <div class="nav-item" data-section="notes" onclick="showSection('notes', this)"><span class="icon">📒</span>Notes Maker</div>
+            <div class="nav-item" data-section="mindmap" onclick="showSection('mindmap', this)"><span class="icon">🧩</span>Mind Maps</div>
+            <div class="nav-item" data-section="quiz" onclick="showSection('quiz', this)"><span class="icon">❓</span>Quizzes</div>
+            <div class="nav-item" data-section="flashcards" onclick="showSection('flashcards', this)"><span class="icon">🃏</span>Flash Cards</div>
+            <div class="nav-item" data-section="formulas" onclick="showSection('formulas', this)"><span class="icon">📐</span>Formula Sheets</div>
+            <div class="nav-item" data-section="homework" onclick="showSection('homework', this)"><span class="icon">✅</span>Homework</div>
+            <div class="nav-item" data-section="doubts" onclick="showSection('doubts', this)"><span class="icon">💬</span>Clear Doubts</div>
+            <div class="nav-item" data-section="strategies" onclick="showSection('strategies', this)"><span class="icon">🎯</span>Strategies</div>
+            <div class="nav-item" data-section="motivation" onclick="showSection('motivation', this)"><span class="icon">🔥</span>Motivation</div>
         </nav>
 
+        <!-- Content Area -->
         <main class="content" id="contentArea">
             <!-- Dashboard -->
             <section class="section active" id="section-dashboard">
-                <h2>📊 Welcome Back! Your Study Dashboard</h2>
-                <p style="color:var(--text2);margin-bottom:16px;">Board: <strong id="dashBoard"></strong> | Class: <strong id="dashClass"></strong> | Subject: <strong id="dashSubject"></strong></p>
+                <h2>📊 Welcome Back! Your Command Center</h2>
+                <p style="color:var(--text2);margin-bottom:12px;">Board: <strong id="dashBoard"></strong> | Class: <strong id="dashClass"></strong> | Subject: <strong id="dashSubject"></strong></p>
                 <div class="grid-3" id="statsGrid">
                     <div class="stat-card"><div class="num" id="statStudyHours">0</div><div class="lbl">📖 Hours Studied</div></div>
                     <div class="stat-card"><div class="num" id="statQuizzes">0</div><div class="lbl">❓ Quizzes Taken</div></div>
@@ -590,214 +831,52 @@
                     <div class="stat-card"><div class="num" id="statStreak">0</div><div class="lbl">🔥 Day Streak</div></div>
                     <div class="stat-card"><div class="num" id="statNotes">0</div><div class="lbl">📒 Notes Saved</div></div>
                 </div>
-                <div class="card">
-                    <h3>📈 Weekly Progress</h3>
-                    <div class="progress-bar"><div class="progress-fill" id="weeklyProgress" style="width:0%"></div></div>
-                    <p style="margin-top:8px;color:var(--text2);">Keep going! You're doing great. 🚀</p>
-                </div>
-                <div class="highlight-box">
-                    <strong>🎯 Today's Focus:</strong> <span id="dailyFocus">Complete at least 2 study sessions and review 5 flashcards!</span>
-                </div>
+                <div class="card"><h3>📈 Weekly Progress</h3><div class="progress-bar"><div class="progress-fill" id="weeklyProgress" style="width:0%"></div></div><p style="margin-top:6px;color:var(--text2);">Keep going! You're doing great. 🚀</p></div>
+                <div class="highlight-box"><strong>🎯 Today's Focus:</strong> <span id="dailyFocus"></span></div>
             </section>
 
             <!-- Timer -->
-            <section class="section" id="section-timer">
-                <h2>⏱️ Pomodoro Study Timer</h2>
-                <div class="card" style="text-align:center;">
-                    <div class="timer-display" id="timerDisplay">25:00</div>
-                    <p style="color:var(--text2);" id="timerLabel">Focus Session</p>
-                    <div class="timer-controls">
-                        <button onclick="startTimer()">▶ Start</button>
-                        <button onclick="pauseTimer()" class="secondary">⏸ Pause</button>
-                        <button onclick="resetTimer()" class="secondary">↺ Reset</button>
-                    </div>
-                    <div style="margin-top:12px;">
-                        <button class="btn-sm secondary" onclick="setTimerMode(25)">25 min Focus</button>
-                        <button class="btn-sm secondary" onclick="setTimerMode(5)">5 min Break</button>
-                        <button class="btn-sm secondary" onclick="setTimerMode(15)">15 min Break</button>
-                        <button class="btn-sm secondary" onclick="setTimerMode(50)">50 min Deep</button>
-                    </div>
-                    <p style="margin-top:10px;color:var(--text2);">Sessions completed today: <strong id="sessionCount">0</strong></p>
-                </div>
-            </section>
+            <section class="section" id="section-timer"><h2>⏱️ Pomodoro Study Timer</h2><div class="card" style="text-align:center;"><div class="timer-display" id="timerDisplay">25:00</div><p style="color:var(--text2);" id="timerLabel">Focus Session</p><div class="timer-controls"><button onclick="startTimer()">▶ Start</button><button onclick="pauseTimer()" class="secondary">⏸ Pause</button><button onclick="resetTimer()" class="secondary">↺ Reset</button></div><div style="margin-top:10px;"><button class="btn-sm secondary" onclick="setTimerMode(25)">25 min</button><button class="btn-sm secondary" onclick="setTimerMode(5)">5 min</button><button class="btn-sm secondary" onclick="setTimerMode(15)">15 min</button><button class="btn-sm secondary" onclick="setTimerMode(50)">50 min</button></div><p style="margin-top:8px;">Sessions today: <strong id="sessionCount">0</strong></p></div></section>
 
             <!-- PYQ -->
-            <section class="section" id="section-pyq">
-                <h2>📝 Previous Year Questions & Sample Papers</h2>
-                <div class="card">
-                    <h3>🔍 Generate PYQ Set</h3>
-                    <p style="color:var(--text2);">Select your preferences to generate relevant PYQs and sample papers.</p>
-                    <div style="display:flex;gap:10px;flex-wrap:wrap;margin:12px 0;">
-                        <select id="pyqYear"><option>2024</option><option>2023</option><option>2022</option><option>2021</option><option>2020</option></select>
-                        <select id="pyqType"><option>Board Exam Paper</option><option>Sample Paper</option><option>Compartment Exam</option></select>
-                        <button onclick="generatePYQ()">Generate Questions</button>
-                    </div>
-                    <div id="pyqOutput" class="chat-box" style="max-height:400px;">
-                        <div class="chat-msg ai">👋 Select options and click generate to see PYQs and sample questions tailored for your board!</div>
-                    </div>
-                    <button onclick="downloadPYQ()" class="btn-sm secondary" style="margin-top:8px;">📥 Download as Text</button>
-                </div>
-            </section>
+            <section class="section" id="section-pyq"><h2>📝 PYQ & Sample Papers</h2><div class="card"><h3>🔍 Board-Specific PYQ Generator</h3><p style="color:var(--text2);">Dynamic content for <strong id="pyqBoardLabel"></strong></p><div style="display:flex;gap:8px;flex-wrap:wrap;margin:10px 0;"><select id="pyqYear"><option>2024</option><option>2023</option><option>2022</option><option>2021</option></select><select id="pyqType"><option>Board Exam Paper</option><option>Sample Paper</option><option>Compartment Exam</option></select><button onclick="generatePYQ()">Generate</button></div><div id="pyqOutput" class="chat-box"><div class="chat-msg ai">👋 Select and generate PYQs for your board.</div></div><button onclick="downloadPYQ()" class="btn-sm secondary">📥 Download</button></div></section>
 
-            <!-- Predictor (CBQ Focus) -->
-            <section class="section" id="section-predictor">
-                <h2>🔮 Competency-Based Question Predictor <span class="cbq-badge">CBQ</span></h2>
-                <div class="card">
-                    <h3>📊 Real-World Application Analysis</h3>
-                    <p style="color:var(--text2);">Our AI analyzes board trends to predict <strong>Competency-Based Questions (CBQs)</strong> that test practical knowledge and real-life application.</p>
-                    <button onclick="runPrediction()">🔮 Run CBQ Prediction</button>
-                    <div id="predictionOutput" style="margin-top:16px;"></div>
-                </div>
-                <div class="card">
-                    <h3>📋 Generate Custom CBQs</h3>
-                    <textarea id="customTopicInput" placeholder="Enter topic (e.g., 'Quadratic Equations in daily life' or 'Uses of electromagnets')..."></textarea>
-                    <button onclick="generateCustomQuestions()" style="margin-top:10px;">✨ Generate Competency-Based Questions</button>
-                    <div id="customQOutput" style="margin-top:12px;"></div>
-                </div>
-            </section>
+            <!-- Predictor -->
+            <section class="section" id="section-predictor"><h2>🔮 CBQ Predictor <span class="cbq-badge">Competency-Based</span></h2><div class="card"><h3>📊 Real-World Application Analysis</h3><button onclick="runPrediction()">🔮 Run CBQ Prediction</button><div id="predictionOutput" style="margin-top:14px;"></div></div><div class="card"><h3>📋 Generate Custom CBQs</h3><textarea id="customTopicInput" placeholder="Enter topic..."></textarea><button onclick="generateCustomQuestions()" style="margin-top:8px;">✨ Generate CBQs</button><div id="customQOutput" style="margin-top:10px;"></div></div></section>
 
             <!-- Notes -->
-            <section class="section" id="section-notes">
-                <h2>📒 Smart Notes Maker</h2>
-                <div class="card">
-                    <input type="text" id="noteTitle" placeholder="Note title...">
-                    <textarea id="noteContent" placeholder="Write your notes here... Use **bold** or bullet points!" style="min-height:180px;"></textarea>
-                    <div style="display:flex;gap:10px;margin-top:10px;flex-wrap:wrap;">
-                        <button onclick="saveNote()">💾 Save Note</button>
-                        <button onclick="clearNoteForm()" class="secondary">🗑 Clear</button>
-                        <button onclick="exportNotes()" class="secondary btn-sm">📥 Export All Notes</button>
-                    </div>
-                </div>
-                <h3>📚 Your Saved Notes</h3>
-                <div id="notesList" class="grid-2"></div>
-            </section>
+            <section class="section" id="section-notes"><h2>📒 Smart Notes Maker</h2><div class="card"><input type="text" id="noteTitle" placeholder="Note title..."><textarea id="noteContent" placeholder="Write your notes..."></textarea><div style="display:flex;gap:8px;margin-top:8px;flex-wrap:wrap;"><button onclick="saveNote()">💾 Save</button><button onclick="clearNoteForm()" class="secondary">🗑 Clear</button><button onclick="exportNotes()" class="secondary btn-sm">📥 Export</button><button onclick="notesToQuiz()" class="accent btn-sm">✨ Notes→Quiz</button></div></div><h3>📚 Saved Notes</h3><div id="notesList" class="grid-2"></div></section>
 
             <!-- Mind Map -->
-            <section class="section" id="section-mindmap">
-                <h2>🧩 Interactive Mind Maps</h2>
-                <div class="card">
-                    <input type="text" id="mindmapTopic" placeholder="Central topic (e.g., 'Photosynthesis')...">
-                    <button onclick="generateMindMap()" style="margin-top:8px;">🧠 Generate Mind Map</button>
-                    <div class="mindmap-container" id="mindmapCanvas"></div>
-                    <p style="color:var(--text2);font-size:0.8rem;">Click nodes to expand/collapse • Drag to rearrange (simulated)</p>
-                </div>
-            </section>
+            <section class="section" id="section-mindmap"><h2>🧩 Mind Maps</h2><div class="card"><input type="text" id="mindmapTopic" placeholder="Central topic..."><button onclick="generateMindMap()" style="margin-top:6px;">🧠 Generate</button><div class="mindmap-container" id="mindmapCanvas"></div></div></section>
 
             <!-- Quiz -->
-            <section class="section" id="section-quiz">
-                <h2>❓ Interactive Quiz</h2>
-                <div class="card" id="quizCard">
-                    <h3>🧪 Quick Quiz</h3>
-                    <p style="color:var(--text2);">Test your knowledge with auto-generated questions!</p>
-                    <button onclick="startQuiz()">▶ Start New Quiz</button>
-                    <div id="quizArea" style="margin-top:16px;"></div>
-                    <div id="quizResult" style="margin-top:12px;font-weight:600;"></div>
-                </div>
-            </section>
+            <section class="section" id="section-quiz"><h2>❓ Interactive Quiz</h2><div class="card"><button onclick="startQuiz()">▶ Start New Quiz</button><div id="quizArea" style="margin-top:12px;"></div><div id="quizResult" style="margin-top:10px;font-weight:600;"></div></div></section>
 
             <!-- Flashcards -->
-            <section class="section" id="section-flashcards">
-                <h2>🃏 Smart Flashcards</h2>
-                <div class="card">
-                    <div style="display:flex;gap:10px;flex-wrap:wrap;">
-                        <input type="text" id="fcFront" placeholder="Front (Question/Term)...">
-                        <input type="text" id="fcBack" placeholder="Back (Answer/Definition)...">
-                        <button onclick="addFlashcard()">➕ Add Card</button>
-                    </div>
-                </div>
-                <div class="flashcard" id="flashcardDisplay" onclick="flipFlashcard()">
-                    <div class="flashcard-inner">
-                        <div class="flashcard-front" id="fcFrontText">🧠 Click to add flashcards!</div>
-                        <div class="flashcard-back" id="fcBackText">✨ Answer appears here</div>
-                    </div>
-                </div>
-                <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;">
-                    <button onclick="prevFlashcard()" class="secondary btn-sm">◀ Previous</button>
-                    <span id="fcCounter" style="color:var(--text2);">0 / 0</span>
-                    <button onclick="nextFlashcard()" class="secondary btn-sm">Next ▶</button>
-                    <button onclick="shuffleFlashcards()" class="btn-sm secondary">🔀 Shuffle</button>
-                </div>
-            </section>
+            <section class="section" id="section-flashcards"><h2>🃏 3D Flashcards</h2><div class="card"><div style="display:flex;gap:8px;flex-wrap:wrap;"><input type="text" id="fcFront" placeholder="Front..."><input type="text" id="fcBack" placeholder="Back..."><button onclick="addFlashcard()">➕ Add</button></div></div><div class="flashcard" id="flashcardDisplay" onclick="flipFlashcard()"><div class="flashcard-inner"><div class="flashcard-front" id="fcFrontText">🧠 Add cards above</div><div class="flashcard-back" id="fcBackText">✨ Answer</div></div></div><div style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap;"><button onclick="prevFlashcard()" class="secondary btn-sm">◀</button><span id="fcCounter">0/0</span><button onclick="nextFlashcard()" class="secondary btn-sm">▶</button><button onclick="shuffleFlashcards()" class="btn-sm secondary">🔀</button></div></section>
 
             <!-- Formulas -->
-            <section class="section" id="section-formulas">
-                <h2>📐 Smart Formula Sheets</h2>
-                <div class="card">
-                    <h3>📋 Auto-Generated Formula Sheet</h3>
-                    <p style="color:var(--text2);">Based on your selected subject: <strong id="formulaSubject"></strong></p>
-                    <button onclick="generateFormulaSheet()">🔄 Generate / Refresh</button>
-                    <div id="formulaOutput" style="margin-top:16px;white-space:pre-wrap;font-family:monospace;background:var(--surface2);padding:16px;border-radius:var(--radius-sm);max-height:400px;overflow-y:auto;"></div>
-                    <button onclick="copyFormulas()" class="btn-sm secondary" style="margin-top:8px;">📋 Copy All Formulas</button>
-                </div>
-            </section>
+            <section class="section" id="section-formulas"><h2>📐 Formula Sheets</h2><div class="card"><h3>📋 Subject: <strong id="formulaSubject"></strong></h3><button onclick="generateFormulaSheet()">🔄 Refresh</button><div id="formulaOutput" style="margin-top:12px;white-space:pre-wrap;font-family:monospace;background:var(--surface2);padding:14px;border-radius:var(--radius-sm);max-height:380px;overflow-y:auto;"></div><button onclick="copyFormulas()" class="btn-sm secondary" style="margin-top:6px;">📋 Copy</button></div></section>
 
             <!-- Homework -->
-            <section class="section" id="section-homework">
-                <h2>✅ Homework & Assignment Tracker</h2>
-                <div class="card">
-                    <div style="display:flex;gap:10px;flex-wrap:wrap;">
-                        <input type="text" id="hwInput" placeholder="Add homework/task...">
-                        <input type="date" id="hwDate">
-                        <button onclick="addHomework()">➕ Add</button>
-                    </div>
-                </div>
-                <div id="hwList"></div>
-                <p style="color:var(--text2);">✅ Completed: <strong id="hwDoneCount">0</strong> | 📋 Pending: <strong id="hwPendingCount">0</strong></p>
-            </section>
+            <section class="section" id="section-homework"><h2>✅ Homework Tracker</h2><div class="card"><div style="display:flex;gap:8px;flex-wrap:wrap;"><input type="text" id="hwInput" placeholder="Add task..."><input type="date" id="hwDate"><button onclick="addHomework()">➕ Add</button></div></div><div id="hwList"></div><p>✅ Done: <strong id="hwDoneCount">0</strong> | 📋 Pending: <strong id="hwPendingCount">0</strong></p></section>
 
             <!-- Doubts -->
-            <section class="section" id="section-doubts">
-                <h2>💬 AI Doubt Solver</h2>
-                <div class="card">
-                    <div class="chat-box" id="doubtChat">
-                        <div class="chat-msg ai">👋 Hello! Ask me any study-related doubt. I'll do my best to help you understand!</div>
-                    </div>
-                    <div style="display:flex;gap:10px;">
-                        <input type="text" id="doubtInput" placeholder="Type your doubt here..." onkeypress="if(event.key==='Enter')askDoubt()">
-                        <button onclick="askDoubt()">Send ➤</button>
-                    </div>
-                </div>
-            </section>
+            <section class="section" id="section-doubts"><h2>💬 AI Doubt Solver</h2><div class="card"><div class="chat-box" id="doubtChat"><div class="chat-msg ai">👋 Ask me anything!</div></div><div style="display:flex;gap:8px;"><input type="text" id="doubtInput" placeholder="Type doubt..." onkeypress="if(event.key==='Enter')askDoubt()"><button onclick="askDoubt()">Send ➤</button></div></div></section>
 
             <!-- Strategies -->
-            <section class="section" id="section-strategies">
-                <h2>🎯 Study Strategies & Exam Tips</h2>
-                <div class="card">
-                    <h3>🧠 Personalized Strategy</h3>
-                    <button onclick="generateStrategy()">🎯 Get Strategy</button>
-                    <div id="strategyOutput" style="margin-top:16px;"></div>
-                </div>
-                <div class="card">
-                    <h3>😌 Last-Minute Pressure Busters</h3>
-                    <div id="pressureTips" style="margin-top:8px;"></div>
-                    <button onclick="showPressureTips()" class="btn-sm secondary">🔄 Refresh Tips</button>
-                </div>
-            </section>
+            <section class="section" id="section-strategies"><h2>🎯 Strategies & Tips</h2><div class="card"><button onclick="generateStrategy()">🎯 Get Strategy</button><div id="strategyOutput" style="margin-top:12px;"></div></div><div class="card"><h3>😌 Pressure Busters</h3><div id="pressureTips"></div><button onclick="showPressureTips()" class="btn-sm secondary">🔄 Refresh</button></div></section>
 
             <!-- Motivation -->
-            <section class="section" id="section-motivation">
-                <h2>🔥 Motivation Station</h2>
-                <div class="card" style="text-align:center;">
-                    <h3 style="font-size:1.5rem;" id="motivationQuote">"The only way to do great work is to love what you do."</h3>
-                    <p style="color:var(--accent);" id="motivationAuthor">— Steve Jobs</p>
-                    <button onclick="newMotivationQuote()">🔄 New Quote</button>
-                </div>
-                <div class="card">
-                    <h3>🏆 Your Achievements</h3>
-                    <div class="grid-3" id="achievementsGrid">
-                        <div class="stat-card">🌟<br><span class="lbl">First Quiz Done</span></div>
-                        <div class="stat-card">🔥<br><span class="lbl">5-Day Streak</span></div>
-                        <div class="stat-card">📒<br><span class="lbl">10 Notes Saved</span></div>
-                    </div>
-                </div>
-            </section>
+            <section class="section" id="section-motivation"><h2>🔥 Motivation</h2><div class="card" style="text-align:center;"><h3 style="font-size:1.4rem;" id="motivationQuote"></h3><p style="color:var(--accent);" id="motivationAuthor"></p><button onclick="newMotivationQuote()">🔄 New Quote</button></div><div class="card"><h3>🏆 Achievements</h3><div class="grid-3"><div class="stat-card">🌟<br><span class="lbl">First Quiz</span></div><div class="stat-card">🔥<br><span class="lbl">5-Day Streak</span></div><div class="stat-card">📒<br><span class="lbl">10 Notes</span></div></div></div></section>
         </main>
     </div>
 
     <div class="toast" id="toast" style="display:none;"></div>
 
     <script>
-        // ============ GLOBAL STATE ============
+        // ==================== STATE ENGINE ====================
         let state = {
             board: 'CBSE',
             studentClass: '10',
@@ -815,72 +894,153 @@
             quizScore: 0,
             quizTotal: 0,
             stats: { studyHours: 0, quizzes: 0, hwDone: 0, flashcardsReviewed: 0, streak: 1, notesCount: 0 },
+            lastActiveDate: null,
+            deepWorkActive: false,
         };
 
+        function saveState() {
+            localStorage.setItem('studyAIPro_state', JSON.stringify(state));
+        }
+
         function loadState() {
-            const saved = localStorage.getItem('studyAIState');
-            if (saved) {
-                try {
-                    const parsed = JSON.parse(saved);
-                    state = { ...state, ...parsed };
-                } catch (e) { console.log('Fresh start'); }
+            const raw = localStorage.getItem('studyAIPro_state');
+            if (raw) {
+                try { const p = JSON.parse(raw);
+                    state = { ...state, ...p }; } catch (e) {}
             }
             document.getElementById('boardSelect').value = state.board;
             document.getElementById('classSelect').value = state.studentClass;
             document.getElementById('subjectSelect').value = state.subject;
             if (state.theme === 'light') document.body.classList.add('light-mode');
+            if (state.deepWorkActive) document.getElementById('deepWorkOverlay').classList.add('active');
+            checkStreak();
             updateDashboard();
             renderNotes();
             renderHomework();
             updateFlashcardDisplay();
             updateFormulaSubject();
+            document.getElementById('pyqBoardLabel').textContent = state.board + ' Class ' + state.studentClass;
+            document.getElementById('mindmapTopic').value = state.subject;
+            document.getElementById('formulaOutput').textContent = getFormulas();
+            newMotivationQuote();
+            showPressureTips();
         }
 
-        function saveState() {
-            localStorage.setItem('studyAIState', JSON.stringify(state));
+        // ==================== STREAK LOGIC ====================
+        function checkStreak() {
+            const today = new Date().toLocaleDateString();
+            if (!state.lastActiveDate) {
+                state.lastActiveDate = today;
+                state.stats.streak = 1;
+            } else if (state.lastActiveDate === today) {
+                // same day, no change
+            } else {
+                const last = new Date(state.lastActiveDate);
+                const curr = new Date(today);
+                const diff = Math.floor((curr - last) / (1000 * 60 * 60 * 24));
+                if (diff === 1) {
+                    state.stats.streak = (state.stats.streak || 0) + 1;
+                } else {
+                    state.stats.streak = 1;
+                }
+                state.lastActiveDate = today;
+            }
+            saveState();
         }
 
-        function showToast(msg) {
+        // ==================== TOAST ====================
+        function showToast(m) {
             const t = document.getElementById('toast');
-            t.textContent = msg;
+            t.textContent = m;
             t.style.display = 'block';
-            setTimeout(() => { t.style.display = 'none'; }, 2400);
+            t.style.animation = 'none';
+            t.offsetHeight;
+            t.style.animation = 'slideUp 0.4s ease, fadeOut 0.4s ease 2.2s forwards';
+            setTimeout(() => { t.style.display = 'none'; }, 2600);
         }
 
+        // ==================== NAVIGATION ====================
         function showSection(name, el) {
             document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
             document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-            const section = document.getElementById('section-' + name);
-            if (section) section.classList.add('active');
+            const sec = document.getElementById('section-' + name);
+            if (sec) sec.classList.add('active');
             if (el) el.classList.add('active');
             if (name === 'formulas') updateFormulaSubject();
             if (name === 'dashboard') updateDashboard();
             if (name === 'strategies') showPressureTips();
+            if (name === 'pyq') document.getElementById('pyqBoardLabel').textContent = state.board + ' Class ' + state
+            .studentClass;
+            document.getElementById('contentArea').scrollTop = 0;
         }
 
-        function changeBoard() {
-            state.board = document.getElementById('boardSelect').value;
+        // ==================== GLOBAL SEARCH ====================
+        function handleGlobalSearch() {
+            const q = document.getElementById('globalSearch').value.toLowerCase().trim();
+            if (!q) return;
+            const mappings = [
+                { kw: ['formula', 'sheet', 'math', 'physics', 'chemistry', 'biology', 'equation'], section: 'formulas' },
+                { kw: ['mind', 'map', 'diagram', 'visual'], section: 'mindmap' },
+                { kw: ['quiz', 'test', 'mcq', 'question'], section: 'quiz' },
+                { kw: ['flashcard', 'card', 'memorize'], section: 'flashcards' },
+                { kw: ['pyq', 'paper', 'previous', 'sample', 'exam'], section: 'pyq' },
+                { kw: ['note', 'write', 'notes'], section: 'notes' },
+                { kw: ['doubt', 'ask', 'help', 'question'], section: 'doubts' },
+                { kw: ['timer', 'pomodoro', 'focus', 'study time'], section: 'timer' },
+                { kw: ['strategy', 'tip', 'plan'], section: 'strategies' },
+                { kw: ['motivation', 'quote', 'inspire'], section: 'motivation' },
+                { kw: ['homework', 'task', 'assignment', 'todo'], section: 'homework' },
+                { kw: ['predict', 'cbq', 'competency', 'application'], section: 'predictor' },
+            ];
+            for (const m of mappings) {
+                if (m.kw.some(k => q.includes(k))) {
+                    showSection(m.section, document.querySelector(`[data-section="${m.section}"]`));
+                    showToast('🔍 Found: ' + m.section.replace('-', ' '));
+                    document.getElementById('globalSearch').value = '';
+                    return;
+                }
+            }
+            showToast('🔍 No direct match. Try "formula", "quiz", "pyq", etc.');
+        }
+
+        // ==================== THEME ====================
+        function toggleTheme() {
+            document.body.classList.toggle('light-mode');
+            state.theme = document.body.classList.contains('light-mode') ? 'light' : 'dark';
+            saveState();
+        }
+
+        // ==================== DEEP WORK MODE ====================
+        function toggleDeepWork() {
+            const overlay = document.getElementById('deepWorkOverlay');
+            overlay.classList.toggle('active');
+            state.deepWorkActive = overlay.classList.contains('active');
+            document.getElementById('sidebar').classList.toggle('hidden', state.deepWorkActive);
+            saveState();
+            if (state.deepWorkActive) showToast('🧘 Deep Work Mode ON - Lo-Fi playing');
+            else showToast('Deep Work Mode OFF');
+        }
+
+        // ==================== BOARD/CLASS/SUBJECT ====================
+        function changeBoard() { state.board = document.getElementById('boardSelect').value;
             saveState();
             updateDashboard();
             updateFormulaSubject();
-            showToast('Board changed to ' + state.board);
-        }
+            document.getElementById('pyqBoardLabel').textContent = state.board + ' Class ' + state.studentClass;
+            showToast('Board: ' + state.board); }
 
-        function changeClass() {
-            state.studentClass = document.getElementById('classSelect').value;
+        function changeClass() { state.studentClass = document.getElementById('classSelect').value;
             saveState();
             updateDashboard();
             updateFormulaSubject();
-            showToast('Class changed to ' + state.studentClass);
-        }
+            document.getElementById('pyqBoardLabel').textContent = state.board + ' Class ' + state.studentClass;
+            showToast('Class: ' + state.studentClass); }
 
-        function changeSubject() {
-            state.subject = document.getElementById('subjectSelect').value;
+        function changeSubject() { state.subject = document.getElementById('subjectSelect').value;
             saveState();
             updateDashboard();
             updateFormulaSubject();
-            showToast('Subject: ' + state.subject);
-        }
+            showToast('Subject: ' + state.subject); }
 
         function updateDashboard() {
             document.getElementById('dashBoard').textContent = state.board;
@@ -892,378 +1052,428 @@
             document.getElementById('statFlashcards').textContent = state.stats.flashcardsReviewed || 0;
             document.getElementById('statStreak').textContent = state.stats.streak || 0;
             document.getElementById('statNotes').textContent = state.notes.length || 0;
-            document.getElementById('weeklyProgress').style.width = Math.min((state.stats.studyHours || 0) * 8, 100) + '%';
+            document.getElementById('weeklyProgress').style.width = Math.min((state.stats.studyHours || 0) * 7, 100) + '%';
             document.getElementById('dailyFocus').textContent =
-                `Complete at least 2 study sessions and review ${Math.max(5 - (state.stats.flashcardsReviewed || 0) % 5, 1)} flashcards!`;
+                `Complete at least 2 study sessions and review ${Math.max(3,5-(state.stats.flashcardsReviewed||0)%5)} flashcards!`;
             document.getElementById('sessionCount').textContent = state.sessionCount || 0;
+            document.getElementById('pyqBoardLabel').textContent = state.board + ' Class ' + state.studentClass;
         }
 
-        function toggleTheme() {
-            document.body.classList.toggle('light-mode');
-            state.theme = document.body.classList.contains('light-mode') ? 'light' : 'dark';
-            saveState();
-        }
+        // ==================== TIMER ====================
+        function updateTimerDisplay() { const m = Math.floor(state.timerSeconds / 60); const s = state.timerSeconds % 60;
+            document.getElementById('timerDisplay').textContent = String(m).padStart(2, '0') + ':' + String(s).padStart(2,
+                '0'); }
 
-        // Timer functions (unchanged)
-        function updateTimerDisplay() {
-            const m = Math.floor(state.timerSeconds / 60);
-            const s = state.timerSeconds % 60;
-            document.getElementById('timerDisplay').textContent = String(m).padStart(2, '0') + ':' + String(s).padStart(2, '0');
-        }
-        function setTimerMode(min) {
-            state.timerMode = min;
+        function setTimerMode(min) { state.timerMode = min;
             state.timerSeconds = min * 60;
             state.timerRunning = false;
             clearInterval(state.timerInterval);
             updateTimerDisplay();
             document.getElementById('timerLabel').textContent = min >= 25 ? 'Focus Session 🔥' : 'Break Time ☕';
-            saveState();
-        }
-        function startTimer() {
-            if (state.timerRunning) return;
+            saveState(); }
+
+        function startTimer() { if (state.timerRunning) return;
             state.timerRunning = true;
-            document.getElementById('timerLabel').textContent = state.timerMode >= 25 ? 'Focus Session 🔥 - Studying...' : 'Break Time ☕ - Relax!';
-            state.timerInterval = setInterval(() => {
-                if (state.timerSeconds > 0) {
-                    state.timerSeconds--;
-                    updateTimerDisplay();
-                } else {
-                    clearInterval(state.timerInterval);
-                    state.timerRunning = false;
-                    if (state.timerMode >= 25) {
-                        state.sessionCount = (state.sessionCount || 0) + 1;
+            document.getElementById('timerLabel').textContent = state.timerMode >= 25 ? 'Studying... 🔥' : 'Relaxing... ☕';
+            state.timerInterval = setInterval(() => { if (state.timerSeconds > 0) { state.timerSeconds--;
+                    updateTimerDisplay(); } else { clearInterval(state.timerInterval);
+                    state.timerRunning = false; if (state.timerMode >= 25) { state.sessionCount = (state.sessionCount || 0) +
+                        1;
                         state.stats.studyHours = (state.stats.studyHours || 0) + state.timerMode / 60;
-                        showToast('🎉 Session complete! Take a break!');
-                    } else {
-                        showToast('☕ Break over! Ready to study?');
-                    }
+                        playNotification();
+                        showToast('🎉 Session complete! Take a break!'); } else { showToast('☕ Break over! Ready?');
+                        playNotification(); }
                     updateDashboard();
                     saveState();
-                    document.getElementById('timerLabel').textContent = 'Done! ✅';
-                }
-            }, 1000);
-            saveState();
-        }
-        function pauseTimer() {
-            state.timerRunning = false;
+                    document.getElementById('timerLabel').textContent = 'Done! ✅'; } }, 1000);
+            saveState(); }
+
+        function pauseTimer() { state.timerRunning = false;
             clearInterval(state.timerInterval);
             document.getElementById('timerLabel').textContent = 'Paused ⏸';
-            saveState();
-        }
-        function resetTimer() {
-            state.timerRunning = false;
+            saveState(); }
+
+        function resetTimer() { state.timerRunning = false;
             clearInterval(state.timerInterval);
             state.timerSeconds = state.timerMode * 60;
             updateTimerDisplay();
             document.getElementById('timerLabel').textContent = state.timerMode >= 25 ? 'Focus Session' : 'Break Time';
-            saveState();
+            saveState(); }
+
+        function playNotification() {
+            try {
+                const ctx = new(window.AudioContext || window.webkitAudioContext)();
+                const o = ctx.createOscillator();
+                const g = ctx.createGain();
+                o.connect(g);
+                g.connect(ctx.destination);
+                o.frequency.value = 800;
+                o.type = 'sine';
+                g.gain.setValueAtTime(0.3, ctx.currentTime);
+                g.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.5);
+                o.start(ctx.currentTime);
+                o.stop(ctx.currentTime + 0.5);
+            } catch (e) {}
         }
 
-        // PYQ (unchanged)
+        // ==================== PYQ ====================
         function generatePYQ() {
             const year = document.getElementById('pyqYear').value;
             const type = document.getElementById('pyqType').value;
-            const board = state.board;
-            const subject = state.subject;
-            const cls = state.studentClass;
-            const pyqBank = {
-                Mathematics: [
-                    `Q1. [${board} ${year} ${type}] Solve the quadratic equation: 2x² - 7x + 3 = 0 using the factorization method. (4 marks)`,
-                    `Q2. [${board} ${year} ${type}] Find the sum of first 20 terms of the AP: 3, 7, 11, 15... (3 marks)`,
-                    `Q3. [${board} ${year} ${type}] Prove that √5 is irrational. (4 marks)`,
-                ],
-                Physics: [
-                    `Q1. [${board} ${year} ${type}] State Ohm's law and derive the relation R = V/I. (3 marks)`,
-                    `Q2. [${board} ${year} ${type}] Explain the working of an electric motor with a labeled diagram. (5 marks)`,
-                ],
-                Chemistry: [
-                    `Q1. [${board} ${year} ${type}] Balance the equation: Fe + H₂O → Fe₃O₄ + H₂ (2 marks)`,
-                    `Q2. [${board} ${year} ${type}] Explain the process of electrolysis of water with a diagram. (4 marks)`,
-                ],
-                Biology: [
-                    `Q1. [${board} ${year} ${type}] Describe the process of photosynthesis with a chemical equation. (4 marks)`,
-                ],
-                English: [
-                    `Q1. [${board} ${year} ${type}] Write a letter to the editor about the increasing pollution in your city. (6 marks)`,
-                ],
+            const boardPyqBank = {
+                CBSE: { Mathematics: [`Q1. [CBSE ${year}] Solve 2x²-7x+3=0. (4m)`, `Q2. [CBSE ${year}] Sum of first 20 terms of AP 3,7,11...`],
+                    Physics: [`Q1. [CBSE ${year}] Ohm's law derivation.`, `Q2. [CBSE ${year}] Electric motor diagram.`],
+                    Chemistry: [`Q1. [CBSE ${year}] Balance Fe+H₂O→Fe₃O₄+H₂.`], Biology: [`Q1. [CBSE ${year}] Photosynthesis process.`] },
+                ICSE: { Mathematics: [`Q1. [ICSE ${year}] Factorise x²-5x+6.`], Physics: [`Q1. [ICSE ${year}] Define refractive index.`] },
+                'State-MH': { Mathematics: [`Q1. [Maharashtra ${year}] Solve simultaneous equations.`],
+                    Physics: [`Q1. [Maharashtra ${year}] Explain Newton's laws.`] },
+                'State-TN': { Mathematics: [`Q1. [Tamil Nadu ${year}] Find LCM and GCD.`] },
+                'State-KA': { Mathematics: [`Q1. [Karnataka ${year}] Pythagoras theorem proof.`] },
             };
-            const questions = pyqBank[subject] || pyqBank['Mathematics'];
+            const boardKey = state.board;
+            const bank = (boardPyqBank[boardKey] && boardPyqBank[boardKey][state.subject]) || (boardPyqBank['CBSE'] && boardPyqBank[
+                'CBSE'][state.subject]) || [`Q1. [${state.board} ${year}] Practice question for ${state.subject}.`];
             const output = document.getElementById('pyqOutput');
-            output.innerHTML = questions.map(q => `<div class="chat-msg ai">📝 ${q}</div>`).join('');
-            output.innerHTML += `<div class="chat-msg ai">✅ These are likely PYQ-style questions for <strong>${board} Class ${cls} ${subject}</strong>. Practice them well!</div>`;
+            output.innerHTML = bank.map(q => `<div class="chat-msg ai">📝 ${q}</div>`).join('');
+            output.innerHTML +=
+                `<div class="chat-msg ai">✅ <strong>${state.board} Class ${state.studentClass} ${state.subject}</strong> PYQs. Practice well!</div>`;
         }
-        function downloadPYQ() {
-            const content = document.getElementById('pyqOutput').innerText;
-            const blob = new Blob([content], { type: 'text/plain' });
+
+        function downloadPYQ() { const c = document.getElementById('pyqOutput').innerText; const b = new Blob([c], { type: 'text/plain' });
             const a = document.createElement('a');
-            a.href = URL.createObjectURL(blob);
+            a.href = URL.createObjectURL(b);
             a.download = `PYQ_${state.board}_${state.subject}.txt`;
             a.click();
-            showToast('📥 Downloaded!');
-        }
+            showToast('📥 Downloaded!'); }
 
-        // ============ CBQ PREDICTOR (Competency-Based) ============
-        function runPrediction() {
-            const output = document.getElementById('predictionOutput');
-            const subject = state.subject;
-            const board = state.board;
-            const predictions = [
-                `🔮 <strong>Competency-Based Question Prediction for ${board} ${subject}</strong> <span class="cbq-badge">CBQ</span>`,
-                `📌 <strong>High-Probability Real-World Application Topics:</strong>`,
-                `1. ⭐ <strong>Case Study Based:</strong> ${getCBQCaseStudyTopic(subject)}`,
-                `2. ⭐ <strong>Data Interpretation:</strong> ${getCBQDataTopic(subject)}`,
-                `3. 🔸 <strong>Assertion & Reasoning:</strong> ${getCBQAssertionTopic(subject)}`,
-                `4. 🔸 <strong>Diagram/Labelling based Application:</strong> ${getCBQDiagramTopic(subject)}`,
-                `📊 <strong>Predicted Question Pattern:</strong> 50% Application-based scenarios, 30% Conceptual reasoning, 20% Problem-solving with real data.`,
-                `💡 <strong>CBQ Strategy:</strong> Practice solving questions that ask "How will you apply this concept in daily life?" or "Justify with an example."`,
-                `🗣 <strong>Sample CBQ:</strong> "${getSampleCBQ(subject)}"`,
-            ];
-            output.innerHTML = predictions.map(p => `<p style="margin:8px 0;">${p}</p>`).join('');
-            showToast('🔮 CBQ Prediction ready!');
-        }
+        // ==================== CBQ PREDICTOR ====================
+        function runPrediction() { const o = document.getElementById('predictionOutput');
+            o.innerHTML = [
+                `🔮 <strong>CBQ Prediction for ${state.board} ${state.subject}</strong> <span class="cbq-badge">CBQ</span>`,
+                `📌 Case Study: ${getCBQCaseStudy()}`, `📌 Data Interpretation: ${getCBQData()}`,
+                `📌 Assertion & Reasoning: ${getCBQAssertion()}`, `📌 Diagram Application: ${getCBQDiagram()}`,
+                `💡 Sample CBQ: "${getSampleCBQ()}"`
+            ].map(p => `<p style="margin:6px 0;">${p}</p>`).join('');
+            showToast('🔮 CBQ Prediction ready!'); }
 
-        function getCBQCaseStudyTopic(subject) {
-            const map = {
-                Mathematics: 'Using trigonometry to find the height of a building using a clinometer',
-                Physics: 'Designing a circuit for a home inverter system',
-                Chemistry: 'Testing the pH of different household substances',
-                Biology: 'Analyzing the effect of pollution on local plant growth',
-                English: 'Writing a report on a community cleanliness drive',
-                History: 'Comparing current election process with ancient democratic practices',
-                Geography: 'Studying rainfall pattern and its impact on agriculture in your state',
-                ComputerScience: 'Creating a small app to track daily water consumption'
-            };
-            return map[subject] || 'Real-life scenario related to the subject';
-        }
+        function getCBQCaseStudy() { const m = { Mathematics: 'Trigonometry for building height',
+                Physics: 'Home inverter circuit design', Chemistry: 'pH testing of household items',
+                Biology: 'Pollution effect on plants' }; return m[state.subject] || 'Real-life application scenario'; }
 
-        function getCBQDataTopic(subject) {
-            const map = {
-                Mathematics: 'Interpreting graphs of COVID-19 cases and calculating growth rate',
-                Physics: 'Reading electricity bills and calculating energy consumption of appliances',
-                Chemistry: 'Analysing the label of a packaged food item for nutritional content',
-                Biology: 'Constructing a food web from a given ecosystem data',
-                Geography: 'Comparing population density maps of two different states',
-                ComputerScience: 'Debugging a small program that calculates simple interest'
-            };
-            return map[subject] || 'Interpreting a table or chart related to the subject';
-        }
+        function getCBQData() { const m = { Mathematics: 'COVID case graph analysis', Physics: 'Electricity bill calculation',
+                Chemistry: 'Food label nutrition analysis' }; return m[state.subject] || 'Data interpretation task'; }
 
-        function getCBQAssertionTopic(subject) {
-            const map = {
-                Mathematics: 'Assertion (A): The graph of a quadratic polynomial is always a parabola. Reason (R): A quadratic polynomial has degree 2.',
-                Physics: 'Assertion (A): A fuse wire has high resistance. Reason (R): It melts when current exceeds safe limit.',
-                Chemistry: 'Assertion (A): Acids turn blue litmus red. Reason (R): Acids release H⁺ ions in water.',
-                Biology: 'Assertion (A): Mitochondria are called powerhouse of the cell. Reason (R): They produce ATP.',
-            };
-            return map[subject] || 'Assertion and Reason based question on core concept';
-        }
+        function getCBQAssertion() { return 'Assertion and Reason based on core ' + state.subject + ' concept.'; }
 
-        function getCBQDiagramTopic(subject) {
-            const map = {
-                Mathematics: 'Drawing and labelling a clinometer to measure angle of elevation',
-                Physics: 'Labelled diagram of an electric motor and its real-life application',
-                Chemistry: 'Electrolysis of water setup with labels',
-                Biology: 'Human digestive system with labels and functions',
-            };
-            return map[subject] || 'Diagram-based question requiring labelling and explanation';
-        }
+        function getCBQDiagram() { return 'Labelled diagram with real-life application explanation.'; }
 
-        function getSampleCBQ(subject) {
-            const samples = {
-                Mathematics: 'A ladder 15 m long just reaches the top of a vertical wall. If the ladder makes an angle of 60° with the wall, find the height of the wall. How can a firefighter use this concept?',
-                Physics: 'You have four resistors of 8 Ω each. Show how you would connect them to get an effective resistance of 8 Ω. Why is this combination used in household circuits?',
-                Chemistry: 'Ravi tested the pH of three unknown solutions and found values 2, 7, and 11. Identify which is likely to be lemon juice, distilled water, and soap solution. Justify your answer.',
-                Biology: 'A farmer notices that the leaves of his crops are turning yellow. What nutrient deficiency could be responsible? Suggest an eco-friendly way to replenish it.',
-            };
-            return samples[subject] || 'Explain how you would use this concept in a practical situation.';
-        }
+        function getSampleCBQ() { const s = { Mathematics: 'A ladder 15m long reaches a wall at 60°. Find height. Firefighter use?',
+                Physics: 'Connect four 8Ω resistors for 8Ω. Household use?', Chemistry: 'pH 2,7,11 – identify lemon, water, soap.',
+                Biology: 'Crop leaves yellowing – nutrient deficiency? Eco-friendly fix?' }; return s[state.subject] ||
+            'Explain a practical application.'; }
 
-        function generateCustomQuestions() {
-            const topic = document.getElementById('customTopicInput').value.trim();
-            if (!topic) { showToast('Please enter a topic!'); return; }
-            const output = document.getElementById('customQOutput');
-            const questions = [
-                `✨ <strong>CBQ 1 (Real-Life Application):</strong> Describe a real-world scenario where knowledge of <em>${topic}</em> is crucial. Formulate a problem based on that scenario and provide a step-by-step solution. (5 marks)`,
-                `✨ <strong>CBQ 2 (Data Analysis):</strong> Study the given data (hypothetical) related to <em>${topic}</em>. Interpret the data, draw conclusions, and suggest two practical improvements. (4 marks)`,
-                `✨ <strong>CBQ 3 (Assertion & Reasoning):</strong> Assertion (A): [Statement about ${topic}]. Reason (R): [Scientific explanation]. Choose the correct option and justify. (3 marks)`,
-                `✨ <strong>CBQ 4 (Diagram Based):</strong> Draw a neat labelled diagram illustrating the principle of <em>${topic}</em>. Explain how it is used in everyday life. (5 marks)`,
-                `✨ <strong>CBQ 5 (HOTS – Problem Solving):</strong> A common problem faced by people is [related to ${topic}]. Using your understanding of <em>${topic}</em>, propose a feasible solution and evaluate its impact. (6 marks)`,
-            ];
-            output.innerHTML = questions.join('<br>') + `<br><br>✅ Competency-Based Questions generated for <strong>"${topic}"</strong>. Focus on applying concepts!`;
-            showToast('✨ CBQs generated!');
-        }
+        function generateCustomQuestions() { const t = document.getElementById('customTopicInput').value.trim(); if (!t) return showToast(
+                'Enter a topic!');
+            document.getElementById('customQOutput').innerHTML = [
+                `✨ <strong>CBQ 1 (Real-Life):</strong> Scenario using <em>${t}</em>. Solve. (5m)`,
+                `✨ <strong>CBQ 2 (Data):</strong> Interpret data on <em>${t}</em>. (4m)`,
+                `✨ <strong>CBQ 3 (Assertion):</strong> A/R on <em>${t}</em>. (3m)`,
+                `✨ <strong>CBQ 4 (Diagram):</strong> Draw & label <em>${t}</em>. (5m)`,
+                `✨ <strong>CBQ 5 (HOTS):</strong> Solve real problem using <em>${t}</em>. (6m)`
+            ].join('<br>') + `<br>✅ CBQs for <strong>"${t}"</strong>`;
+            showToast('✨ CBQs generated!'); }
 
-        // Notes (unchanged)
-        function saveNote() {
-            const title = document.getElementById('noteTitle').value.trim();
-            const content = document.getElementById('noteContent').value.trim();
-            if (!title || !content) { showToast('Please fill both title and content!'); return; }
-            state.notes.unshift({ title, content, date: new Date().toLocaleDateString(), subject: state.subject });
+        // ==================== NOTES ====================
+        function saveNote() { const ti = document.getElementById('noteTitle').value.trim(); const co = document.getElementById(
+                'noteContent').value.trim(); if (!ti || !co) return showToast('Fill both fields!');
+            state.notes.unshift({ title: ti, content: co, date: new Date().toLocaleDateString(), subject: state.subject });
             state.stats.notesCount = state.notes.length;
             saveState();
             renderNotes();
             clearNoteForm();
             updateDashboard();
-            showToast('📒 Note saved!');
-        }
-        function clearNoteForm() { document.getElementById('noteTitle').value = ''; document.getElementById('noteContent').value = ''; }
-        function renderNotes() {
-            const container = document.getElementById('notesList');
-            if (state.notes.length === 0) {
-                container.innerHTML = '<div class="empty-state"><div class="icon">📒</div><p>No notes yet. Start writing!</p></div>';
-                return;
-            }
-            container.innerHTML = state.notes.map((n, i) => `
-                <div class="card" style="position:relative;">
-                  <small style="color:var(--text2);">${n.date} • ${n.subject}</small>
-                  <h4>${n.title}</h4>
-                  <p style="white-space:pre-wrap;">${n.content.substring(0, 200)}${n.content.length > 200 ? '...' : ''}</p>
-                  <button class="btn-sm danger" onclick="deleteNote(${i})" style="position:absolute;top:10px;right:10px;">🗑</button>
-                </div>`).join('');
-        }
-        function deleteNote(i) { state.notes.splice(i,1); state.stats.notesCount=state.notes.length; saveState(); renderNotes(); updateDashboard(); showToast('Note deleted'); }
-        function exportNotes() {
-            const text = state.notes.map(n => `## ${n.title}\n${n.content}\n---`).join('\n\n');
-            const blob = new Blob([text], { type: 'text/plain' });
-            const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'StudyAI_Notes.txt'; a.click();
-            showToast('📥 Notes exported!');
-        }
+            showToast('📒 Note saved!'); }
 
-        // Mind Map (unchanged)
-        function generateMindMap() {
-            const topic = document.getElementById('mindmapTopic').value.trim() || state.subject;
-            const canvas = document.getElementById('mindmapCanvas');
-            const branches = getMindMapBranches(topic);
-            const leaves = getMindMapLeaves(topic);
-            let html = `<div class="mind-node central" style="top:45%;left:42%;transform:translate(-50%,-50%);">🧠 ${topic}</div>`;
-            const positions = [{top:'10%',left:'5%'},{top:'10%',left:'65%'},{top:'60%',left:'5%'},{top:'60%',left:'65%'},{top:'35%',left:'80%'},{top:'35%',left:'0%'}];
-            branches.forEach((b,i) => { const pos = positions[i]||{top:'20%',left:'50%'}; html += `<div class="mind-node branch" style="top:${pos.top};left:${pos.left};">📌 ${b}</div>`; });
-            const leafPos = [{top:'22%',left:'15%'},{top:'22%',left:'70%'},{top:'72%',left:'15%'},{top:'72%',left:'70%'}];
-            leaves.forEach((l,i) => { const pos = leafPos[i]||{top:'50%',left:'50%'}; html += `<div class="mind-node leaf" style="top:${pos.top};left:${pos.left};">🍃 ${l}</div>`; });
-            canvas.innerHTML = html;
-            showToast('🧩 Mind map generated!');
-        }
-        function getMindMapBranches(topic) {
-            const map = { Mathematics:['Algebra','Geometry','Trigonometry','Statistics'], Physics:['Mechanics','Optics','Electricity','Thermodynamics'], Chemistry:['Organic','Inorganic','Physical','Biochemistry'], Biology:['Botany','Zoology','Genetics','Ecology'] };
-            return map[topic]||['Concept 1','Concept 2','Concept 3','Concept 4'];
-        }
-        function getMindMapLeaves(topic) {
-            const map = { Mathematics:['Quadratic Eq.','Triangles','Sin/Cos','Mean/Median'], Physics:['Newton Laws','Lenses','Ohm Law','Heat'], Chemistry:['Hydrocarbons','Salts','Equilibrium','Enzymes'], Biology:['Photosynth.','Digestion','DNA','Food Chain'] };
-            return map[topic]||['Detail A','Detail B','Detail C','Detail D'];
-        }
+        function clearNoteForm() { document.getElementById('noteTitle').value = '';
+            document.getElementById('noteContent').value = ''; }
 
-        // Quiz (unchanged)
-        function startQuiz() {
-            const quizQuestions = getQuizQuestions();
-            state.quizTotal = quizQuestions.length; state.quizScore = 0; let currentQ = 0;
-            const area = document.getElementById('quizArea'); const result = document.getElementById('quizResult'); result.innerHTML = '';
-            function showQuestion() {
-                if (currentQ >= quizQuestions.length) { area.innerHTML = '<h3>🎉 Quiz Complete!</h3>'; result.innerHTML = `Your Score: <strong>${state.quizScore} / ${state.quizTotal}</strong> (${Math.round(state.quizScore/state.quizTotal*100)}%)`; state.stats.quizzes = (state.stats.quizzes||0)+1; saveState(); updateDashboard(); return; }
-                const q = quizQuestions[currentQ];
-                area.innerHTML = `<h4>Q${currentQ+1}: ${q.question}</h4>${q.options.map((o,i)=>`<button onclick="answerQuiz(${i},${q.correct},${currentQ})" style="display:block;width:100%;margin:6px 0;text-align:left;" class="secondary">${String.fromCharCode(65+i)}. ${o}</button>`).join('')}`;
-            }
-            window.answerQuiz = function(selected, correct, qIndex) { if(selected===correct) state.quizScore++; currentQ = qIndex+1; showQuestion(); };
-            showQuestion();
-        }
-        function getQuizQuestions() {
-            const bank = {
-                Mathematics:[ {question:'What is the discriminant of 2x² - 4x + 2 = 0?',options:['0','4','8','16'],correct:0}, {question:'Sin 30° = ?',options:['0','1/2','1','√3/2'],correct:1} ],
-                Physics:[ {question:'SI unit of current?',options:['Volt','Ampere','Ohm','Watt'],correct:1} ],
-                Chemistry:[ {question:'pH of pure water?',options:['0','5','7','14'],correct:2} ],
-                Biology:[ {question:'Powerhouse of the cell?',options:['Nucleus','Ribosome','Mitochondria','Golgi'],correct:2} ]
-            };
-            return bank[state.subject]||bank['Mathematics'];
-        }
+        function renderNotes() { const c = document.getElementById('notesList'); if (state.notes.length === 0) { c.innerHTML =
+                    '<div class="empty-state"><div class="icon">📒</div><p>No notes yet.</p></div>'; return; }
+            c.innerHTML = state.notes.map((n, i) => `
+            <div class="card" style="position:relative;"><small style="color:var(--text2);">${n.date} • ${n.subject}</small>
+            <h4>${n.title}</h4><p>${n.content.substring(0,180)}${n.content.length>180?'...':''}</p>
+            <button class="btn-sm danger" onclick="deleteNote(${i})" style="position:absolute;top:8px;right:8px;">🗑</button></div>`)
+                .join(''); }
 
-        // Flashcards (unchanged)
-        function addFlashcard() { const front=document.getElementById('fcFront').value.trim(); const back=document.getElementById('fcBack').value.trim(); if(!front||!back){showToast('Fill both sides!');return;} state.flashcards.push({front,back}); state.fcIndex=state.flashcards.length-1; document.getElementById('fcFront').value=''; document.getElementById('fcBack').value=''; saveState(); updateFlashcardDisplay(); showToast('🃏 Card added!'); }
-        function updateFlashcardDisplay() {
-            if(state.flashcards.length===0){ document.getElementById('fcFrontText').textContent='🧠 No cards yet! Add some above.'; document.getElementById('fcBackText').textContent='✨ Answer appears here'; document.getElementById('fcCounter').textContent='0 / 0'; return; }
-            const card=state.flashcards[state.fcIndex]||state.flashcards[0]; document.getElementById('fcFrontText').textContent=card.front; document.getElementById('fcBackText').textContent=card.back; document.getElementById('fcCounter').textContent=`${state.fcIndex+1} / ${state.flashcards.length}`; document.getElementById('flashcardDisplay').classList.remove('flipped'); state.stats.flashcardsReviewed=(state.stats.flashcardsReviewed||0)+1; saveState(); updateDashboard();
-        }
-        function flipFlashcard(){ document.getElementById('flashcardDisplay').classList.toggle('flipped'); }
-        function nextFlashcard(){ if(state.flashcards.length===0)return; state.fcIndex=(state.fcIndex+1)%state.flashcards.length; updateFlashcardDisplay(); }
-        function prevFlashcard(){ if(state.flashcards.length===0)return; state.fcIndex=(state.fcIndex-1+state.flashcards.length)%state.flashcards.length; updateFlashcardDisplay(); }
-        function shuffleFlashcards(){ state.flashcards.sort(()=>Math.random()-0.5); state.fcIndex=0; updateFlashcardDisplay(); showToast('🔀 Shuffled!'); }
+        function deleteNote(i) { state.notes.splice(i, 1);
+            state.stats.notesCount = state.notes.length;
+            saveState();
+            renderNotes();
+            updateDashboard(); }
 
-        // Formulas (unchanged)
-        function updateFormulaSubject(){ document.getElementById('formulaSubject').textContent=state.subject; }
-        function generateFormulaSheet(){ document.getElementById('formulaOutput').textContent=getFormulas(); showToast('📐 Formula sheet ready!'); }
-        function getFormulas(){
-            const sheets={
-                Mathematics:`📐 MATHEMATICS FORMULAS (${state.board} Class ${state.studentClass})\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n🔹 ALGEBRA:\n  • (a+b)² = a² + 2ab + b²\n  • Quadratic Formula: x = [-b ± √(b²-4ac)] / 2a\n🔹 TRIGONOMETRY:\n  • sin²θ + cos²θ = 1\n  • tan θ = sin θ / cos θ`,
-                Physics:`⚡ PHYSICS FORMULAS\n━━━━━━━━━━━━━━━━━━\n🔹 ELECTRICITY:\n  • V = IR\n  • P = VI = I²R\n🔹 LIGHT:\n  • 1/f = 1/v + 1/u (mirror)\n  • Power P = 1/f (m)`,
-                Chemistry:`🧪 CHEMISTRY FORMULAS\n━━━━━━━━━━━━━━━━━━\n🔹 MOLE: n = m/M\n🔹 pH = -log[H⁺]`
-            };
-            return sheets[state.subject]||sheets['Mathematics'];
-        }
-        function copyFormulas(){ navigator.clipboard.writeText(document.getElementById('formulaOutput').textContent).then(()=>showToast('📋 Formulas copied!')); }
+        function exportNotes() { const t = state.notes.map(n => `## ${n.title}\n${n.content}\n---`).join('\n\n');
+            const b = new Blob([t], { type: 'text/plain' });
+            const a = document.createElement('a');
+            a.href = URL.createObjectURL(b);
+            a.download = 'StudyAI_Notes.txt';
+            a.click();
+            showToast('📥 Exported!'); }
 
-        // Homework (unchanged)
-        function addHomework(){ const task=document.getElementById('hwInput').value.trim(); const date=document.getElementById('hwDate').value||new Date().toISOString().split('T')[0]; if(!task){showToast('Enter a task!');return;} state.homework.unshift({task,date,done:false}); document.getElementById('hwInput').value=''; saveState(); renderHomework(); showToast('✅ Task added!'); }
-        function toggleHW(i){ state.homework[i].done=!state.homework[i].done; if(state.homework[i].done) state.stats.hwDone=(state.stats.hwDone||0)+1; else state.stats.hwDone=Math.max((state.stats.hwDone||0)-1,0); saveState(); renderHomework(); updateDashboard(); }
-        function deleteHW(i){ if(state.homework[i].done) state.stats.hwDone=Math.max((state.stats.hwDone||0)-1,0); state.homework.splice(i,1); saveState(); renderHomework(); updateDashboard(); }
-        function renderHomework(){
-            const container=document.getElementById('hwList');
-            if(state.homework.length===0){ container.innerHTML='<div class="empty-state"><div class="icon">✅</div><p>No homework yet. Add tasks above!</p></div>'; }
-            else { container.innerHTML=state.homework.map((h,i)=>`<div class="checklist-item ${h.done?'done':''}"><input type="checkbox" ${h.done?'checked':''} onchange="toggleHW(${i})"><span style="flex:1;"><strong>${h.task}</strong> <small>📅 ${h.date}</small></span><button class="btn-sm danger" onclick="deleteHW(${i})">🗑</button></div>`).join(''); }
-            document.getElementById('hwDoneCount').textContent=state.homework.filter(h=>h.done).length;
-            document.getElementById('hwPendingCount').textContent=state.homework.filter(h=>!h.done).length;
-        }
+        function notesToQuiz() { if (state.notes.length === 0) return showToast('Save some notes first!');
+            const lastNote = state.notes[0];
+            const questions = [
+                { question: `Based on "${lastNote.title}": What is the main concept?`, options: [lastNote.content.split(' ')[
+                        0
+                    ] || 'A', 'Option B', 'Option C', 'Option D'
+                ], correct: 0 },
+                { question: `Application of "${lastNote.title}":`, options: ['Real-world use A', 'Real-world use B',
+                    'Theoretical only', 'None'
+                ], correct: 0 },
+            ];
+            state.quizTotal = questions.length;
+            state.quizScore = 0;
+            let cq = 0;
+            const area = document.getElementById('quizArea');
+            const result = document.getElementById('quizResult');
+            result.innerHTML = '';
 
-        // Doubt (unchanged)
-        function askDoubt(){
-            const input=document.getElementById('doubtInput'); const question=input.value.trim(); if(!question)return;
-            const chat=document.getElementById('doubtChat'); chat.innerHTML+=`<div class="chat-msg user">🧑‍🎓 ${question}</div>`; input.value='';
-            const responses=[`Great question! Let me explain based on ${state.subject} curriculum...`, `I understand your doubt! Let's clarify step by step...`];
-            setTimeout(()=>{ chat.innerHTML+=`<div class="chat-msg ai">🤖 ${responses[Math.floor(Math.random()*responses.length)]}</div>`; chat.scrollTop=chat.scrollHeight; },600);
-            chat.scrollTop=chat.scrollHeight;
-        }
+            function showQ() { if (cq >= questions.length) { area.innerHTML = '<h3>🎉 Quiz from Notes Done!</h3>';
+                    result.innerHTML =
+                    `Score: <strong>${state.quizScore}/${state.quizTotal}</strong>`;
+                    state.stats.quizzes = (state.stats.quizzes || 0) + 1;
+                    saveState();
+                    updateDashboard(); return; } const q = questions[cq];
+                area.innerHTML =
+                    `<h4>Q${cq+1}: ${q.question}</h4>${q.options.map((o,i)=>`<button onclick="ansNQ(${i},${q.correct},${cq})" style="display:block;width:100%;margin:4px 0;text-align:left;" class="secondary">${String.fromCharCode(65+i)}. ${o}</button>`).join('')}`; }
+            window.ansNQ = function(s, cor, qi) { if (s === cor) state.quizScore++;
+                cq = qi + 1;
+                showQ(); };
+            showQ();
+            showSection('quiz', document.querySelector('[data-section="quiz"]'));
+            showToast('✨ Quiz generated from your notes!'); }
 
-        // Strategies (unchanged but mention CBQ)
-        function generateStrategy(){
-            const output=document.getElementById('strategyOutput');
-            const strategies=[`🎯 <strong>Your Personalized Strategy for ${state.board} ${state.subject}:</strong>`,
-                `📅 <strong>Week 1-2:</strong> Master NCERT and focus on <strong>Competency-Based Questions (CBQs)</strong> – application over rote.`,
-                `📅 <strong>Week 3:</strong> Solve PYQs and analyze how concepts are applied in real-life contexts.`,
-                `📝 <strong>Daily:</strong> 2 hours focused study + practice 5 CBQs from your weak areas.`,
-                `💡 <strong>CBQ Tip:</strong> In ${state.board} exams, expect questions like "Justify with example" or "How will you apply this?"`];
-            output.innerHTML=strategies.join('<br>'); showToast('🎯 Strategy generated!');
-        }
-        function showPressureTips(){
-            const tips=['😌 <strong>Deep Breathing:</strong> Inhale 4 sec, hold 4 sec, exhale 4 sec.',
-                '📋 <strong>Quick Revision:</strong> Use flashcards for competency-based definitions.',
-                '💧 <strong>Stay Hydrated:</strong> Water reduces anxiety.',
-                '🗣 <strong>Talk It Out:</strong> Explain a CBQ to a friend.'];
-            document.getElementById('pressureTips').innerHTML=tips.join('<br>');
-        }
+        // ==================== MIND MAP ====================
+        function generateMindMap() { const t = document.getElementById('mindmapTopic').value.trim() || state.subject;
+            const c = document.getElementById('mindmapCanvas');
+            const br = ['Concept A', 'Concept B', 'Concept C', 'Concept D'];
+            const lf = ['Detail 1', 'Detail 2', 'Detail 3', 'Detail 4'];
+            let h =
+                `<div class="mind-node central" style="top:42%;left:40%;">🧠 ${t}</div>`;
+            const bp = [{ t: '8%', l: '3%' }, { t: '8%', l: '68%' }, { t: '58%', l: '3%' }, { t: '58%', l: '68%' }];
+            br.forEach((b, i) => { h +=
+                    `<div class="mind-node branch" style="top:${bp[i].t};left:${bp[i].l};">📌 ${b}</div>`; });
+            const lp = [{ t: '20%', l: '14%' }, { t: '20%', l: '72%' }, { t: '70%', l: '14%' }, { t: '70%', l: '72%' }];
+            lf.forEach((l, i) => { h +=
+                    `<div class="mind-node leaf" style="top:${lp[i].t};left:${lp[i].l};">🍃 ${l}</div>`; });
+            c.innerHTML = h;
+            showToast('🧩 Mind map ready!'); }
 
-        // Motivation (unchanged)
-        const quotes=[{q:'The only way to do great work is to love what you do.',a:'Steve Jobs'},{q:'Success is not final, failure is not fatal: it is the courage to continue that counts.',a:'Winston Churchill'},{q:'Believe you can and you\'re halfway there.',a:'Theodore Roosevelt'},{q:'Push yourself, because no one else is going to do it for you.',a:'Unknown'},{q:'Exams are not a test of your worth, but a test of your preparation. You\'ve got this!',a:'StudyAI 💪'}];
-        function newMotivationQuote(){ const random=quotes[Math.floor(Math.random()*quotes.length)]; document.getElementById('motivationQuote').textContent='"'+random.q+'"'; document.getElementById('motivationAuthor').textContent='— '+random.a; }
+        // ==================== QUIZ ====================
+        function startQuiz() { const qq = [{ question: 'Sin 30° = ?', options: ['0', '1/2', '1', '√3/2'], correct: 1 },
+                { question: 'pH of pure water?', options: ['0', '5', '7', '14'], correct: 2 },
+                { question: 'Powerhouse of cell?', options: ['Nucleus', 'Ribosome', 'Mitochondria', 'Golgi'], correct: 2 },
+                { question: 'Ohm\'s Law: V=?', options: ['IR', 'I/R', 'R/I', 'I+R'], correct: 0 }
+            ];
+            state.quizTotal = qq.length;
+            state.quizScore = 0;
+            let cq = 0;
+            const a = document.getElementById('quizArea');
+            const r = document.getElementById('quizResult');
+            r.innerHTML = '';
 
-        function resetAllData(){
-            if(confirm('⚠️ This will delete ALL your data. Continue?')){
-                localStorage.removeItem('studyAIState');
-                state={board:'CBSE',studentClass:'10',subject:'Mathematics',theme:'dark',timerSeconds:25*60,timerRunning:false,timerInterval:null,timerMode:25,sessionCount:0,flashcards:[],fcIndex:0,notes:[],homework:[],quizScore:0,quizTotal:0,stats:{studyHours:0,quizzes:0,hwDone:0,flashcardsReviewed:0,streak:1,notesCount:0}};
-                document.getElementById('boardSelect').value='CBSE'; document.getElementById('classSelect').value='10'; document.getElementById('subjectSelect').value='Mathematics';
+            function sq() { if (cq >= qq.length) { a.innerHTML = '<h3>🎉 Done!</h3>';
+                    r.innerHTML =
+                    `Score: <strong>${state.quizScore}/${state.quizTotal}</strong>`;
+                    state.stats.quizzes = (state.stats.quizzes || 0) + 1;
+                    saveState();
+                    updateDashboard(); return; } const q = qq[cq];
+                a.innerHTML =
+                    `<h4>Q${cq+1}: ${q.question}</h4>${q.options.map((o,i)=>`<button onclick="aq(${i},${q.correct},${cq})" style="display:block;width:100%;margin:4px 0;text-align:left;" class="secondary">${String.fromCharCode(65+i)}. ${o}</button>`).join('')}`; }
+            window.aq = function(s, cor, qi) { if (s === cor) state.quizScore++;
+                cq = qi + 1;
+                sq(); };
+            sq(); }
+
+        // ==================== FLASHCARDS ====================
+        function addFlashcard() { const f = document.getElementById('fcFront').value.trim(); const b = document.getElementById(
+                'fcBack').value.trim(); if (!f || !b) return showToast('Fill both sides!');
+            state.flashcards.push({ front: f, back: b });
+            state.fcIndex = state.flashcards.length - 1;
+            document.getElementById('fcFront').value = '';
+            document.getElementById('fcBack').value = '';
+            saveState();
+            updateFlashcardDisplay();
+            showToast('🃏 Card added!'); }
+
+        function updateFlashcardDisplay() { if (state.flashcards.length === 0) { document.getElementById('fcFrontText')
+                .textContent = '🧠 Add cards above';
+                document.getElementById('fcBackText').textContent = '✨ Answer';
+                document.getElementById('fcCounter').textContent = '0/0'; return; } const card = state.flashcards[state.fcIndex] ||
+            state.flashcards[0];
+            document.getElementById('fcFrontText').textContent = card.front;
+            document.getElementById('fcBackText').textContent = card.back;
+            document.getElementById('fcCounter').textContent = `${state.fcIndex+1}/${state.flashcards.length}`;
+            document.getElementById('flashcardDisplay').classList.remove('flipped');
+            state.stats.flashcardsReviewed = (state.stats.flashcardsReviewed || 0) + 1;
+            saveState();
+            updateDashboard(); }
+
+        function flipFlashcard() { document.getElementById('flashcardDisplay').classList.toggle('flipped'); }
+
+        function nextFlashcard() { if (!state.flashcards.length) return;
+            state.fcIndex = (state.fcIndex + 1) % state.flashcards.length;
+            updateFlashcardDisplay(); }
+
+        function prevFlashcard() { if (!state.flashcards.length) return;
+            state.fcIndex = (state.fcIndex - 1 + state.flashcards.length) % state.flashcards.length;
+            updateFlashcardDisplay(); }
+
+        function shuffleFlashcards() { state.flashcards.sort(() => Math.random() - 0.5);
+            state.fcIndex = 0;
+            updateFlashcardDisplay();
+            showToast('🔀 Shuffled!'); }
+
+        // ==================== FORMULAS ====================
+        function updateFormulaSubject() { document.getElementById('formulaSubject').textContent = state.subject; }
+
+        function generateFormulaSheet() { document.getElementById('formulaOutput').textContent = getFormulas();
+            showToast('📐 Sheet ready!'); }
+
+        function getFormulas() { const s = { Mathematics: `📐 MATHEMATICS (${state.board})\n━━━━━━━━━━━━\n• (a+b)²=a²+2ab+b²\n• Quadratic: x=[-b±√(b²-4ac)]/2a\n• sin²θ+cos²θ=1\n• Circle Area=πr²\n• AP Sum=n/2[2a+(n-1)d]`,
+                Physics: `⚡ PHYSICS (${state.board})\n━━━━━━━━━━━━\n• V=IR\n• P=VI=I²R\n• 1/f=1/v+1/u\n• n=sin i/sin r\n• v=u+at`,
+                Chemistry: `🧪 CHEMISTRY (${state.board})\n━━━━━━━━━━━━\n• n=m/M\n• pH=-log[H⁺]\n• PV=nRT\n• Molarity=n/V`,
+                Biology: `🧬 BIOLOGY (${state.board})\n━━━━━━━━━━━━\n• Photosynthesis: 6CO₂+6H₂O→C₆H₁₂O₆+6O₂\n• Respiration: C₆H₁₂O₆+6O₂→6CO₂+6H₂O+ATP` }; return s[
+                state.subject] || s['Mathematics']; }
+
+        function copyFormulas() { navigator.clipboard.writeText(document.getElementById('formulaOutput').textContent).then(() =>
+            showToast('📋 Copied!')); }
+
+        // ==================== HOMEWORK ====================
+        function addHomework() { const t = document.getElementById('hwInput').value.trim(); const d = document.getElementById(
+                'hwDate').value || new Date().toISOString().split('T')[0]; if (!t) return showToast('Enter a task!');
+            state.homework.unshift({ task: t, date: d, done: false });
+            document.getElementById('hwInput').value = '';
+            saveState();
+            renderHomework();
+            showToast('✅ Added!'); }
+
+        function toggleHW(i) { state.homework[i].done = !state.homework[i].done;
+            state.stats.hwDone = state.homework.filter(h => h.done).length;
+            saveState();
+            renderHomework();
+            updateDashboard(); }
+
+        function deleteHW(i) { state.homework.splice(i, 1);
+            state.stats.hwDone = state.homework.filter(h => h.done).length;
+            saveState();
+            renderHomework();
+            updateDashboard(); }
+
+        function renderHomework() { const c = document.getElementById('hwList'); if (state.homework.length === 0) { c.innerHTML =
+                    '<div class="empty-state"><div class="icon">✅</div><p>No tasks.</p></div>'; } else { c.innerHTML = state
+                .homework.map((h, i) =>
+                    `<div class="checklist-item ${h.done?'done':''}"><input type="checkbox" ${h.done?'checked':''} onchange="toggleHW(${i})"><span><strong>${h.task}</strong> <small>📅${h.date}</small></span><button class="btn-sm danger" onclick="deleteHW(${i})">🗑</button></div>`
+                    ).join(''); }
+            document.getElementById('hwDoneCount').textContent = state.homework.filter(h => h.done).length;
+            document.getElementById('hwPendingCount').textContent = state.homework.filter(h => !h.done).length; }
+
+        // ==================== DOUBTS ====================
+        function askDoubt() { const i = document.getElementById('doubtInput'); const q = i.value.trim(); if (!q) return;
+            const c = document.getElementById('doubtChat');
+            c.innerHTML += `<div class="chat-msg user">🧑‍🎓 ${q}</div>`;
+            i.value = '';
+            const r = ['Great question! Let me explain... 📌', 'I understand! Here\'s the breakdown... 🧠',
+                'Let\'s clarify step by step... 💡'
+            ];
+            setTimeout(() => { c.innerHTML +=
+                    `<div class="chat-msg ai">🤖 ${r[Math.floor(Math.random()*r.length)]} (${state.subject} - ${state.board})</div>`;
+                c.scrollTop = c.scrollHeight; }, 500);
+            c.scrollTop = c.scrollHeight; }
+
+        // ==================== STRATEGIES ====================
+        function generateStrategy() { document.getElementById('strategyOutput').innerHTML = [
+                `🎯 Strategy for ${state.board} ${state.subject}:`,
+                `📅 Week 1-2: Master NCERT + CBQs.`, `📅 Week 3: PYQs + mock tests.`,
+                `💡 Focus on application-based questions!`
+            ].join('<br>');
+            showToast('🎯 Strategy ready!'); }
+
+        function showPressureTips() { document.getElementById('pressureTips').innerHTML = [
+                '😌 Deep breathing (4-4-4)', '📋 Quick flashcard review', '💧 Stay hydrated', '🚶 5-min walk breaks'
+            ].join('<br>'); }
+
+        // ==================== MOTIVATION ====================
+        const quotes = [{ q: 'Believe you can and you\'re halfway there.', a: 'Theodore Roosevelt' }, { q: 'Success is no accident. It is hard work, perseverance, and learning.', a: 'Pele' },
+            { q: 'The expert in anything was once a beginner.', a: 'Helen Hayes' }, { q: 'Push yourself, because no one else will do it for you.', a: 'Unknown' },
+            { q: 'Exams test your preparation, not your worth. You\'ve got this!', a: 'StudyAI 💪' }
+        ];
+
+        function newMotivationQuote() { const r = quotes[Math.floor(Math.random() * quotes.length)];
+            document.getElementById('motivationQuote').textContent = '"' + r.q + '"';
+            document.getElementById('motivationAuthor').textContent = '— ' + r.a; }
+
+        // ==================== RESET ====================
+        function resetAllData() { if (confirm('⚠️ Delete ALL data? This cannot be undone.')) { localStorage.removeItem(
+                    'studyAIPro_state');
+                state = { board: 'CBSE', studentClass: '10', subject: 'Mathematics', theme: 'dark', timerSeconds: 25 * 60,
+                    timerRunning: false, timerInterval: null, timerMode: 25, sessionCount: 0, flashcards: [], fcIndex: 0,
+                    notes: [], homework: [], quizScore: 0, quizTotal: 0, stats: { studyHours: 0, quizzes: 0, hwDone: 0,
+                        flashcardsReviewed: 0, streak: 1, notesCount: 0 }, lastActiveDate: null, deepWorkActive: false };
+                document.getElementById('boardSelect').value = 'CBSE';
+                document.getElementById('classSelect').value = '10';
+                document.getElementById('subjectSelect').value = 'Mathematics';
                 document.body.classList.remove('light-mode');
-                updateDashboard(); renderNotes(); renderHomework(); updateFlashcardDisplay();
-                document.getElementById('pyqOutput').innerHTML='<div class="chat-msg ai">👋 Select options and click generate...</div>';
-                document.getElementById('predictionOutput').innerHTML=''; document.getElementById('customQOutput').innerHTML='';
-                document.getElementById('formulaOutput').textContent=''; document.getElementById('doubtChat').innerHTML='<div class="chat-msg ai">👋 Hello! Ask me any study-related doubt...</div>';
-                document.getElementById('strategyOutput').innerHTML=''; document.getElementById('mindmapCanvas').innerHTML='';
-                showToast('🔄 All data reset!');
-            }
+                document.getElementById('deepWorkOverlay').classList.remove('active');
+                document.getElementById('sidebar').classList.remove('hidden');
+                updateDashboard();
+                renderNotes();
+                renderHomework();
+                updateFlashcardDisplay();
+                document.getElementById('pyqOutput').innerHTML =
+                    '<div class="chat-msg ai">👋 Select and generate PYQs.</div>';
+                document.getElementById('predictionOutput').innerHTML = '';
+                document.getElementById('customQOutput').innerHTML = '';
+                document.getElementById('formulaOutput').textContent = getFormulas();
+                document.getElementById('doubtChat').innerHTML = '<div class="chat-msg ai">👋 Ask me anything!</div>';
+                document.getElementById('strategyOutput').innerHTML = '';
+                document.getElementById('mindmapCanvas').innerHTML = '';
+                newMotivationQuote();
+                showPressureTips();
+                showToast('🔄 All data reset!'); } }
+
+        // ==================== SERVICE WORKER ====================
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register(
+                    URL.createObjectURL(new Blob([
+                        `self.addEventListener('install',e=>{self.skipWaiting()});self.addEventListener('activate',e=>{e.waitUntil(clients.claim())});self.addEventListener('fetch',e=>{e.respondWith(fetch(e.request))});`
+                    ], { type: 'application/javascript' }))
+                ).catch(() => {});
+            });
         }
 
-        function init(){
-            loadState(); updateTimerDisplay(); updateDashboard(); renderNotes(); renderHomework(); updateFlashcardDisplay(); updateFormulaSubject();
-            showPressureTips(); document.getElementById('mindmapTopic').value=state.subject;
-            document.getElementById('formulaOutput').textContent=getFormulas(); newMotivationQuote();
+        // ==================== INIT ====================
+        function init() {
+            loadState();
+            updateTimerDisplay();
+            updateDashboard();
+            renderNotes();
+            renderHomework();
+            updateFlashcardDisplay();
+            updateFormulaSubject();
+            document.getElementById('pyqBoardLabel').textContent = state.board + ' Class ' + state.studentClass;
+            document.getElementById('mindmapTopic').value = state.subject;
+            document.getElementById('formulaOutput').textContent = getFormulas();
+            newMotivationQuote();
+            showPressureTips();
+            checkStreak();
         }
-        window.addEventListener('beforeunload',()=>{ if(state.timerRunning){ clearInterval(state.timerInterval); state.timerRunning=false; saveState(); } });
+        window.addEventListener('beforeunload', () => { if (state.timerRunning) { clearInterval(state.timerInterval);
+                state.timerRunning = false;
+                saveState(); } });
         init();
+        console.log('🚀 StudyAI Pro "Absolute Beast" Ready | Board:', state.board, '| Streak:', state.stats.streak,
+            '| PWA: Ready');
     </script>
 </body>
 </html>
