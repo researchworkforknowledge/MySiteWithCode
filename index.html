@@ -1,236 +1,681 @@
-<script>
-  (() => {
-    /* ---------- 1. CORE STATE & PERSISTENCE ---------- */
-    const defaultState = {
-      board: 'CBSE', studentClass: '10', subject: 'Mathematics', theme: 'dark',
-      timer: { seconds: 1500, mode: 25, running: false, sessionsToday: 0 },
-      stats: { studyHours: 0, quizzes: 0, hwDone: 0, streak: 0 },
-      dailySessions: {}, lastActiveDate: null, lofiPlaying: false,
-      notes: [], homework: [], flashcards: [], examDate: null, weakTopics: [], quickTasks: []
-    };
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#0a0a14">
+  <title>StudyAI Pro | #1 Study Hub</title>
+  <!-- Chart.js & jsPDF -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <style>
+    :root {
+      --bg: #0a0a14;
+      --glass-bg: rgba(20, 20, 40, 0.45);
+      --glass-border: rgba(255, 255, 255, 0.1);
+      --primary: #6c5ce7;
+      --primary2: #a29bfe;
+      --accent: #00cec9;
+      --accent2: #fd79a8;
+      --text: #e8e8f8;
+      --text2: #a0a0c0;
+      --danger: #e74c3c;
+      --success: #2ecc71;
+      --radius: 20px;
+      --radius-sm: 12px;
+      --transition: 0.3s cubic-bezier(0.4,0,0.2,1);
+    }
+    .light-mode {
+      --bg: #f0f2fa;
+      --glass-bg: rgba(255,255,255,0.7);
+      --glass-border: rgba(0,0,0,0.1);
+      --text: #1a1a2e;
+      --text2: #4a4a6a;
+    }
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body {
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      background: var(--bg);
+      background-image: radial-gradient(ellipse at 20% 10%, rgba(108,92,231,0.15) 0%, transparent 55%),
+                        radial-gradient(ellipse at 80% 90%, rgba(0,206,201,0.12) 0%, transparent 55%);
+      background-attachment: fixed;
+      color: var(--text);
+      min-height: 100vh;
+      line-height: 1.6;
+      transition: var(--transition);
+      overflow-x: hidden;
+    }
+    ::-webkit-scrollbar { width:5px; }
+    ::-webkit-scrollbar-thumb { background:var(--primary); border-radius:10px; }
 
-    let state = JSON.parse(localStorage.getItem('studyAIState')) || defaultState;
-    state = { ...defaultState, ...state }; // Ensure new keys exist
+    /* Header */
+    .header {
+      background: var(--glass-bg); backdrop-filter: blur(18px);
+      border-bottom:1px solid var(--glass-border);
+      padding:12px 20px; display:flex; align-items:center; justify-content:space-between;
+      flex-wrap:wrap; gap:10px; position:sticky; top:0; z-index:110;
+    }
+    .logo-area { display:flex; align-items:center; gap:12px; flex-wrap:nowrap; }
+    .logo { font-size:1.5rem; font-weight:900; background:linear-gradient(135deg,var(--primary2),var(--accent)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; cursor:pointer; white-space:nowrap; }
+    .built-by { font-size:0.7rem; color:var(--text2); background:rgba(108,92,231,0.15); padding:4px 12px; border-radius:20px; border:1px solid rgba(108,92,231,0.3); white-space:nowrap; }
+    .header-actions { display:flex; gap:8px; align-items:center; flex-wrap:wrap; }
+    select, button, input, textarea {
+      padding:10px 15px; border-radius:25px;
+      border:1px solid var(--glass-border);
+      background:rgba(34,34,64,0.6); backdrop-filter:blur(8px);
+      color:var(--text); font-size:0.85rem;
+      transition:var(--transition); font-family:inherit; outline:none;
+    }
+    button {
+      background:var(--primary); border:none; color:#fff;
+      font-weight:600; cursor:pointer; box-shadow:0 4px 15px rgba(108,92,231,0.3);
+    }
+    button:hover { transform:translateY(-2px); box-shadow:0 8px 25px rgba(108,92,231,0.5); }
+    button.secondary { background:rgba(255,255,255,0.1); color:var(--text); border:1px solid var(--glass-border); }
+    button.accent { background:var(--accent); color:#000; }
+    button.danger { background:var(--danger); }
+    .btn-sm { padding:6px 13px; font-size:0.75rem; border-radius:18px; }
+    .btn-icon { width:36px; height:36px; border-radius:50%; padding:0; display:flex; align-items:center; justify-content:center; font-size:1.1rem; }
+    .hamburger { background:none; border:none; font-size:1.5rem; color:var(--text); cursor:pointer; }
 
-    const save = () => localStorage.setItem('studyAIState', JSON.stringify(state));
-    const toast = msg => { 
-      const t = document.getElementById('toast'); 
-      t.textContent = msg; t.style.display = 'block'; 
-      setTimeout(() => t.style.display = 'none', 2500); 
-    };
+    /* Sidebar */
+    .sidebar {
+      position:fixed; top:0; left:0; height:100vh; width:260px;
+      background:var(--glass-bg); backdrop-filter:blur(18px);
+      border-right:1px solid var(--glass-border);
+      padding:80px 10px 20px; z-index:200;
+      display:flex; flex-direction:column; gap:4px;
+      transform:translateX(0); transition:transform 0.3s ease;
+      overflow-y:auto;
+    }
+    .sidebar.hidden { transform:translateX(-100%); }
+    .sidebar .nav-item {
+      padding:12px 16px; border-radius:var(--radius-sm); cursor:pointer;
+      display:flex; align-items:center; gap:10px; font-weight:500;
+      color:var(--text2); font-size:0.85rem; transition:var(--transition);
+      border:1px solid transparent;
+    }
+    .sidebar .nav-item:hover { background:rgba(108,92,231,0.15); color:var(--text); }
+    .sidebar .nav-item.active {
+      background:rgba(108,92,231,0.25); color:#fff;
+      border:1px solid rgba(108,92,231,0.5);
+      box-shadow:0 0 22px rgba(108,92,231,0.3); font-weight:700;
+    }
+    .backdrop { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.4); z-index:150; }
 
-    /* ---------- 2. ULTIMATE NAVIGATION (Fixes "Stuck" Issue) ---------- */
-    window.showPage = (pageName) => {
-      // Hide ALL sections first
-      document.querySelectorAll('.page-section').forEach(section => {
-        section.classList.remove('active');
-        section.style.display = 'none';
-      });
+    /* Main */
+    .content { margin-left:260px; padding:24px; transition:margin-left 0.3s; }
+    .content.expanded { margin-left:0; }
+    .page-section { display:none; }
+    .page-section.active { display:block; animation: fadeIn 0.4s; }
+    @keyframes fadeIn { from{opacity:0;transform:translateY(10px);} to{opacity:1;transform:translateY(0);} }
+    .card {
+      background:var(--glass-bg); backdrop-filter:blur(18px);
+      border-radius:var(--radius); padding:20px; margin-bottom:18px;
+      border:1px solid var(--glass-border); box-shadow:0 8px 32px rgba(0,0,0,0.3);
+    }
+    .stat-card {
+      background:var(--glass-bg); backdrop-filter:blur(18px);
+      border-radius:var(--radius-sm); padding:16px; text-align:center;
+      border:1px solid var(--glass-border);
+    }
+    .stat-card .num { font-size:2.4rem; font-weight:900; background:linear-gradient(135deg,var(--primary2),var(--accent)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
+    .timer-display { font-size:5rem; font-weight:900; text-align:center; background:linear-gradient(135deg,var(--accent),var(--primary2)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
+    .chart-container { max-width:600px; margin:0 auto; }
+    .flashcard { perspective:1200px; height:210px; cursor:pointer; margin-bottom:10px; }
+    .flashcard-inner { position:relative; width:100%; height:100%; transition:transform 0.7s; transform-style:preserve-3d; }
+    .flashcard.flipped .flashcard-inner { transform:rotateY(180deg); }
+    .flashcard-front, .flashcard-back { position:absolute; width:100%; height:100%; backface-visibility:hidden; border-radius:var(--radius); display:flex; align-items:center; justify-content:center; padding:22px; font-weight:600; font-size:1.05rem; }
+    .flashcard-front { background:linear-gradient(135deg,var(--primary),#4a3db5); color:#fff; }
+    .flashcard-back { background:rgba(26,26,46,0.7); transform:rotateY(180deg); border:2px solid var(--primary2); color:var(--text); }
+    .chat-box { max-height:350px; overflow-y:auto; display:flex; flex-direction:column; gap:10px; padding:10px; background:rgba(0,0,0,0.15); border-radius:var(--radius-sm); margin-bottom:12px; }
+    .chat-msg { padding:10px 14px; border-radius:18px; max-width:82%; font-size:0.88rem; }
+    .chat-msg.user { background:var(--primary); color:#fff; align-self:flex-end; }
+    .chat-msg.ai { background:rgba(255,255,255,0.1); align-self:flex-start; }
+    .toast { position:fixed; bottom:30px; right:30px; background:var(--success); color:#fff; padding:12px 24px; border-radius:28px; z-index:999; display:none; font-weight:600; }
 
-      // Show the targeted section
-      const target = document.getElementById('page-' + pageName);
-      if (target) {
-        target.classList.add('active');
-        target.style.display = 'block';
-      }
+    /* Focus Mode */
+    body.focus-mode .header, body.focus-mode .sidebar, body.focus-mode .backdrop { display:none; }
+    body.focus-mode .content { margin-left:0; padding:0; }
+    .focus-overlay {
+      display:none; position:fixed; inset:0; background:rgba(0,0,0,0.85); backdrop-filter:blur(10px);
+      flex-direction:column; align-items:center; justify-content:center; gap:20px; z-index:500;
+    }
+    body.focus-mode .focus-overlay { display:flex; }
+    .focus-overlay textarea { width:80%; max-width:500px; background:rgba(255,255,255,0.1); color:#fff; border:1px solid rgba(255,255,255,0.3); }
 
-      // Update Sidebar UI
-      document.querySelectorAll('.nav-item').forEach(nav => nav.classList.remove('active'));
-      const activeNav = document.querySelector(`.nav-item[data-page="${pageName}"]`);
-      if (activeNav) activeNav.classList.add('active');
+    .quick-task-item { display:flex; gap:8px; align-items:center; background:rgba(255,255,255,0.05); padding:8px; border-radius:8px; margin-bottom:4px; }
+    .modal { position:fixed; inset:0; background:rgba(0,0,0,0.6); backdrop-filter:blur(6px); display:none; justify-content:center; align-items:center; z-index:600; }
+    .modal.active { display:flex; }
+    .modal-content { background:var(--glass-bg); backdrop-filter:blur(18px); padding:30px; border-radius:var(--radius); border:1px solid var(--glass-border); width:90%; max-width:400px; }
 
-      // Refresh specific page data
-      if (pageName === 'dashboard') refreshDashboard();
-      if (pageName === 'formulas') generateFormulaSheet();
-      
-      if (window.innerWidth <= 768) closeSidebar();
-      window.scrollTo(0, 0);
-    };
+    @media (max-width:768px) {
+      .sidebar { width:270px; transform:translateX(-100%); }
+      .sidebar.open { transform:translateX(0); }
+      .content { margin-left:0; }
+      .timer-display { font-size:3rem; }
+      .backdrop.show { display:block; }
+    }
+  </style>
+</head>
+<body>
+  <div class="backdrop" id="backdrop" onclick="closeSidebar()"></div>
 
-    /* ---------- 3. LOFI MUSIC ENGINE (Fixed) ---------- */
-    const lofiAudio = document.getElementById('lofiAudio');
-    lofiAudio.src = 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3'; 
-    
-    window.toggleMusic = () => {
-      if (lofiAudio.paused) {
-        lofiAudio.play().then(() => {
-          state.lofiPlaying = true;
-          updateMusicUI(true);
-          save();
-        }).catch(() => toast('🎵 Click again to play Lofi!'));
-      } else {
-        lofiAudio.pause();
-        state.lofiPlaying = false;
-        updateMusicUI(false);
+  <!-- Sidebar -->
+  <nav class="sidebar" id="sidebar">
+    <div class="nav-item active" data-page="dashboard" onclick="showPage('dashboard')"><span class="icon">📊</span>Dashboard</div>
+    <div class="nav-item" data-page="timer" onclick="showPage('timer')"><span class="icon">⏱️</span>Timer</div>
+    <div class="nav-item" data-page="pyq" onclick="showPage('pyq')"><span class="icon">📝</span>PYQ & Papers</div>
+    <div class="nav-item" data-page="predictor" onclick="showPage('predictor')"><span class="icon">🔮</span>CBQ Predictor</div>
+    <div class="nav-item" data-page="notes" onclick="showPage('notes')"><span class="icon">📒</span>Notes Maker</div>
+    <div class="nav-item" data-page="mindmap" onclick="showPage('mindmap')"><span class="icon">🧩</span>Mind Maps</div>
+    <div class="nav-item" data-page="quiz" onclick="showPage('quiz')"><span class="icon">❓</span>Quizzes</div>
+    <div class="nav-item" data-page="flashcards" onclick="showPage('flashcards')"><span class="icon">🃏</span>Flash Cards</div>
+    <div class="nav-item" data-page="formulas" onclick="showPage('formulas')"><span class="icon">📐</span>Formulas</div>
+    <div class="nav-item" data-page="homework" onclick="showPage('homework')"><span class="icon">✅</span>Homework</div>
+    <div class="nav-item" data-page="doubts" onclick="showPage('doubts')"><span class="icon">💬</span>Doubts</div>
+    <div class="nav-item" data-page="weaknesses" onclick="showPage('weaknesses')"><span class="icon">📉</span>Weak Areas</div>
+    <div class="nav-item" data-page="strategies" onclick="showPage('strategies')"><span class="icon">🎯</span>Strategies</div>
+    <div class="nav-item" data-page="motivation" onclick="showPage('motivation')"><span class="icon">🔥</span>Motivation</div>
+  </nav>
+
+  <header class="header">
+    <div class="logo-area">
+      <button class="hamburger" onclick="toggleSidebar()">☰</button>
+      <div class="logo" onclick="showPage('dashboard')">🧠 StudyAI Pro</div>
+      <span class="built-by">✨ Built by Master Arhan</span>
+    </div>
+    <div class="header-actions">
+      <select id="boardSelect" onchange="saveBoard()"><option value="CBSE">CBSE</option><option value="ICSE">ICSE</option></select>
+      <select id="classSelect" onchange="saveClass()"><option value="10">Class 10</option><option value="12">Class 12</option></select>
+      <select id="subjectSelect" onchange="saveSubject()"><option value="Mathematics">Maths</option><option value="Physics">Physics</option></select>
+      <button onclick="toggleTheme()" class="btn-icon secondary">🌓</button>
+      <button id="musicToggleBtn" class="btn-icon accent" onclick="toggleMusic()">🎵</button>
+      <button onclick="toggleFocusMode()" class="btn-icon accent" title="Focus Mode">🧘</button>
+      <button onclick="openExamModal()" class="btn-icon accent" title="Set Exam Date">📅</button>
+      <button onclick="resetWeek()" class="btn-icon danger">🔄</button>
+    </div>
+  </header>
+
+  <div class="content" id="contentArea">
+    <!-- DASHBOARD -->
+    <section class="page-section active" id="page-dashboard">
+      <h2>📊 Command Center</h2>
+      <p>Board: <strong id="dashBoard"></strong> | Class: <strong id="dashClass"></strong> | Subject: <strong id="dashSubject"></strong></p>
+      <div class="grid-3" id="statsGrid" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:12px;"></div>
+      <div class="card" id="examCountdownCard" style="display:none;"><h3>📅 Days Until Exam: <span id="examCountdownDisplay">--</span></h3><p>Your exam is on <strong id="examDateDisplay"></strong>.</p></div>
+      <div class="card">
+        <h3>✅ Quick Tasks</h3>
+        <div style="display:flex;gap:8px;"><input type="text" id="quickTaskInput" placeholder="Add task..." onkeypress="if(event.key==='Enter') addQuickTask()"><button onclick="addQuickTask()">➕</button></div>
+        <div id="quickTaskList" style="margin-top:8px;"></div>
+      </div>
+      <div class="card"><h3>📈 Weekly Progress (hours)</h3><div class="chart-container"><canvas id="weeklyChart"></canvas></div></div>
+    </section>
+
+    <!-- TIMER -->
+    <section class="page-section" id="page-timer">
+      <div class="card" style="text-align:center;">
+        <div class="timer-display" id="timerDisplay">25:00</div>
+        <p id="timerLabel">Focus Session</p>
+        <div style="display:flex;gap:8px;justify-content:center;"><button onclick="startTimer()">▶ Start</button><button onclick="pauseTimer()" class="secondary">⏸ Pause</button><button onclick="resetTimer()" class="secondary">↺ Reset</button></div>
+        <div style="margin-top:10px;"><button class="btn-sm secondary" onclick="setTimerMode(25)">25 min</button><button class="btn-sm secondary" onclick="setTimerMode(5)">5 min</button></div>
+        <p>Sessions today: <span id="sessionCount">0</span></p>
+        <button id="lofiInlineBtn" onclick="toggleMusic()" class="btn-sm accent" style="margin-top:10px;">🎵 Lo‑Fi Beats</button>
+      </div>
+    </section>
+
+    <!-- PYQ -->
+    <section class="page-section" id="page-pyq">
+      <h2>📝 PYQ & Papers</h2>
+      <div class="card">
+        <p>Current: <strong id="pyqBoardLabel"></strong></p>
+        <div style="display:flex;gap:8px;margin:10px 0;"><select id="pyqYear"><option>2024</option><option>2023</option></select><select id="pyqType"><option>Board Exam</option><option>Sample Paper</option></select><button onclick="generatePYQ()">Generate</button></div>
+        <div id="pyqOutput" class="chat-box"></div>
+        <button onclick="downloadPYQ('txt')" class="btn-sm secondary">📥 .txt</button>
+        <button onclick="downloadPYQ('pdf')" class="btn-sm accent" style="margin-left:8px;">📄 PDF</button>
+      </div>
+    </section>
+
+    <!-- CBQ Predictor -->
+    <section class="page-section" id="page-predictor"><h2>🔮 CBQ Predictor</h2><div class="card"><button onclick="runPrediction()">Run Prediction</button><div id="predictionOutput" style="margin-top:12px;"></div></div><div class="card"><textarea id="customTopicInput" placeholder="Enter topic..."></textarea><button onclick="generateCustomQuestions()" style="margin-top:8px;">✨ Generate CBQs</button><div id="customQOutput" style="margin-top:10px;"></div></div></section>
+
+    <!-- Notes -->
+    <section class="page-section" id="page-notes"><h2>📒 Notes Maker</h2><div class="card"><input type="text" id="noteTitle" placeholder="Title..."><textarea id="noteContent" placeholder="Write..."></textarea><button onclick="saveNote()" style="margin-top:8px;">💾 Save</button><button onclick="exportNotesPDF()" class="accent btn-sm" style="margin-left:8px;">📄 PDF</button></div><div id="notesList" class="grid-2" style="grid-template-columns:repeat(auto-fit,minmax(250px,1fr)); gap:14px;"></div></section>
+
+    <!-- Mind Map -->
+    <section class="page-section" id="page-mindmap"><h2>🧩 Mind Maps</h2><div class="card"><input type="text" id="mindmapTopic" placeholder="Central topic..."><button onclick="generateMindMap()">Generate</button><div id="mindmapCanvas" style="min-height:300px;position:relative;border:1px dashed rgba(255,255,255,0.15);margin-top:10px;"></div></div></section>
+
+    <!-- Quiz -->
+    <section class="page-section" id="page-quiz"><h2>❓ Quick Quiz</h2><div class="card"><button onclick="startStandardQuiz()">▶ Start Quiz</button><div id="quizArea"></div><div id="quizResult"></div></div></section>
+
+    <!-- Flashcards -->
+    <section class="page-section" id="page-flashcards"><h2>🃏 3D Flash Cards</h2><div class="card"><input type="text" id="fcFront" placeholder="Front..."><input type="text" id="fcBack" placeholder="Back..."><button onclick="addFlashcard()">➕ Add</button></div><div class="flashcard" id="flashcardDisplay" onclick="flipFlashcard()"><div class="flashcard-inner"><div class="flashcard-front" id="fcFrontText">🧠 Add cards</div><div class="flashcard-back" id="fcBackText">✨ Answer</div></div></div><div style="display:flex;gap:8px;justify-content:center;margin-top:8px;"><button onclick="prevFlashcard()" class="secondary btn-sm">◀</button><span id="fcCounter">0/0</span><button onclick="nextFlashcard()" class="secondary btn-sm">▶</button></div></section>
+
+    <!-- Formulas -->
+    <section class="page-section" id="page-formulas"><h2>📐 Formula Sheet</h2><div class="card"><h3>Subject: <strong id="formulaSubject"></strong></h3><button onclick="generateFormulaSheet()">Refresh</button><div id="formulaOutput" style="white-space:pre-wrap;font-family:monospace;background:rgba(255,255,255,0.05);padding:14px;border-radius:10px;max-height:400px;overflow-y:auto;margin-top:10px;"></div></div></section>
+
+    <!-- Homework -->
+    <section class="page-section" id="page-homework"><h2>✅ Homework Tracker</h2><div class="card"><input type="text" id="hwInput" placeholder="Task..."><input type="date" id="hwDate"><button onclick="addHomework()" style="margin-top:8px;">➕ Add</button></div><div id="hwList"></div></section>
+
+    <!-- Doubts -->
+    <section class="page-section" id="page-doubts"><h2>💬 AI Doubt Solver</h2><div class="card"><div class="chat-box" id="doubtChat"><div class="chat-msg ai">👋 Ask me anything!</div></div><div style="display:flex;gap:8px;"><input type="text" id="doubtInput" placeholder="Type doubt..." onkeydown="if(event.key==='Enter') askDoubt()"><button onclick="askDoubt()">Send</button></div></div></section>
+
+    <!-- Weak Areas -->
+    <section class="page-section" id="page-weaknesses"><h2>📉 Weak Areas Tracker</h2><div class="card"><input type="text" id="weakTopicInput" placeholder="e.g., Trigonometry"><button onclick="addWeakTopic()">➕ Add</button><div id="weakTopicsList" style="margin-top:10px;"></div></div></section>
+
+    <!-- Strategies -->
+    <section class="page-section" id="page-strategies"><h2>🎯 Strategies & Tips</h2><div class="card"><button onclick="generateStrategy()">Get Strategy</button><div id="strategyOutput"></div></div></section>
+
+    <!-- Motivation -->
+    <section class="page-section" id="page-motivation"><h2>🔥 Motivation</h2><div class="card" style="text-align:center;"><h3 id="motivationQuote"></h3><p id="motivationAuthor"></p><button onclick="newMotivationQuote()">🔄 New Quote</button></div></section>
+  </div>
+
+  <!-- Focus Overlay -->
+  <div class="focus-overlay" id="focusOverlay">
+    <button class="exit-focus danger" onclick="toggleFocusMode()">✕ Exit</button>
+    <div class="timer-display" id="focusTimerDisplay">25:00</div>
+    <textarea placeholder="What are you focusing on?"></textarea>
+  </div>
+
+  <div class="modal" id="examModal">
+    <div class="modal-content"><h3>Set Exam Date</h3><input type="date" id="examDateInput" style="width:100%;margin:15px 0;"><button onclick="saveExamDate()">Save</button><button onclick="closeExamModal()" class="secondary" style="margin-left:10px;">Cancel</button></div>
+  </div>
+
+  <audio id="lofiAudio" loop style="display:none;"></audio>
+  <div class="toast" id="toast"></div>
+
+  <script>
+    (() => {
+      /* ---------- STATE ---------- */
+      const defaultState = {
+        board: 'CBSE', studentClass: '10', subject: 'Mathematics', theme: 'dark',
+        timer: { seconds: 1500, mode: 25, running: false, interval: null, sessionsToday: 0 },
+        stats: { studyHours: 0, quizzes: 0, hwDone: 0, streak: 0 },
+        dailySessions: {}, lastActiveDate: null, lofiPlaying: false,
+        notes: [], homework: [], flashcards: [], examDate: null, weakTopics: [], quickTasks: []
+      };
+      let state = JSON.parse(localStorage.getItem('studyAIState')) || defaultState;
+      state.stats = { ...defaultState.stats, ...state.stats };
+      state.timer = { ...defaultState.timer, ...state.timer };
+      state.dailySessions = state.dailySessions || {};
+      state.notes = state.notes || [];
+      state.homework = state.homework || [];
+      state.flashcards = state.flashcards || [];
+      state.weakTopics = state.weakTopics || [];
+      state.quickTasks = state.quickTasks || [];
+
+      const save = () => localStorage.setItem('studyAIState', JSON.stringify(state));
+      const toast = msg => { const t = document.getElementById('toast'); t.textContent = msg; t.style.display = 'block'; setTimeout(() => t.style.display = 'none', 2000); };
+
+      /* ---------- STREAK & STATS ---------- */
+      function updateStreak() {
+        const today = new Date().toLocaleDateString();
+        const sessions = state.dailySessions[today] || 0;
+        if (sessions >= 1) {
+          if (!state.lastActiveDate || state.lastActiveDate !== today) {
+            const yesterday = new Date(Date.now() - 86400000).toLocaleDateString();
+            state.stats.streak = (state.lastActiveDate === yesterday) ? (state.stats.streak || 0) + 1 : 1;
+            state.lastActiveDate = today;
+          }
+        } else {
+          if (state.lastActiveDate && state.lastActiveDate !== today) {
+            const yesterday = new Date(Date.now() - 86400000).toLocaleDateString();
+            if (state.lastActiveDate !== yesterday) state.stats.streak = 0;
+          }
+        }
         save();
       }
-    };
 
-    function updateMusicUI(isPlaying) {
-      const btn = document.getElementById('musicToggleBtn');
-      const inlineBtn = document.getElementById('lofiInlineBtn');
-      btn.textContent = isPlaying ? '⏸️' : '🎵';
-      if(inlineBtn) inlineBtn.textContent = isPlaying ? '⏸️ Lo-Fi On' : '🎵 Lo-Fi Beats';
-    }
+      function addStudyHours(hours) {
+        const today = new Date().toLocaleDateString();
+        state.dailySessions[today] = (state.dailySessions[today] || 0) + 1;
+        state.stats.studyHours = (state.stats.studyHours || 0) + hours;
+        updateStreak();
+        save();
+        refreshDashboard();
+        updateChart();
+      }
 
-    /* ---------- 4. AI FEATURE SIMULATORS (The "More Features" Part) ---------- */
-    
-    // CBQ Predictor Logic
-    window.runPrediction = () => {
-      const out = document.getElementById('predictionOutput');
-      out.innerHTML = "🔮 <em>Analyzing previous trends...</em>";
-      setTimeout(() => {
-        out.innerHTML = `<div class="card" style="border-left: 4px solid var(--accent)">
-          <strong>High Probability CBQ:</strong> "A real estate developer uses the quadratic formula to calculate area..." <br>
-          <small>Focus on: Real-world application of ${state.subject} Section C.</small>
-        </div>`;
-      }, 1500);
-    };
+      /* ---------- EXAM COUNTDOWN ---------- */
+      function updateExamCountdown() {
+        const card = document.getElementById('examCountdownCard');
+        if (state.examDate) {
+          const exam = new Date(state.examDate);
+          const diff = Math.ceil((exam - new Date()) / (1000 * 60 * 60 * 24));
+          document.getElementById('examCountdownDisplay').textContent = diff > 0 ? diff + ' day(s)' : (diff === 0 ? 'Today!' : 'Passed');
+          document.getElementById('examDateDisplay').textContent = exam.toLocaleDateString('en-IN', { day:'numeric', month:'long', year:'numeric' });
+          card.style.display = 'block';
+        } else card.style.display = 'none';
+      }
+      window.openExamModal = () => { document.getElementById('examModal').classList.add('active'); if(state.examDate) document.getElementById('examDateInput').value = state.examDate; };
+      window.closeExamModal = () => document.getElementById('examModal').classList.remove('active');
+      window.saveExamDate = () => { const v = document.getElementById('examDateInput').value; if(v) { state.examDate = v; save(); updateExamCountdown(); toast('Exam date saved!'); } closeExamModal(); };
 
-    // Mind Map Generator
-    window.generateMindMap = () => {
-      const topic = document.getElementById('mindmapTopic').value || "Central Topic";
-      const canvas = document.getElementById('mindmapCanvas');
-      canvas.innerHTML = `<div style="display:flex; flex-direction:column; align-items:center; gap:20px; padding:20px;">
-        <div class="card" style="background:var(--primary); color:white;">${topic}</div>
-        <div style="display:flex; gap:10px;">
-          <div class="stat-card">Concept A</div>
-          <div class="stat-card">Concept B</div>
-          <div class="stat-card">Concept C</div>
-        </div>
-      </div>`;
-      toast("Mind Map Generated!");
-    };
+      /* ---------- CHART ---------- */
+      let weeklyChart;
+      function initChart() {
+        const ctx = document.getElementById('weeklyChart').getContext('2d');
+        weeklyChart = new Chart(ctx, {
+          type: 'bar',
+          data: { labels: ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'], datasets: [{ data: [0,0,0,0,0,0,0], backgroundColor: 'rgba(108,92,231,0.6)', borderColor: '#6c5ce7', borderWidth: 1 }] },
+          options: { responsive: true, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true } } }
+        });
+      }
+      function updateChart() {
+        const days = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
+        const monday = new Date(); monday.setDate(monday.getDate() - ((monday.getDay() + 6) % 7));
+        const data = days.map((_, i) => {
+          const d = new Date(monday); d.setDate(monday.getDate() + i);
+          return (state.dailySessions[d.toLocaleDateString()] || 0) * 0.4;
+        });
+        weeklyChart.data.datasets[0].data = data;
+        weeklyChart.update();
+      }
 
-    // AI Doubt Solver
-    window.askDoubt = () => {
-      const input = document.getElementById('doubtInput');
-      const chat = document.getElementById('doubtChat');
-      if (!input.value) return;
+      /* ---------- SIDEBAR & NAVIGATION ---------- */
+      window.toggleSidebar = () => {
+        const sidebar = document.getElementById('sidebar');
+        const backdrop = document.getElementById('backdrop');
+        const content = document.getElementById('contentArea');
+        sidebar.classList.toggle('hidden');
+        content.classList.toggle('expanded');
+        if (window.innerWidth <= 768) {
+          backdrop.classList.toggle('show');
+          sidebar.classList.toggle('open');
+        }
+      };
+      window.closeSidebar = () => {
+        document.getElementById('sidebar').classList.add('hidden');
+        document.getElementById('contentArea').classList.add('expanded');
+        document.getElementById('backdrop').classList.remove('show');
+      };
 
-      chat.innerHTML += `<div class="chat-msg user">${input.value}</div>`;
-      const userQuery = input.value;
-      input.value = '';
+      /* ---------- SPA PAGE SWITCHING ---------- */
+      window.showPage = (pageName) => {
+        document.querySelectorAll('.page-section').forEach(s => s.classList.remove('active'));
+        document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+        const section = document.getElementById('page-' + pageName);
+        if (section) section.classList.add('active');
+        const nav = document.querySelector(`.nav-item[data-page="${pageName}"]`);
+        if (nav) nav.classList.add('active');
+        if (pageName === 'dashboard') refreshDashboard();
+        if (pageName === 'formulas') updateFormulaSubject();
+        if (pageName === 'pyq') document.getElementById('pyqBoardLabel').textContent = `${state.board} Class ${state.studentClass}`;
+        if (pageName === 'weaknesses') renderWeakTopics();
+        document.getElementById('contentArea').scrollTop = 0;
+        if (window.innerWidth < 768) closeSidebar();
+      };
 
-      setTimeout(() => {
-        chat.innerHTML += `<div class="chat-msg ai">🤖 Analyzing "${userQuery}"... <br> Based on ${state.board} guidelines, you should solve this by using the step-by-step substitution method.</div>`;
-        chat.scrollTop = chat.scrollHeight;
-      }, 1000);
-    };
+      /* ---------- HEADER SYNC ---------- */
+      window.saveBoard = () => { state.board = document.getElementById('boardSelect').value; save(); refreshDashboard(); };
+      window.saveClass = () => { state.studentClass = document.getElementById('classSelect').value; save(); refreshDashboard(); };
+      window.saveSubject = () => { state.subject = document.getElementById('subjectSelect').value; save(); refreshDashboard(); };
 
-    /* ---------- 5. POMODORO & STATS SYSTEM ---------- */
-    let timerInt = null;
-    window.startTimer = () => {
-      if (state.timer.running) return;
-      state.timer.running = true;
-      timerInt = setInterval(() => {
-        if (state.timer.seconds > 0) {
-          state.timer.seconds--;
-          updateTimerDisplay();
+      function refreshDashboard() {
+        document.getElementById('dashBoard').textContent = state.board;
+        document.getElementById('dashClass').textContent = 'Class ' + state.studentClass;
+        document.getElementById('dashSubject').textContent = state.subject;
+        document.getElementById('statsGrid').innerHTML = `
+          <div class="stat-card"><div class="num">${(state.stats.studyHours||0).toFixed(1)}</div><div class="lbl">📖 Hours</div></div>
+          <div class="stat-card"><div class="num">${state.stats.quizzes||0}</div><div class="lbl">❓ Quizzes</div></div>
+          <div class="stat-card"><div class="num">${state.stats.hwDone||0}</div><div class="lbl">✅ HW Done</div></div>
+          <div class="stat-card"><div class="num">${state.stats.streak||0}</div><div class="lbl">🔥 Streak</div></div>
+          <div class="stat-card"><div class="num">${state.notes.length||0}</div><div class="lbl">📒 Notes</div></div>
+        `;
+        document.getElementById('sessionCount').textContent = state.timer.sessionsToday || 0;
+        renderQuickTasks();
+        updateExamCountdown();
+      }
+
+      window.toggleTheme = () => {
+        document.body.classList.toggle('light-mode');
+        state.theme = document.body.classList.contains('light-mode') ? 'light' : 'dark';
+        save();
+      };
+
+      /* ---------- MUSIC (reliable Audio) ---------- */
+      const lofiAudio = document.getElementById('lofiAudio');
+      lofiAudio.src = 'https://www.bensound.com/bensound-music/bensound-lofi.mp3'; // royalty‑free
+      lofiAudio.load();
+      window.toggleMusic = () => {
+        if (lofiAudio.paused) {
+          lofiAudio.play().then(() => {
+            state.lofiPlaying = true;
+            document.getElementById('musicToggleBtn').textContent = '⏸️';
+            document.getElementById('lofiInlineBtn').textContent = '⏸️ Lo‑Fi On';
+            save();
+          }).catch(() => toast('⚠️ Could not play audio. Try again.'));
         } else {
-          clearInterval(timerInt);
-          state.timer.running = false;
-          state.stats.studyHours += 0.4;
-          state.timer.sessionsToday++;
-          toast("Session Complete! +0.4h added to Dashboard.");
-          refreshDashboard();
-          updateChart();
+          lofiAudio.pause();
+          state.lofiPlaying = false;
+          document.getElementById('musicToggleBtn').textContent = '🎵';
+          document.getElementById('lofiInlineBtn').textContent = '🎵 Lo‑Fi Beats';
           save();
         }
-      }, 1000);
-    };
+      };
 
-    window.pauseTimer = () => { clearInterval(timerInt); state.timer.running = false; save(); };
-    window.resetTimer = () => { 
-      pauseTimer(); 
-      state.timer.seconds = state.timer.mode * 60; 
-      updateTimerDisplay(); 
-    };
+      /* ---------- POMODORO TIMER ---------- */
+      function updateTimerDisplay() {
+        const m = Math.floor(state.timer.seconds/60), s = state.timer.seconds%60;
+        document.getElementById('timerDisplay').textContent = String(m).padStart(2,'0')+':'+String(s).padStart(2,'0');
+        document.getElementById('focusTimerDisplay').textContent = document.getElementById('timerDisplay').textContent;
+      }
+      window.setTimerMode = min => {
+        state.timer.mode = min; state.timer.seconds = min*60;
+        state.timer.running = false; clearInterval(state.timer.interval);
+        updateTimerDisplay(); save();
+      };
+      window.startTimer = () => {
+        if(state.timer.running) return;
+        state.timer.running = true;
+        state.timer.interval = setInterval(() => {
+          if(state.timer.seconds > 0) { state.timer.seconds--; updateTimerDisplay(); }
+          else {
+            clearInterval(state.timer.interval); state.timer.running = false;
+            if(state.timer.mode >= 25) {
+              state.timer.sessionsToday++;
+              addStudyHours(0.4);
+              if(Notification.permission==='granted') new Notification('🍅 Pomodoro Complete', {body:'+0.4 hours'});
+              toast('Session complete! +0.4h');
+            } else toast('Break finished!');
+            document.getElementById('timerLabel').textContent = 'Done';
+            save();
+          }
+        }, 1000);
+        save();
+      };
+      window.pauseTimer = () => { state.timer.running = false; clearInterval(state.timer.interval); save(); };
+      window.resetTimer = () => { state.timer.running = false; clearInterval(state.timer.interval); state.timer.seconds = state.timer.mode*60; updateTimerDisplay(); save(); };
 
-    function updateTimerDisplay() {
-      const m = Math.floor(state.timer.seconds / 60);
-      const s = state.timer.seconds % 60;
-      const display = `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
-      document.getElementById('timerDisplay').textContent = display;
-      document.getElementById('focusTimerDisplay').textContent = display;
-    }
+      window.toggleFocusMode = () => document.body.classList.toggle('focus-mode');
 
-    /* ---------- 6. DASHBOARD & QUICK TASKS ---------- */
-    window.addQuickTask = () => {
-      const inp = document.getElementById('quickTaskInput');
-      if(!inp.value) return;
-      state.quickTasks.push({text: inp.value, done: false});
-      inp.value = ''; save(); renderQuickTasks();
-    };
+      /* ---------- QUICK TASKS ---------- */
+      window.addQuickTask = () => {
+        const input = document.getElementById('quickTaskInput');
+        const val = input.value.trim();
+        if(!val) return;
+        state.quickTasks.push({text: val, done: false});
+        input.value = '';
+        save(); renderQuickTasks();
+      };
+      window.toggleQuickTask = i => { state.quickTasks[i].done = !state.quickTasks[i].done; save(); renderQuickTasks(); };
+      window.deleteQuickTask = i => { state.quickTasks.splice(i,1); save(); renderQuickTasks(); };
+      function renderQuickTasks() {
+        const container = document.getElementById('quickTaskList');
+        if(!state.quickTasks.length) container.innerHTML = '<p style="color:var(--text2);">No tasks yet.</p>';
+        else container.innerHTML = state.quickTasks.map((t,i) => `
+          <div class="quick-task-item">
+            <input type="checkbox" ${t.done?'checked':''} onchange="toggleQuickTask(${i})">
+            <span style="flex:1; text-decoration:${t.done?'line-through':'none'};">${t.text}</span>
+            <button class="btn-sm danger" onclick="deleteQuickTask(${i})">✕</button>
+          </div>`).join('');
+      }
 
-    window.toggleQuickTask = i => { state.quickTasks[i].done = !state.quickTasks[i].done; save(); renderQuickTasks(); };
-    window.deleteQuickTask = i => { state.quickTasks.splice(i, 1); save(); renderQuickTasks(); };
+      /* ---------- NOTES ---------- */
+      window.saveNote = () => {
+        const title = document.getElementById('noteTitle').value.trim(), content = document.getElementById('noteContent').value.trim();
+        if(!title||!content) return toast('Fill both');
+        state.notes.unshift({title, content, date: new Date().toLocaleDateString()});
+        document.getElementById('noteTitle').value=''; document.getElementById('noteContent').value='';
+        save(); renderNotes(); refreshDashboard();
+      };
+      function renderNotes() {
+        const c = document.getElementById('notesList');
+        if(!state.notes.length) c.innerHTML = '<div class="card">No notes.</div>';
+        else c.innerHTML = state.notes.map((n,i)=>`<div class="card"><small>${n.date}</small><h4>${n.title}</h4><p>${n.content.substring(0,100)}...</p><button class="btn-sm danger" onclick="deleteNote(${i})">🗑</button></div>`).join('');
+      }
+      window.deleteNote = i => { state.notes.splice(i,1); save(); renderNotes(); refreshDashboard(); };
+      window.exportNotesPDF = () => {
+        if(!state.notes.length) return toast('No notes');
+        const {jsPDF}=window.jspdf; const doc=new jsPDF(); doc.setFontSize(16); doc.text('Notes',20,20);
+        let y=30;
+        state.notes.forEach(n=>{ if(y>270){ doc.addPage(); y=20; } doc.setFontSize(12); doc.text(`${n.title} (${n.date})`,20,y); y+=7; doc.setFontSize(10); doc.text(n.content.substring(0,150),20,y); y+=15; });
+        doc.save('notes.pdf'); toast('PDF downloaded');
+      };
 
-    function renderQuickTasks() {
-      const list = document.getElementById('quickTaskList');
-      list.innerHTML = state.quickTasks.map((t, i) => `
-        <div class="quick-task-item">
-          <input type="checkbox" ${t.done ? 'checked' : ''} onchange="toggleQuickTask(${i})">
-          <span style="${t.done ? 'text-decoration:line-through; opacity:0.5' : ''}">${t.text}</span>
-          <button class="btn-sm danger" onclick="deleteQuickTask(${i})">✕</button>
-        </div>`).join('');
-    }
+      /* ---------- QUIZ ---------- */
+      window.startStandardQuiz = () => {
+        window.currentQuiz = {questions:[
+          {q:'Sin 30°?',o:['0','1/2','1','√3/2'],c:1},
+          {q:'pH of water?',o:['0','5','7','14'],c:2}
+        ],score:0,idx:0};
+        showQuizQuestion();
+      };
+      function showQuizQuestion() {
+        const quiz = window.currentQuiz;
+        if(quiz.idx >= quiz.questions.length) {
+          document.getElementById('quizArea').innerHTML='<h3>Done!</h3>';
+          document.getElementById('quizResult').innerHTML=`Score: ${quiz.score}/${quiz.questions.length}`;
+          state.stats.quizzes = (state.stats.quizzes||0)+1; save(); refreshDashboard();
+          return;
+        }
+        const q = quiz.questions[quiz.idx];
+        document.getElementById('quizArea').innerHTML = `
+          <h4>Q${quiz.idx+1}: ${q.q}</h4>
+          ${q.o.map((o,i)=>`<button onclick="answerQuiz(${i},${q.c})" class="secondary" style="display:block;width:100%;margin:4px 0;">${String.fromCharCode(65+i)}. ${o}</button>`).join('')}
+        `;
+      }
+      window.answerQuiz = (sel,cor) => { if(sel===cor) window.currentQuiz.score++; window.currentQuiz.idx++; showQuizQuestion(); };
 
-    function refreshDashboard() {
-      document.getElementById('dashBoard').textContent = state.board;
-      document.getElementById('dashClass').textContent = 'Class ' + state.studentClass;
-      document.getElementById('dashSubject').textContent = state.subject;
-      
-      document.getElementById('statsGrid').innerHTML = `
-        <div class="stat-card"><div class="num">${state.stats.studyHours.toFixed(1)}</div><div class="lbl">📖 Hours</div></div>
-        <div class="stat-card"><div class="num">${state.stats.quizzes}</div><div class="lbl">❓ Quizzes</div></div>
-        <div class="stat-card"><div class="num">${state.stats.hwDone}</div><div class="lbl">✅ HW Done</div></div>
-        <div class="stat-card"><div class="num">${state.stats.streak}</div><div class="lbl">🔥 Streak</div></div>
-      `;
-      renderQuickTasks();
-    }
+      /* ---------- FLASHCARDS ---------- */
+      window.addFlashcard = () => {
+        const f=document.getElementById('fcFront').value.trim(), b=document.getElementById('fcBack').value.trim();
+        if(!f||!b) return;
+        state.flashcards.push({front:f,back:b});
+        document.getElementById('fcFront').value=''; document.getElementById('fcBack').value='';
+        save(); updateFlashcardDisplay();
+      };
+      function updateFlashcardDisplay() {
+        if(!state.flashcards.length) {
+          document.getElementById('fcFrontText').textContent='Add cards'; document.getElementById('fcBackText').textContent='Answer';
+          document.getElementById('fcCounter').textContent='0/0'; return;
+        }
+        const idx = state.fcIndex || 0, card = state.flashcards[idx];
+        document.getElementById('fcFrontText').textContent=card.front; document.getElementById('fcBackText').textContent=card.back;
+        document.getElementById('fcCounter').textContent=`${idx+1}/${state.flashcards.length}`;
+        document.getElementById('flashcardDisplay').classList.remove('flipped');
+      }
+      window.flipFlashcard = () => document.getElementById('flashcardDisplay').classList.toggle('flipped');
+      window.nextFlashcard = () => { state.fcIndex = ((state.fcIndex||0)+1) % state.flashcards.length; updateFlashcardDisplay(); };
+      window.prevFlashcard = () => { state.fcIndex = ((state.fcIndex||0)-1+state.flashcards.length) % state.flashcards.length; updateFlashcardDisplay(); };
 
-    /* ---------- 7. CHART & INITIALIZATION ---------- */
-    let weeklyChart;
-    function initChart() {
-      const ctx = document.getElementById('weeklyChart').getContext('2d');
-      weeklyChart = new Chart(ctx, {
-        type: 'bar',
-        data: {
-          labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
-          datasets: [{ label: 'Study Hours', data: [0,0,0,0,0,0,0], backgroundColor: '#6c5ce7', borderRadius: 8 }]
-        },
-        options: { responsive: true, scales: { y: { beginAtZero: true } } }
-      });
-    }
+      /* ---------- PYQ & PDF ---------- */
+      window.generatePYQ = () => {
+        const bank = { CBSE:{Mathematics:['Q1. Solve 2x²-7x+3=0.']} };
+        document.getElementById('pyqOutput').innerHTML = (bank[state.board]?.[state.subject]||['Q1. Practice']).map(q=>`<div class="chat-msg ai">📝 ${q}</div>`).join('');
+      };
+      window.downloadPYQ = format => {
+        const text = document.getElementById('pyqOutput').innerText || '';
+        if(format==='txt'){
+          const blob=new Blob([text],{type:'text/plain'}); const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='PYQ.txt'; a.click();
+        } else {
+          const {jsPDF}=window.jspdf; const doc=new jsPDF(); doc.setFontSize(14); doc.text('PYQ',20,20); let y=30;
+          text.split('\n').forEach(line=>{ if(y>270){doc.addPage();y=20;} doc.text(line,20,y); y+=7; });
+          doc.save('PYQ.pdf'); toast('PDF downloaded');
+        }
+      };
 
-    function updateChart() {
-      const day = (new Date().getDay() + 6) % 7; // Monday = 0
-      weeklyChart.data.datasets[0].data[day] = state.stats.studyHours;
-      weeklyChart.update();
-    }
+      /* ---------- FORMULAS ---------- */
+      function updateFormulaSubject(){ document.getElementById('formulaSubject').textContent=state.subject; }
+      window.generateFormulaSheet = () => { const s={Mathematics:'(a+b)² = a²+2ab+b²', Physics:'V=IR'}; document.getElementById('formulaOutput').textContent = s[state.subject]||'Formulas...'; };
 
-    // Sidebar/Theme Handlers
-    window.toggleSidebar = () => document.getElementById('sidebar').classList.toggle('open');
-    window.closeSidebar = () => document.getElementById('sidebar').classList.remove('open');
-    window.toggleTheme = () => {
-      document.body.classList.toggle('light-mode');
-      state.theme = document.body.classList.contains('light-mode') ? 'light' : 'dark';
-      save();
-    };
+      /* ---------- HOMEWORK ---------- */
+      window.addHomework = () => {
+        const t=document.getElementById('hwInput').value.trim(), d=document.getElementById('hwDate').value||new Date().toISOString().slice(0,10);
+        if(!t) return;
+        state.homework.unshift({task:t,date:d,done:false}); document.getElementById('hwInput').value=''; save(); renderHomework();
+      };
+      window.toggleHW = i => { state.homework[i].done=!state.homework[i].done; state.stats.hwDone=state.homework.filter(h=>h.done).length; save(); renderHomework(); refreshDashboard(); };
+      window.deleteHW = i => { state.homework.splice(i,1); state.stats.hwDone=state.homework.filter(h=>h.done).length; save(); renderHomework(); refreshDashboard(); };
+      function renderHomework() {
+        const c=document.getElementById('hwList');
+        if(!state.homework.length) c.innerHTML='';
+        else c.innerHTML = state.homework.map((h,i)=>`<div style="display:flex;gap:8px;align-items:center;background:rgba(255,255,255,0.05);padding:8px;border-radius:8px;margin-bottom:4px;"><input type="checkbox" ${h.done?'checked':''} onchange="toggleHW(${i})"><span>${h.task} (📅${h.date})</span><button class="btn-sm danger" onclick="deleteHW(${i})">🗑</button></div>`).join('');
+      }
 
-    function init() {
-      if(state.theme === 'light') document.body.classList.add('light-mode');
-      document.getElementById('boardSelect').value = state.board;
-      document.getElementById('classSelect').value = state.studentClass;
-      document.getElementById('subjectSelect').value = state.subject;
-      
-      initChart();
-      updateChart();
-      updateTimerDisplay();
-      showPage('dashboard'); // Start on dashboard
-    }
+      /* ---------- DOUBTS ---------- */
+      window.askDoubt = () => {
+        const q = document.getElementById('doubtInput').value.trim(); if(!q) return;
+        const chat = document.getElementById('doubtChat');
+        chat.innerHTML += `<div class="chat-msg user">🧑‍🎓 ${q}</div>`;
+        document.getElementById('doubtInput').value='';
+        chat.innerHTML += `<div class="chat-msg ai" id="thinkingMsg">🤔 Thinking...</div>`;
+        chat.scrollTop = chat.scrollHeight;
+        setTimeout(()=>{ const el=document.getElementById('thinkingMsg'); if(el) el.innerHTML = '🤖 <strong>Here\'s your answer:</strong> Great question! Based on your syllabus, the key points are...'; }, 1500);
+      };
 
-    init();
-  })();
-</script>
+      /* ---------- WEAK AREAS ---------- */
+      window.addWeakTopic = () => {
+        const val = document.getElementById('weakTopicInput').value.trim();
+        if(!val) return;
+        state.weakTopics.push(val); document.getElementById('weakTopicInput').value=''; save(); renderWeakTopics();
+      };
+      window.removeWeakTopic = i => { state.weakTopics.splice(i,1); save(); renderWeakTopics(); };
+      function renderWeakTopics() {
+        const list = document.getElementById('weakTopicsList');
+        if(!state.weakTopics.length) list.innerHTML = '<p>No weak topics.</p>';
+        else list.innerHTML = state.weakTopics.map((t,i)=>`<div style="display:flex;justify-content:space-between;background:rgba(255,255,255,0.05);padding:8px;border-radius:8px;margin-bottom:4px;"><span>📉 ${t}</span><button class="btn-sm danger" onclick="removeWeakTopic(${i})">✕</button></div>`).join('');
+      }
+
+      window.generateStrategy = () => document.getElementById('strategyOutput').innerHTML = `🎯 ${state.board} ${state.subject}: Week1 NCERT, Week2 PYQs.`;
+      const quotes = [{q:'Believe you can and you\'re halfway there.',a:'Theodore Roosevelt'},{q:'Push yourself, because no one else will.',a:'Unknown'}];
+      window.newMotivationQuote = () => { const r=quotes[Math.floor(Math.random()*quotes.length)]; document.getElementById('motivationQuote').textContent='"'+r.q+'"'; document.getElementById('motivationAuthor').textContent='— '+r.a; };
+
+      window.resetWeek = () => { state.dailySessions = {}; save(); updateChart(); toast('Week reset'); };
+
+      function init() {
+        document.getElementById('boardSelect').value = state.board;
+        document.getElementById('classSelect').value = state.studentClass;
+        document.getElementById('subjectSelect').value = state.subject;
+        if(state.theme==='light') document.body.classList.add('light-mode');
+        document.getElementById('hwDate').valueAsDate = new Date();
+        updateTimerDisplay();
+        refreshDashboard();
+        renderNotes();
+        renderHomework();
+        updateFlashcardDisplay();
+        updateFormulaSubject();
+        initChart();
+        updateChart();
+        newMotivationQuote();
+        updateExamCountdown();
+        renderWeakTopics();
+        if(Notification.permission!=='granted') Notification.requestPermission();
+        if(state.lofiPlaying) {
+          document.getElementById('musicToggleBtn').textContent = '⏸️';
+          document.getElementById('lofiInlineBtn').textContent = '⏸️ Lo‑Fi On';
+          lofiAudio.play().catch(()=>{});
+        }
+        if(window.innerWidth>768) {
+          document.getElementById('sidebar').classList.remove('hidden');
+          document.getElementById('contentArea').classList.remove('expanded');
+        } else {
+          document.getElementById('sidebar').classList.add('hidden');
+          document.getElementById('contentArea').classList.add('expanded');
+        }
+      }
+      init();
+    })();
+  </script>
+</body>
+</html>
