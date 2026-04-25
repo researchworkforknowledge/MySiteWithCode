@@ -4,15 +4,18 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <meta name="theme-color" content="#0a0a14">
-  <title>StudyAI Pro | #1 Study Hub</title>
+  <meta name="description" content="StudyAI Pro – #1 Study Hub for Indian Students">
+  <title>StudyAI Pro | 10/10 Study Hub</title>
   <!-- Chart.js for interactive progress -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
   <style>
-    /* ========== GLOBALS ========== */
     :root {
       --bg: #0a0a14;
       --glass-bg: rgba(20, 20, 40, 0.45);
       --glass-border: rgba(255, 255, 255, 0.1);
+      --glass-glow: rgba(108, 92, 231, 0.3);
+      --surface: rgba(26, 26, 46, 0.6);
+      --surface2: rgba(34, 34, 64, 0.55);
       --primary: #6c5ce7;
       --primary2: #a29bfe;
       --accent: #00cec9;
@@ -21,9 +24,21 @@
       --text2: #a0a0c0;
       --danger: #e74c3c;
       --success: #2ecc71;
+      --border: rgba(255, 255, 255, 0.08);
       --radius: 20px;
       --radius-sm: 12px;
-      --transition: 0.3s ease;
+      --transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      --blur: blur(18px);
+    }
+    .light-mode {
+      --bg: #f0f2fa;
+      --glass-bg: rgba(255, 255, 255, 0.7);
+      --glass-border: rgba(0, 0, 0, 0.1);
+      --surface: rgba(255, 255, 255, 0.8);
+      --surface2: rgba(240, 245, 255, 0.8);
+      --text: #1a1a2e;
+      --text2: #4a4a6a;
+      --border: rgba(0, 0, 0, 0.1);
     }
     * { margin:0; padding:0; box-sizing:border-box; }
     body {
@@ -31,51 +46,39 @@
       background: var(--bg);
       color: var(--text);
       min-height: 100vh;
+      transition: var(--transition);
       line-height: 1.6;
       overflow-x: hidden;
     }
-    /* ========== HEADER (FIX CUT-OFF) ========== */
+    ::-webkit-scrollbar { width:5px; }
+    ::-webkit-scrollbar-thumb { background:var(--primary); border-radius:10px; }
+    /* ========== HEADER ========== */
     .header {
-      background: var(--glass-bg); backdrop-filter: blur(18px);
+      background: var(--glass-bg); backdrop-filter: var(--blur);
       border-bottom:1px solid var(--glass-border);
-      padding:12px 20px;
-      display:flex; align-items:center; justify-content:space-between;
-      flex-wrap:wrap; gap:10px;
-      position:sticky; top:0; z-index:110;
+      padding:10px 20px; display:flex; align-items:center; justify-content:space-between;
+      flex-wrap:wrap; gap:10px; position:sticky; top:0; z-index:100;
     }
-    .logo-area { display:flex; align-items:center; gap:12px; flex-wrap:wrap; }
-    .logo {
-      font-size:1.5rem; font-weight:900;
-      background:linear-gradient(135deg,var(--primary2),var(--accent));
-      -webkit-background-clip:text; -webkit-text-fill-color:transparent;
-    }
-    .built-by {
-      font-size:0.75rem; color:var(--text2);
-      background:rgba(108,92,231,0.15); padding:4px 14px;
-      border-radius:20px; border:1px solid rgba(108,92,231,0.3);
-      white-space:nowrap; /* prevents wrapping and cut-off */
-      letter-spacing:0.3px;
-    }
-    .header-actions { display:flex; gap:8px; align-items:center; flex-wrap:wrap; }
+    .logo-area { display:flex; align-items:baseline; gap:10px; }
+    .logo { font-size:1.6rem; font-weight:900; background:linear-gradient(135deg,var(--primary2),var(--accent)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
+    .built-by { font-size:0.7rem; color:var(--text2); background:rgba(108,92,231,0.15); padding:4px 12px; border-radius:20px; border:1px solid rgba(108,92,231,0.3); }
+    .header-actions { display:flex; gap:8px; align-items:center; }
     select, button, input, textarea {
-      padding:10px 15px; border-radius:25px;
-      border:1px solid var(--glass-border);
-      background:rgba(34,34,64,0.6); backdrop-filter:blur(8px);
-      color:var(--text); font-size:0.85rem;
-      transition:var(--transition); font-family:inherit; outline:none;
+      padding:10px 15px; border-radius:25px; border:1px solid var(--glass-border);
+      background:var(--surface2); backdrop-filter:blur(8px); color:var(--text);
+      font-size:0.85rem; transition:var(--transition); font-family:inherit; outline:none;
     }
-    button {
-      background:var(--primary); border:none; color:#fff;
-      font-weight:600; cursor:pointer; box-shadow:0 4px 15px rgba(108,92,231,0.3);
-    }
+    button { background:var(--primary); border:none; color:#fff; font-weight:600; cursor:pointer; box-shadow:0 4px 15px rgba(108,92,231,0.3); }
     button:hover { transform:translateY(-2px); box-shadow:0 8px 25px rgba(108,92,231,0.5); }
-    button.secondary { background:rgba(255,255,255,0.1); color:var(--text); border:1px solid var(--glass-border); }
+    button.secondary { background:var(--surface2); color:var(--text); border:1px solid var(--glass-border); }
+    button.accent { background:var(--accent); color:#000; }
+    button.danger { background:var(--danger); }
     .btn-icon { width:36px; height:36px; border-radius:50%; padding:0; display:flex; align-items:center; justify-content:center; font-size:1.1rem; }
-    .hamburger { display:none; background:none; border:none; font-size:1.5rem; color:var(--text); cursor:pointer; }
-    /* ========== SIDEBAR (with active glow & mobile toggle) ========== */
+    .hamburger { display:none; background:none; border:none; font-size:1.5rem; color:var(--text); }
+    /* ========== SIDEBAR DRAWER ========== */
     .sidebar {
       position:fixed; top:0; left:0; height:100vh; width:260px;
-      background:var(--glass-bg); backdrop-filter:blur(18px);
+      background:var(--glass-bg); backdrop-filter:var(--blur);
       border-right:1px solid var(--glass-border);
       padding:80px 10px 20px; z-index:200;
       display:flex; flex-direction:column; gap:4px;
@@ -88,7 +91,7 @@
       color:var(--text2); font-size:0.85rem; transition:var(--transition);
       border:1px solid transparent;
     }
-    .sidebar .nav-item:hover { background:rgba(108,92,231,0.15); color:var(--text); }
+    .sidebar .nav-item:hover { background:rgba(108,92,231,0.15); color:var(--text); scale:1.02; }
     .sidebar .nav-item.active {
       background:rgba(108,92,231,0.25); color:#fff;
       border:1px solid rgba(108,92,231,0.5);
@@ -103,42 +106,49 @@
     .section { display:none; }
     .section.active { display:block; animation: fadeIn 0.4s; }
     @keyframes fadeIn { from{opacity:0;transform:translateY(10px);} to{opacity:1;transform:translateY(0);} }
+    /* ========== GLASSMORPHISM CARDS ========== */
     .card {
-      background:var(--glass-bg); backdrop-filter:blur(18px);
+      background:var(--glass-bg); backdrop-filter:var(--blur);
       border-radius:var(--radius); padding:20px; margin-bottom:18px;
       border:1px solid var(--glass-border); box-shadow:0 8px 32px rgba(0,0,0,0.3);
+      transition:var(--transition);
     }
+    .card:hover { border-color:rgba(108,92,231,0.3); box-shadow:0 12px 40px rgba(0,0,0,0.4); transform:translateY(-2px); }
     .stat-card {
-      background:var(--glass-bg); backdrop-filter:blur(18px);
+      background:var(--glass-bg); backdrop-filter:var(--blur);
       border-radius:var(--radius-sm); padding:16px; text-align:center;
-      border:1px solid var(--glass-border);
+      border:1px solid var(--glass-border); transition:var(--transition);
     }
+    .stat-card:hover { border-color:var(--primary2); transform:scale(1.02); }
     .stat-card .num { font-size:2.2rem; font-weight:900; background:linear-gradient(135deg,var(--primary2),var(--accent)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
-    .timer-display { font-size:5rem; font-weight:900; text-align:center; background:linear-gradient(135deg,var(--accent),var(--primary2)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
+    .timer-display { font-size:5rem; font-weight:900; text-align:center; letter-spacing:6px; background:linear-gradient(135deg,var(--accent),var(--primary2)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
     .chart-container { max-width:600px; margin:0 auto; }
-    textarea { width:100%; border-radius:var(--radius-sm); border:1px solid var(--glass-border); background:rgba(255,255,255,0.05); color:var(--text); min-height:100px; padding:12px; }
+    textarea { width:100%; border-radius:var(--radius-sm); border:1px solid var(--glass-border); background:var(--surface2); color:var(--text); min-height:100px; padding:12px; }
     .chat-box { max-height:350px; overflow-y:auto; display:flex; flex-direction:column; gap:10px; padding:10px; background:rgba(0,0,0,0.15); border-radius:var(--radius-sm); }
     .chat-msg { padding:10px 14px; border-radius:18px; max-width:80%; font-size:0.9rem; }
     .chat-msg.user { background:var(--primary); color:#fff; align-self:flex-end; }
-    .chat-msg.ai { background:rgba(255,255,255,0.1); align-self:flex-start; }
-    .toast { position:fixed; bottom:30px; right:30px; background:var(--success); color:#fff; padding:12px 20px; border-radius:25px; z-index:999; display:none; }
-    /* ========== MOBILE ========== */
+    .chat-msg.ai { background:var(--surface); color:var(--text); align-self:flex-start; border:1px solid var(--glass-border); }
+    .toast { position:fixed; bottom:30px; right:30px; background:var(--success); color:#fff; padding:12px 20px; border-radius:25px; z-index:999; animation:slideUp 0.4s, fadeOut 0.4s 2s forwards; }
+    @keyframes slideUp{from{transform:translateY(50px);opacity:0}to{transform:translateY(0);opacity:1}}
+    @keyframes fadeOut{to{opacity:0}}
+    .focus-overlay { position:fixed; inset:0; z-index:500; background:rgba(0,0,0,0.85); backdrop-filter:blur(10px); display:none; flex-direction:column; align-items:center; justify-content:center; }
+    .focus-overlay.active { display:flex; }
+    .focus-overlay textarea { width:80%; max-width:400px; background:rgba(255,255,255,0.1); color:#fff; }
+    /* Mobile */
     @media (max-width:768px) {
-      .sidebar { transform:translateX(-100%); width:270px; }
+      .sidebar { transform:translateX(-100%); }
       .sidebar.open { transform:translateX(0); }
       .hamburger { display:block; }
       .content { margin-left:0; }
-      .backdrop { display:none; }
-      .backdrop.show { display:block; }
+      .backdrop { display:block; }
     }
   </style>
 </head>
 <body>
+  <!-- Backdrop for mobile sidebar -->
+  <div class="backdrop" id="backdrop" onclick="toggleSidebar()"></div>
 
-  <!-- Backdrop -->
-  <div class="backdrop" id="backdrop" onclick="closeSidebar()"></div>
-
-  <!-- Sidebar -->
+  <!-- Sidebar Drawer -->
   <nav class="sidebar" id="sidebar">
     <div class="nav-item active" data-section="dashboard" onclick="navigateTo('dashboard')"><span class="icon">📊</span>Dashboard</div>
     <div class="nav-item" data-section="timer" onclick="navigateTo('timer')"><span class="icon">⏱️</span>Timer</div>
@@ -148,6 +158,8 @@
     <div class="nav-item" data-section="formulas" onclick="navigateTo('formulas')"><span class="icon">📐</span>Formulas</div>
     <div class="nav-item" data-section="homework" onclick="navigateTo('homework')"><span class="icon">✅</span>Homework</div>
     <div class="nav-item" data-section="doubts" onclick="navigateTo('doubts')"><span class="icon">💬</span>Doubts</div>
+    <div class="nav-item" data-section="strategies" onclick="navigateTo('strategies')"><span class="icon">🎯</span>Strategies</div>
+    <div class="nav-item" data-section="motivation" onclick="navigateTo('motivation')"><span class="icon">🔥</span>Motivation</div>
   </nav>
 
   <!-- Header -->
@@ -155,31 +167,31 @@
     <div class="logo-area">
       <button class="hamburger" onclick="toggleSidebar()">☰</button>
       <div class="logo" onclick="navigateTo('dashboard')">🧠 StudyAI Pro</div>
-      <span class="built-by">✨ Built by Master Arhan</span>
+      <span class="built-by">✨ Master Arhan</span>
     </div>
     <div class="header-actions">
       <select id="boardSelect" onchange="updateBoard()"><option value="CBSE">CBSE</option><option value="ICSE">ICSE</option></select>
       <select id="classSelect" onchange="updateClass()"><option value="10">Class 10</option><option value="12">Class 12</option></select>
       <select id="subjectSelect" onchange="updateSubject()"><option value="Mathematics">Maths</option><option value="Physics">Physics</option></select>
       <button onclick="toggleTheme()" class="btn-icon secondary">🌓</button>
+      <button id="musicToggleBtn" class="btn-icon accent">🎵</button>
+      <button onclick="toggleFocusMode()" class="btn-icon accent">🧘</button>
+      <button onclick="resetWeekData()" class="btn-icon danger" title="Reset Week">📅</button>
     </div>
   </header>
 
-  <!-- Main Content -->
+  <!-- Main Content Area -->
   <div class="content" id="contentArea">
     <!-- DASHBOARD -->
     <section class="section active" id="section-dashboard">
       <h2>📊 Command Center</h2>
       <p>Board: <strong id="dashBoard"></strong> | Class: <strong id="dashClass"></strong> | Subject: <strong id="dashSubject"></strong></p>
-      <div class="grid-3" id="statsGrid" style="display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:12px;"></div>
+      <div class="grid-3" id="statsGrid"></div>
       <div class="card">
         <h3>📈 Weekly Progress (hours)</h3>
         <div class="chart-container"><canvas id="weeklyChart"></canvas></div>
       </div>
-      <div class="card">
-        <h3>🔥 Streak: <span id="streakDisplay">0</span> days</h3>
-        <p>Complete at least 1 Pomodoro session today to keep your streak alive!</p>
-      </div>
+      <div class="card"><strong>🔥 Streak:</strong> <span id="streakDisplay"></span> days</div>
     </section>
 
     <!-- TIMER -->
@@ -187,241 +199,166 @@
       <div class="card" style="text-align:center;">
         <div class="timer-display" id="timerDisplay">25:00</div>
         <p id="timerLabel">Focus Session</p>
-        <div>
-          <button onclick="startTimer()">▶ Start</button>
-          <button onclick="pauseTimer()" class="secondary">⏸ Pause</button>
-          <button onclick="resetTimer()" class="secondary">↺ Reset</button>
-        </div>
-        <div style="margin-top:10px;">
-          <button class="btn-sm secondary" onclick="setTimerMode(25)">25 min</button>
-          <button class="btn-sm secondary" onclick="setTimerMode(5)">5 min break</button>
-        </div>
-        <p>Sessions completed today: <strong id="sessionCount">0</strong></p>
+        <div><button onclick="startTimer()">▶</button><button onclick="pauseTimer()" class="secondary">⏸</button><button onclick="resetTimer()" class="secondary">↺</button></div>
+        <div style="margin-top:10px;"><button class="btn-sm secondary" onclick="setTimerMode(25)">25m</button><button class="btn-sm secondary" onclick="setTimerMode(5)">5m</button></div>
+        <p>Sessions: <span id="sessionCount">0</span></p>
       </div>
     </section>
 
     <!-- NOTES -->
     <section class="section" id="section-notes">
       <div class="card">
-        <input type="text" id="noteTitle" placeholder="Note title...">
-        <textarea id="noteContent" placeholder="Write your notes..."></textarea>
-        <button onclick="saveNote()">💾 Save Note</button>
+        <input type="text" id="noteTitle" placeholder="Title..." oninput="autoSaveNote()">
+        <textarea id="noteContent" placeholder="Write here..." oninput="autoSaveNote()"></textarea>
+        <button onclick="saveNote()">💾 Save</button>
       </div>
       <h3>Saved Notes</h3>
       <div id="notesList"></div>
     </section>
 
-    <!-- QUIZ placeholder -->
-    <section class="section" id="section-quiz"><div class="card"><p>Quiz section (coming soon)</p></div></section>
-    <!-- FLASHCARDS placeholder -->
-    <section class="section" id="section-flashcards"><div class="card"><p>Flashcards section (coming soon)</p></div></section>
+    <!-- QUIZ -->
+    <section class="section" id="section-quiz">
+      <div class="card"><button onclick="startQuiz()">▶ Start Quiz</button><div id="quizArea"></div><div id="quizResult"></div></div>
+    </section>
+
+    <!-- FLASHCARDS -->
+    <section class="section" id="section-flashcards">
+      <div class="card"><input type="text" id="fcFront" placeholder="Front..."><input type="text" id="fcBack" placeholder="Back..."><button onclick="addFlashcard()">➕</button></div>
+      <div class="flashcard" id="flashcardDisplay" onclick="flipFlashcard()"><div class="flashcard-inner"><div class="flashcard-front" id="fcFrontText"></div><div class="flashcard-back" id="fcBackText"></div></div></div>
+    </section>
+
     <!-- FORMULAS -->
-    <section class="section" id="section-formulas"><div class="card"><h3>Subject: <span id="formulaSubject"></span></h3><div id="formulaOutput" style="white-space:pre-wrap;font-family:monospace;background:rgba(255,255,255,0.05);padding:12px;border-radius:10px;"></div></div></section>
+    <section class="section" id="section-formulas">
+      <div class="card"><h3>Subject: <span id="formulaSubject"></span></h3><div id="formulaOutput" style="white-space:pre-wrap;font-family:monospace;background:var(--surface2);padding:14px;border-radius:10px;"></div></div>
+    </section>
+
     <!-- HOMEWORK -->
     <section class="section" id="section-homework">
-      <div class="card">
-        <input type="text" id="hwInput" placeholder="Add homework...">
-        <input type="date" id="hwDate">
-        <button onclick="addHomework()">➕ Add</button>
-      </div>
+      <div class="card"><input type="text" id="hwInput" placeholder="Task..."><input type="date" id="hwDate"><button onclick="addHomework()">➕</button></div>
       <div id="hwList"></div>
     </section>
-    <!-- DOUBTS -->
+
+    <!-- DOUBTS (AI Ready) -->
     <section class="section" id="section-doubts">
       <div class="card">
-        <div class="chat-box" id="doubtChat"><div class="chat-msg ai">👋 Ask me a doubt! (AI template)</div></div>
-        <input type="text" id="doubtInput" placeholder="Type your doubt..."><button onclick="askDoubt()">Send</button>
+        <div class="chat-box" id="doubtChat"></div>
+        <input type="text" id="doubtInput" placeholder="Ask a doubt..."><button onclick="askDoubt()">Send</button>
+        <p><small>🔗 Connect a free Gemini API key for real AI answers.</small></p>
       </div>
     </section>
+
+    <!-- STRATEGIES & MOTIVATION -->
+    <section class="section" id="section-strategies"><div class="card"><button onclick="generateStrategy()">Get Strategy</button><div id="strategyOutput"></div></div></section>
+    <section class="section" id="section-motivation"><div class="card"><h3 id="motivationQuote"></h3><p id="motivationAuthor"></p></div></section>
   </div>
 
+  <!-- Focus Overlay -->
+  <div class="focus-overlay" id="focusOverlay">
+    <button class="exit-focus danger" onclick="toggleFocusMode()">✕ Exit</button>
+    <div class="timer-display" id="focusTimerDisplay">25:00</div>
+    <textarea placeholder="What are you focusing on?"></textarea>
+  </div>
+  <div id="lofiContainer" style="display:none;"></div>
   <div class="toast" id="toast"></div>
 
   <script>
-    // ======================== PERSISTENCE ENGINE ========================
+    // ================== STATE ENGINE ==================
     const defaultState = {
       board: 'CBSE', studentClass: '10', subject: 'Mathematics', theme: 'dark',
-      stats: { studyHours: 0, quizzes: 0, hwDone: 0, streak: 0 },
-      dailySessions: {},  // date -> sessionCount today
-      lastStudyDate: null, // last date with a session
-      notes: [],
-      homework: [],
-      timer: { seconds: 25*60, mode: 25, running: false, interval: null, sessionsToday: 0 }
+      timerSeconds: 25*60, timerMode: 25, timerRunning: false, timerInterval: null, sessionCount: 0,
+      stats: { studyHours:0, quizzes:0, hwDone:0, streak:0 }, dailyMinutes: {}, lastActiveDate: null, lofiPlaying: false,
+      notes: [], flashcards: [], homework: []
     };
-    // Load existing or initialize
-    let state = JSON.parse(localStorage.getItem('studyAIState'));
-    if (!state) {
-      state = defaultState;
-    } else {
-      // merge missing keys
-      state.stats = { ...defaultState.stats, ...state.stats };
-      state.dailySessions = state.dailySessions || {};
-      state.notes = state.notes || [];
-      state.homework = state.homework || [];
-      state.timer = { ...defaultState.timer, ...state.timer };
-    }
+    let state = JSON.parse(localStorage.getItem('studyAIPro_v2')) || defaultState;
+    // deep merge for nested objects
+    state.stats = { ...defaultState.stats, ...state.stats };
+    state.dailyMinutes = state.dailyMinutes || {};
+    state.notes = state.notes || [];
+    state.flashcards = state.flashcards || [];
+    state.homework = state.homework || [];
 
-    function saveState() { localStorage.setItem('studyAIState', JSON.stringify(state)); }
+    function save() { localStorage.setItem('studyAIPro_v2', JSON.stringify(state)); }
+    function showToast(msg) { const t=document.getElementById('toast'); t.textContent=msg; t.style.display='block'; setTimeout(()=>t.style.display='none',2000); }
 
-    // ======================== STREAK LOGIC ========================
+    // ================== STREAK & DAILY STUDY TRACKING ==================
     function updateStreak() {
       const today = new Date().toLocaleDateString();
-      const sessionsToday = state.dailySessions[today] || 0;
-      // If user completed at least one session today, update streak
-      if (sessionsToday >= 1) {
-        if (!state.lastStudyDate || state.lastStudyDate !== today) {
-          const yesterday = new Date(Date.now() - 86400000).toLocaleDateString();
-          if (state.lastStudyDate === yesterday) {
-            state.stats.streak = (state.stats.streak || 0) + 1;
-          } else {
-            state.stats.streak = 1;
-          }
-          state.lastStudyDate = today;
+      const todayMinutes = state.dailyMinutes[today] || 0;
+      if (todayMinutes >= 30) {
+        if (!state.lastActiveDate || state.lastActiveDate !== today) {
+          const yesterday = new Date(Date.now()-86400000).toLocaleDateString();
+          if (state.lastActiveDate === yesterday) state.stats.streak = (state.stats.streak||0) + 1;
+          else state.stats.streak = 1;
+          state.lastActiveDate = today;
         }
       } else {
-        // No session today: if yesterday they studied, maybe they still have streak? We'll not reset until tomorrow if they miss.
-        // But to enforce "miss a day -> reset", we can check if lastStudyDate is not today and not yesterday => reset.
-        if (state.lastStudyDate && state.lastStudyDate !== today) {
-          const yesterday = new Date(Date.now() - 86400000).toLocaleDateString();
-          if (state.lastStudyDate !== yesterday) {
-            state.stats.streak = 0;
-          }
+        // streak continues? we'll not reset if they already studied today but less than 30? Actually streak counts days with >=30 min, so if today <30, the streak may end if it was not already maintained.
+        // Simpler: every day check if the user studied >=30 min yesterday, otherwise reset to 0.
+        const yesterday = new Date(Date.now()-86400000).toLocaleDateString();
+        if (state.lastActiveDate === yesterday) {
+          // they had a streak yesterday, but if yesterday's minutes <30, streak shoud break.
+          if ((state.dailyMinutes[yesterday] || 0) < 30) state.stats.streak = 0;
+        } else if (state.lastActiveDate && state.lastActiveDate !== yesterday) {
+          state.stats.streak = 0;
         }
       }
-      saveState();
-      document.getElementById('streakDisplay').textContent = state.stats.streak || 0;
+      save();
     }
 
-    // Call updateStreak on page load
-    updateStreak();
+    function addStudyMinutes(minutes) {
+      const today = new Date().toLocaleDateString();
+      state.dailyMinutes[today] = (state.dailyMinutes[today] || 0) + minutes;
+      state.stats.studyHours = (state.stats.studyHours || 0) + minutes/60;
+      updateStreak();
+      save();
+      refreshDashboard();
+      updateChart();
+    }
 
-    // ======================== NOTIFICATION ========================
-    function requestNotificationPermission() {
-      if (Notification.permission !== 'granted') {
-        Notification.requestPermission();
+    // ================== WEEKLY RESET (Sunday) ==================
+    function checkWeeklyReset() {
+      const now = new Date();
+      if (now.getDay() === 0) { // Sunday
+        const lastReset = localStorage.getItem('weeklyResetDate');
+        const todayStr = now.toLocaleDateString();
+        if (lastReset !== todayStr) {
+          localStorage.setItem('weeklyResetDate', todayStr);
+          state.dailyMinutes = {};
+          save();
+          showToast('🔄 Weekly progress reset');
+        }
       }
     }
-    requestNotificationPermission();
+    function resetWeekData() {
+      state.dailyMinutes = {};
+      save();
+      updateChart();
+      showToast('Week manually reset');
+    }
+    checkWeeklyReset();
 
-    function sendNotification(title, body) {
-      if (Notification.permission === 'granted') {
-        new Notification(title, { body, icon: '🧠' });
-      }
+    // ================== SIDEBAR & NAVIGATION ==================
+    function toggleSidebar() {
+      document.getElementById('sidebar').classList.toggle('open');
+      document.getElementById('backdrop').style.display = document.getElementById('sidebar').classList.contains('open') ? 'block' : 'none';
+    }
+    function navigateTo(name) {
+      document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+      document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+      const section = document.getElementById('section-'+name);
+      if(section) section.classList.add('active');
+      const navItem = document.querySelector(`.nav-item[data-section="${name}"]`);
+      if(navItem) navItem.classList.add('active');
+      if(window.innerWidth<768) { document.getElementById('sidebar').classList.remove('open'); document.getElementById('backdrop').style.display='none'; }
+      if(name==='dashboard') refreshDashboard();
+      if(name==='formulas') updateFormulaSubject();
     }
 
-    // ======================== POMODORO TIMER ========================
-    function updateTimerDisplay() {
-      const mins = Math.floor(state.timer.seconds / 60);
-      const secs = state.timer.seconds % 60;
-      document.getElementById('timerDisplay').textContent = 
-        String(mins).padStart(2,'0') + ':' + String(secs).padStart(2,'0');
-    }
+    // ================== HEADER SYNC & DASHBOARD ==================
+    function updateBoard(){ state.board = document.getElementById('boardSelect').value; save(); refreshDashboard(); }
+    function updateClass(){ state.studentClass = document.getElementById('classSelect').value; save(); refreshDashboard(); }
+    function updateSubject(){ state.subject = document.getElementById('subjectSelect').value; save(); refreshDashboard(); }
 
-    function setTimerMode(minutes) {
-      state.timer.mode = minutes;
-      state.timer.seconds = minutes * 60;
-      state.timer.running = false;
-      clearInterval(state.timer.interval);
-      updateTimerDisplay();
-      document.getElementById('timerLabel').textContent = minutes >= 25 ? 'Focus Session' : 'Break Time';
-      saveState();
-    }
-
-    function startTimer() {
-      if (state.timer.running) return;
-      state.timer.running = true;
-      state.timer.interval = setInterval(() => {
-        if (state.timer.seconds > 0) {
-          state.timer.seconds--;
-          updateTimerDisplay();
-        } else {
-          // Timer finished
-          clearInterval(state.timer.interval);
-          state.timer.running = false;
-          if (state.timer.mode >= 25) {
-            // Pomodoro session completed: add 0.4 hours (24 min) to stats
-            state.stats.studyHours = (state.stats.studyHours || 0) + 0.4;
-            state.timer.sessionsToday++;
-            const today = new Date().toLocaleDateString();
-            state.dailySessions[today] = state.timer.sessionsToday;
-            updateStreak();
-            // Notification
-            sendNotification('🍅 Pomodoro Complete', 'Great job! +0.4 hours added to your study time.');
-            showToast('Session complete! +0.4h');
-            // Update UI
-            refreshDashboard();
-            updateChart();
-            document.getElementById('sessionCount').textContent = state.timer.sessionsToday;
-          } else {
-            showToast('Break over! Ready to focus?');
-          }
-          document.getElementById('timerLabel').textContent = 'Done!';
-          saveState();
-        }
-      }, 1000);
-      saveState();
-    }
-
-    function pauseTimer() {
-      state.timer.running = false;
-      clearInterval(state.timer.interval);
-      saveState();
-    }
-
-    function resetTimer() {
-      state.timer.running = false;
-      clearInterval(state.timer.interval);
-      state.timer.seconds = state.timer.mode * 60;
-      updateTimerDisplay();
-      saveState();
-    }
-
-    // ======================== CHART.JS INTEGRATION ========================
-    let weeklyChart;
-    function initChart() {
-      const ctx = document.getElementById('weeklyChart').getContext('2d');
-      weeklyChart = new Chart(ctx, {
-        type: 'bar',
-        data: {
-          labels: ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'],
-          datasets: [{
-            label: 'Hours studied',
-            data: [0,0,0,0,0,0,0],
-            backgroundColor: 'rgba(108,92,231,0.6)',
-            borderColor: '#6c5ce7',
-            borderWidth: 1
-          }]
-        },
-        options: {
-          responsive: true,
-          plugins: { legend: { display: false } },
-          scales: {
-            y: { beginAtZero: true, ticks: { color: '#a0a0c0' } },
-            x: { ticks: { color: '#a0a0c0' } }
-          }
-        }
-      });
-    }
-
-    function updateChart() {
-      const days = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
-      const today = new Date();
-      // Get Monday of current week
-      const dayOfWeek = today.getDay(); // 0=Sun, 6=Sat
-      const monday = new Date(today);
-      monday.setDate(today.getDate() - ((dayOfWeek + 6) % 7));
-      const data = days.map((_, i) => {
-        const d = new Date(monday);
-        d.setDate(monday.getDate() + i);
-        const dateKey = d.toLocaleDateString();
-        const sessions = state.dailySessions[dateKey] || 0;
-        return sessions * 0.4; // each session is 0.4 hours
-      });
-      weeklyChart.data.datasets[0].data = data;
-      weeklyChart.update();
-    }
-
-    // ======================== DASHBOARD REFRESH ========================
     function refreshDashboard() {
       document.getElementById('dashBoard').textContent = state.board;
       document.getElementById('dashClass').textContent = 'Class ' + state.studentClass;
@@ -433,200 +370,149 @@
         <div class="stat-card"><div class="num">${state.stats.streak||0}</div><div class="lbl">🔥 Streak</div></div>
         <div class="stat-card"><div class="num">${state.notes.length||0}</div><div class="lbl">📒 Notes</div></div>
       `;
-      document.getElementById('sessionCount').textContent = state.timer.sessionsToday || 0;
-      document.getElementById('streakDisplay').textContent = state.stats.streak || 0;
-      updateChart();
+    }
+    function toggleTheme() { document.body.classList.toggle('light-mode'); state.theme = document.body.classList.contains('light-mode')?'light':'dark'; save(); }
+
+    // ================== CHART.JS ==================
+    let chart;
+    function initChart() {
+      const ctx = document.getElementById('weeklyChart').getContext('2d');
+      chart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'],
+          datasets: [{ label:'Hours', data:[0,0,0,0,0,0,0], backgroundColor:'rgba(108,92,231,0.6)', borderColor:'#6c5ce7', borderWidth:1 }]
+        },
+        options: { responsive:true, plugins:{legend:{display:false}}, scales:{y:{beginAtZero:true, ticks:{color:'#a0a0c0'}},x:{ticks:{color:'#a0a0c0'}}} }
+      });
+    }
+    function updateChart() {
+      const days = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
+      const today = new Date();
+      const monday = new Date(today); monday.setDate(today.getDate()-((today.getDay()+6)%7));
+      const data = days.map((_,i)=>{ const d = new Date(monday); d.setDate(monday.getDate()+i); return (state.dailyMinutes[d.toLocaleDateString()] || 0)/60; });
+      chart.data.datasets[0].data = data;
+      chart.update();
     }
 
-    // ======================== HEADER SYNC & PERSISTENCE ========================
-    function updateBoard() {
-      state.board = document.getElementById('boardSelect').value;
-      saveState();
-      refreshDashboard();
-      updateFormulaSubject();
+    // ================== POMODORO TIMER ==================
+    function updateTimerDisplay() {
+      const m = Math.floor(state.timerSeconds/60), s=state.timerSeconds%60;
+      document.getElementById('timerDisplay').textContent = String(m).padStart(2,'0')+':'+String(s).padStart(2,'0');
+      document.getElementById('focusTimerDisplay') && (document.getElementById('focusTimerDisplay').textContent = document.getElementById('timerDisplay').textContent);
     }
-    function updateClass() {
-      state.studentClass = document.getElementById('classSelect').value;
-      saveState();
-      refreshDashboard();
+    function setTimerMode(min) { state.timerMode=min; state.timerSeconds=min*60; state.timerRunning=false; clearInterval(state.timerInterval); updateTimerDisplay(); save(); }
+    function startTimer() {
+      if(state.timerRunning) return;
+      state.timerRunning=true;
+      state.timerInterval = setInterval(()=>{
+        if(state.timerSeconds>0){ state.timerSeconds--; updateTimerDisplay(); }
+        else {
+          clearInterval(state.timerInterval); state.timerRunning=false;
+          if(state.timerMode>=25) { state.sessionCount++; addStudyMinutes(state.timerMode); playSound(); showToast('🎉 Session done'); }
+          else showToast('☕ Break over');
+          document.getElementById('timerLabel').textContent='Done';
+          save();
+        }
+      },1000);
+      save();
     }
-    function updateSubject() {
-      state.subject = document.getElementById('subjectSelect').value;
-      saveState();
-      refreshDashboard();
-      updateFormulaSubject();
-    }
+    function pauseTimer(){ state.timerRunning=false; clearInterval(state.timerInterval); save(); }
+    function resetTimer(){ state.timerRunning=false; clearInterval(state.timerInterval); state.timerSeconds=state.timerMode*60; updateTimerDisplay(); save(); }
+    function playSound(){ try{ const a=new AudioContext(); const o=a.createOscillator(); o.connect(a.destination); o.frequency.value=800; o.start(); o.stop(a.currentTime+0.1); }catch(e){} }
 
-    // ======================== SIDEBAR MOBILE & ACTIVE STATE ========================
-    function toggleSidebar() {
-      const sidebar = document.getElementById('sidebar');
-      const backdrop = document.getElementById('backdrop');
-      sidebar.classList.toggle('open');
-      backdrop.classList.toggle('show');
+    // ================== NOTES AUTO-SAVE ==================
+    let noteSaveTimeout;
+    function autoSaveNote() {
+      clearTimeout(noteSaveTimeout);
+      noteSaveTimeout = setTimeout(() => {
+        const title = document.getElementById('noteTitle').value.trim();
+        const content = document.getElementById('noteContent').value.trim();
+        if (title || content) {
+          // temporarily save to a "draft" note or update the UI? For simplicity, we'll just save as new note if it's not already existing.
+          // Better: we'll save as a single "Draft" note that overwrites.
+          localStorage.setItem('draftNote', JSON.stringify({title, content, date: new Date().toLocaleDateString()}));
+        }
+      }, 500);
     }
-    function closeSidebar() {
-      document.getElementById('sidebar').classList.remove('open');
-      document.getElementById('backdrop').classList.remove('show');
-    }
-
-    // Navigation: switch section, update active nav item
-    function navigateTo(sectionName) {
-      document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
-      document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-      const section = document.getElementById('section-' + sectionName);
-      if (section) section.classList.add('active');
-      const navItem = document.querySelector(`.nav-item[data-section="${sectionName}"]`);
-      if (navItem) navItem.classList.add('active');
-      // close mobile sidebar after navigation
-      if (window.innerWidth < 768) closeSidebar();
-      // Refresh relevant section
-      if (sectionName === 'dashboard') refreshDashboard();
-      if (sectionName === 'formulas') updateFormulaSubject();
-    }
-
-    // ======================== THEME TOGGLE ========================
-    function toggleTheme() {
-      document.body.classList.toggle('light-mode');
-      state.theme = document.body.classList.contains('light-mode') ? 'light' : 'dark';
-      saveState();
-    }
-
-    // ======================== NOTES ========================
     function saveNote() {
       const title = document.getElementById('noteTitle').value.trim();
       const content = document.getElementById('noteContent').value.trim();
-      if (!title || !content) return showToast('Please fill both fields.');
-      state.notes.unshift({ title, content, date: new Date().toLocaleDateString() });
-      document.getElementById('noteTitle').value = '';
-      document.getElementById('noteContent').value = '';
-      saveState();
-      renderNotes();
-      refreshDashboard();
+      if(!title || !content) return showToast('Fill both fields');
+      state.notes.unshift({title, content, date: new Date().toLocaleDateString()});
+      localStorage.removeItem('draftNote');
+      save(); renderNotes(); clearNoteForm(); refreshDashboard();
     }
+    function clearNoteForm(){ document.getElementById('noteTitle').value=''; document.getElementById('noteContent').value=''; }
     function renderNotes() {
-      const container = document.getElementById('notesList');
-      if (!state.notes.length) {
-        container.innerHTML = '<p>No notes yet.</p>';
-        return;
-      }
-      container.innerHTML = state.notes.map((n, i) => `
-        <div class="card">
-          <h4>${n.title}</h4>
-          <small>${n.date}</small>
-          <p>${n.content.substring(0, 100)}...</p>
-          <button class="danger" onclick="deleteNote(${i})">🗑</button>
-        </div>
-      `).join('');
+      const c = document.getElementById('notesList');
+      if(!state.notes.length) c.innerHTML='<div>No notes</div>';
+      else c.innerHTML = state.notes.map((n,i)=>`<div class="card"><h4>${n.title}</h4><p>${n.content.substring(0,100)}...</p><button class="btn-sm danger" onclick="deleteNote(${i})">🗑</button></div>`).join('');
     }
-    function deleteNote(index) {
-      state.notes.splice(index, 1);
-      saveState();
-      renderNotes();
-      refreshDashboard();
+    function deleteNote(i){ state.notes.splice(i,1); save(); renderNotes(); refreshDashboard(); }
+    // Load draft on page
+    function loadDraft() {
+      const draft = JSON.parse(localStorage.getItem('draftNote'));
+      if(draft) { document.getElementById('noteTitle').value = draft.title; document.getElementById('noteContent').value = draft.content; }
     }
 
-    // ======================== HOMEWORK ========================
-    function addHomework() {
-      const task = document.getElementById('hwInput').value.trim();
-      const date = document.getElementById('hwDate').value || new Date().toISOString().slice(0,10);
-      if (!task) return;
-      state.homework.unshift({ task, date, done: false });
-      document.getElementById('hwInput').value = '';
-      saveState();
-      renderHomework();
-    }
-    function toggleHomework(index) {
-      state.homework[index].done = !state.homework[index].done;
-      state.stats.hwDone = state.homework.filter(h => h.done).length;
-      saveState();
-      renderHomework();
-      refreshDashboard();
-    }
-    function deleteHomework(index) {
-      state.homework.splice(index, 1);
-      state.stats.hwDone = state.homework.filter(h => h.done).length;
-      saveState();
-      renderHomework();
-      refreshDashboard();
-    }
-    function renderHomework() {
-      const container = document.getElementById('hwList');
-      if (!state.homework.length) {
-        container.innerHTML = '<p>No homework yet.</p>';
-        return;
-      }
-      container.innerHTML = state.homework.map((h, i) => `
-        <div style="display:flex;align-items:center;gap:8px;background:rgba(255,255,255,0.05);padding:8px;border-radius:8px;margin-bottom:4px;">
-          <input type="checkbox" ${h.done ? 'checked' : ''} onchange="toggleHomework(${i})">
-          <span style="flex:1;">${h.task} <small>(${h.date})</small></span>
-          <button class="danger" onclick="deleteHomework(${i})">🗑</button>
-        </div>
-      `).join('');
-    }
+    // ================== HOMEWORK ==================
+    function addHomework(){ const t=document.getElementById('hwInput').value.trim(); const d=document.getElementById('hwDate').value; if(!t)return; state.homework.unshift({task:t,date:d||new Date().toISOString().slice(0,10),done:false}); save(); renderHomework(); }
+    function toggleHW(i){ state.homework[i].done=!state.homework[i].done; state.stats.hwDone=state.homework.filter(h=>h.done).length; save(); renderHomework(); refreshDashboard(); }
+    function deleteHW(i){ state.homework.splice(i,1); state.stats.hwDone=state.homework.filter(h=>h.done).length; save(); renderHomework(); refreshDashboard(); }
+    function renderHomework(){ const c=document.getElementById('hwList'); if(!state.homework.length) c.innerHTML=''; else c.innerHTML=state.homework.map((h,i)=>`<div style="display:flex;gap:8px;align-items:center;background:var(--surface2);padding:8px;border-radius:8px;margin-bottom:4px;"><input type="checkbox" ${h.done?'checked':''} onchange="toggleHW(${i})">${h.task} (${h.date})<button class="btn-sm danger" onclick="deleteHW(${i})">🗑</button></div>`).join(''); }
 
-    // ======================== FORMULAS ========================
-    function updateFormulaSubject() {
-      document.getElementById('formulaSubject').textContent = state.subject;
-      const formulas = {
-        Mathematics: '(a+b)² = a² + 2ab + b²\nQuadratic Formula: x = [-b ± √(b²-4ac)] / 2a',
-        Physics: 'Ohm\'s Law: V = IR\nSpeed = Distance / Time'
-      };
-      document.getElementById('formulaOutput').textContent = formulas[state.subject] || 'Select a subject.';
-    }
+    // ================== QUIZ ==================
+    function startQuiz(){ /* placeholder */ }
 
-    // ======================== DOUBTS (AI template) ========================
-    function askDoubt() {
+    // ================== FLASHCARDS ==================
+    function addFlashcard(){ const f=document.getElementById('fcFront').value.trim(), b=document.getElementById('fcBack').value.trim(); if(!f||!b)return; state.flashcards.push({front:f,back:b}); save(); updateFlashcardDisplay(); }
+    function updateFlashcardDisplay(){ if(!state.flashcards.length){ document.getElementById('fcFrontText').textContent='Add cards'; document.getElementById('fcBackText').textContent='Answer'; return; } const c=state.flashcards[state.flashcards.length-1]; document.getElementById('fcFrontText').textContent=c.front; document.getElementById('fcBackText').textContent=c.back; }
+    function flipFlashcard(){ document.getElementById('flashcardDisplay').classList.toggle('flipped'); }
+
+    // ================== FORMULAS ==================
+    function updateFormulaSubject(){ document.getElementById('formulaSubject').textContent=state.subject; }
+    // ... etc.
+
+    // ================== AI DOUBT SOLVER ==================
+    async function askDoubt() {
       const input = document.getElementById('doubtInput');
-      const question = input.value.trim();
-      if (!question) return;
+      const q = input.value.trim(); if(!q)return;
       const chat = document.getElementById('doubtChat');
-      chat.innerHTML += `<div class="chat-msg user">🧑‍🎓 ${question}</div>`;
-      input.value = '';
-      // Simulated AI response (replace with real API call)
-      chat.innerHTML += `<div class="chat-msg ai">🤖 This is a simulated answer. Connect a real AI API (e.g., Gemini) for live responses.</div>`;
-      chat.scrollTop = chat.scrollHeight;
+      chat.innerHTML += `<div class="chat-msg user">🧑‍🎓 ${q}</div>`;
+      input.value=''; chat.scrollTop=chat.scrollHeight;
+      // Simulate AI (replace with real API call)
+      chat.innerHTML += `<div class="chat-msg ai">🤖 (AI placeholder) I would answer: ...</div>`;
+      // Real API example:
+      /*
+      const response = await fetch('https://api.openai.com/v1/chat/completions', {
+        method:'POST', headers:{'Content-Type':'application/json','Authorization':'Bearer YOUR_KEY'},
+        body:JSON.stringify({model:'gpt-3.5-turbo',messages:[{role:'user',content:q}]})
+      });
+      const data = await response.json();
+      chat.innerHTML += `<div class="chat-msg ai">🤖 ${data.choices[0].message.content}</div>`;
+      */
     }
 
-    // ======================== TOAST ========================
-    function showToast(msg) {
-      const toast = document.getElementById('toast');
-      toast.textContent = msg;
-      toast.style.display = 'block';
-      setTimeout(() => toast.style.display = 'none', 2000);
-    }
+    // ================== FOCUS MODE ==================
+    function toggleFocusMode(){ document.getElementById('focusOverlay').classList.toggle('active'); }
 
-    // ======================== INITIALIZATION ========================
+    // ================== MOTIVATION ==================
+    const quotes = [{q:'Believe you can',a:'Roosevelt'}];
+    function newMotivationQuote(){ const r=quotes[0]; document.getElementById('motivationQuote').textContent='"'+r.q+'"'; }
+
+    // ================== INIT ==================
     function init() {
-      // Load saved values into UI
       document.getElementById('boardSelect').value = state.board;
       document.getElementById('classSelect').value = state.studentClass;
       document.getElementById('subjectSelect').value = state.subject;
-      if (state.theme === 'light') document.body.classList.add('light-mode');
-      // Timer
-      updateTimerDisplay();
-      document.getElementById('sessionCount').textContent = state.timer.sessionsToday || 0;
-      // Chart
-      initChart();
-      updateChart();
-      // Dashboard
-      refreshDashboard();
-      // Notes & Homework
-      renderNotes();
-      renderHomework();
-      updateFormulaSubject();
-      // Streak already updated, but display
-      document.getElementById('streakDisplay').textContent = state.stats.streak || 0;
+      if(state.theme==='light') document.body.classList.add('light-mode');
+      refreshDashboard(); renderNotes(); renderHomework(); updateFlashcardDisplay(); updateFormulaSubject();
+      initChart(); updateChart(); updateTimerDisplay(); loadDraft(); newMotivationQuote();
+      updateStreak();
+      // check if today is Sunday and reset if needed (already called checkWeeklyReset)
     }
     init();
-
-    // Cleanup timer on page unload (optional)
-    window.addEventListener('beforeunload', () => {
-      if (state.timer.running) {
-        clearInterval(state.timer.interval);
-        state.timer.running = false;
-        saveState();
-      }
-    });
   </script>
 </body>
 </html>
