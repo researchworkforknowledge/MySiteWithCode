@@ -1,508 +1,4364 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <meta name="theme-color" content="#0a0a14">
-    <title>StudyAI Pro | #1 Study Hub</title>
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+    />
+    <meta name="theme-color" content="#07071a" />
+    <title>StudyAI Pro V2 | #1 Study Hub by Master Arhan</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800;900&family=DM+Mono:ital,wght@0,400;0,500;1,400&display=swap"
+      rel="stylesheet"
+    />
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <!-- Firebase v10 (Modular / v9+) — exposed on window.FB for the main script -->
+    <script type="module">
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-app.js";
+      import {
+        getAuth,
+        GoogleAuthProvider,
+        signInWithPopup,
+        signOut,
+        onAuthStateChanged,
+      } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-auth.js";
+      import {
+        getFirestore,
+        doc,
+        setDoc,
+        getDoc,
+        onSnapshot,
+      } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-firestore.js";
+      window.FB = {
+        initializeApp,
+        getAuth,
+        GoogleAuthProvider,
+        signInWithPopup,
+        signOut,
+        onAuthStateChanged,
+        getFirestore,
+        doc,
+        setDoc,
+        getDoc,
+        onSnapshot,
+      };
+      // Notify the main script that Firebase modular SDK is ready
+      window.dispatchEvent(new Event("fb-ready"));
+    </script>
     <style>
+      :root {
+        --bg: #07071a;
+        --bg2: #0d0d24;
+        --glass: rgba(20, 20, 46, 0.55);
+        --glass-strong: rgba(20, 20, 46, 0.82);
+        --glass2: rgba(255, 255, 255, 0.04);
+        --border: rgba(255, 255, 255, 0.09);
+        --border2: rgba(124, 107, 239, 0.35);
+        --p: #7c6bef;
+        --p2: #a89bff;
+        --p-deep: #3d2db8;
+        --a: #00d4cc;
+        --a2: #ff6eb4;
+        --a3: #ffd166;
+        --txt: #e8e8f8;
+        --txt2: #8a8aa8;
+        --danger: #e05260;
+        --success: #29c77f;
+        --warning: #ffb547;
+        --r: 18px;
+        --r2: 12px;
+        --r3: 8px;
+        --t: 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+        --blur: blur(24px) saturate(160%);
+        --sh: 0 8px 32px rgba(0, 0, 0, 0.35);
+        --sh-soft: 0 2px 12px rgba(0, 0, 0, 0.18);
+        --sh2: 0 24px 60px rgba(0, 0, 0, 0.55);
+        --sh-glow: 0 0 24px rgba(124, 107, 239, 0.25);
+        --reading-w: 780px;
+        --sb-w: 240px;
+      }
+      .light {
+        --bg: #f3f4fb;
+        --bg2: #e8eaf6;
+        --glass: rgba(255, 255, 255, 0.72);
+        --glass-strong: rgba(255, 255, 255, 0.92);
+        --glass2: rgba(0, 0, 0, 0.025);
+        --border: rgba(0, 0, 0, 0.08);
+        --border2: rgba(124, 107, 239, 0.4);
+        --txt: #1a1a2e;
+        --txt2: #5a5a7a;
+        --sh: 0 4px 24px rgba(0, 0, 0, 0.08);
+        --sh2: 0 16px 50px rgba(0, 0, 0, 0.12);
+        --sh-soft: 0 2px 8px rgba(0, 0, 0, 0.06);
+      }
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      html {
+        scroll-behavior: smooth;
+      }
+      body {
+        font-family: "Outfit", system-ui, sans-serif;
+        background: var(--bg);
+        background-image:
+          radial-gradient(
+            ellipse at 12% 12%,
+            rgba(124, 107, 239, 0.2) 0%,
+            transparent 50%
+          ),
+          radial-gradient(
+            ellipse at 88% 88%,
+            rgba(0, 212, 204, 0.13) 0%,
+            transparent 50%
+          ),
+          radial-gradient(
+            ellipse at 50% 50%,
+            rgba(255, 110, 180, 0.05) 0%,
+            transparent 70%
+          );
+        background-attachment: fixed;
+        color: var(--txt);
+        min-height: 100vh;
+        overflow-x: hidden;
+        transition:
+          background var(--t),
+          color var(--t);
+      }
+      ::-webkit-scrollbar {
+        width: 6px;
+        height: 6px;
+      }
+      ::-webkit-scrollbar-track {
+        background: transparent;
+      }
+      ::-webkit-scrollbar-thumb {
+        background: rgba(124, 107, 239, 0.5);
+        border-radius: 10px;
+      }
+      ::-webkit-scrollbar-thumb:hover {
+        background: var(--p);
+      }
+
+      /* HEADER */
+      .hdr {
+        position: sticky;
+        top: 0;
+        z-index: 120;
+        background: var(--glass);
+        backdrop-filter: var(--blur);
+        -webkit-backdrop-filter: var(--blur);
+        border-bottom: 1px solid var(--border);
+        padding: 0 16px;
+        height: 60px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 8px;
+      }
+      .logo-area {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        flex-shrink: 0;
+      }
+      .logo {
+        font-size: 1.3rem;
+        font-weight: 900;
+        letter-spacing: -0.5px;
+        cursor: pointer;
+        white-space: nowrap;
+        background: linear-gradient(135deg, var(--p2), var(--a));
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+      }
+      .badge {
+        font-size: 0.6rem;
+        background: rgba(124, 107, 239, 0.18);
+        color: var(--p2);
+        border: 1px solid rgba(124, 107, 239, 0.35);
+        padding: 3px 10px;
+        border-radius: 20px;
+        white-space: nowrap;
+        font-weight: 600;
+        letter-spacing: 0.2px;
+      }
+      .hdr-r {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        flex-wrap: wrap;
+      }
+      select,
+      input[type="text"],
+      input[type="date"],
+      input[type="password"],
+      textarea {
+        padding: 8px 12px;
+        border-radius: 25px;
+        border: 1px solid var(--border);
+        background: rgba(30, 30, 60, 0.5);
+        backdrop-filter: blur(8px);
+        color: var(--txt);
+        font-size: 0.78rem;
+        font-family: inherit;
+        outline: none;
+        transition: var(--t);
+      }
+      .light select,
+      .light input[type="text"],
+      .light input[type="date"],
+      .light input[type="password"],
+      .light textarea {
+        background: rgba(255, 255, 255, 0.6);
+      }
+      select {
+        cursor: pointer;
+        max-width: 100px;
+        padding: 7px 10px;
+      }
+      input:focus,
+      select:focus,
+      textarea:focus {
+        border-color: var(--p);
+        box-shadow: 0 0 0 3px rgba(124, 107, 239, 0.15);
+      }
+      textarea {
+        border-radius: 14px;
+        resize: vertical;
+        min-height: 80px;
+        line-height: 1.5;
+        width: 100%;
+      }
+      input[type="text"],
+      input[type="date"],
+      input[type="password"] {
+        width: 100%;
+      }
+
+      /* BUTTONS */
+      .btn {
+        padding: 9px 16px;
+        border-radius: 25px;
+        border: none;
+        background: var(--p);
+        color: #fff;
+        font-weight: 700;
+        font-size: 0.78rem;
+        cursor: pointer;
+        font-family: inherit;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        justify-content: center;
+        transition: var(--t);
+        white-space: nowrap;
+        min-height: 38px;
+        box-shadow: 0 4px 14px rgba(124, 107, 239, 0.28);
+      }
+      .btn:hover {
+        transform: translateY(-1px);
+        filter: brightness(1.12);
+        box-shadow: 0 6px 18px rgba(124, 107, 239, 0.4);
+      }
+      .btn:active {
+        transform: translateY(0);
+      }
+      .btn:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+        transform: none;
+      }
+      .btn.sec {
+        background: var(--glass2);
+        color: var(--txt);
+        border: 1px solid var(--border);
+        box-shadow: none;
+      }
+      .btn.sec:hover {
+        background: rgba(124, 107, 239, 0.12);
+      }
+      .btn.acc {
+        background: linear-gradient(135deg, var(--a), #0bb6ae);
+        color: #001b1a;
+        box-shadow: 0 4px 14px rgba(0, 212, 204, 0.3);
+      }
+      .btn.acc2 {
+        background: linear-gradient(135deg, var(--a2), #d94d96);
+        color: #fff;
+      }
+      .btn.acc3 {
+        background: linear-gradient(135deg, var(--a3), #f0a82e);
+        color: #3d2400;
+      }
+      .btn.dng {
+        background: var(--danger);
+      }
+      .btn.sm {
+        padding: 6px 12px;
+        font-size: 0.7rem;
+        border-radius: 18px;
+        min-height: 30px;
+      }
+      .btn.ico {
+        width: 38px;
+        height: 38px;
+        border-radius: 50%;
+        padding: 0;
+        font-size: 1rem;
+        min-height: 38px;
+      }
+      .btn.full {
+        width: 100%;
+      }
+      .ham {
+        background: none;
+        border: none;
+        color: var(--txt);
+        cursor: pointer;
+        padding: 6px;
+        font-size: 1.4rem;
+        display: flex;
+        align-items: center;
+        border-radius: 10px;
+        transition: var(--t);
+        min-width: 44px;
+        min-height: 44px;
+        justify-content: center;
+        box-shadow: none;
+      }
+      .ham:hover {
+        background: var(--glass2);
+      }
+
+      /* SIDEBAR */
+      .sb {
+        position: fixed;
+        top: 0;
+        left: 0;
+        height: 100vh;
+        width: var(--sb-w);
+        background: var(--glass-strong);
+        backdrop-filter: var(--blur);
+        -webkit-backdrop-filter: var(--blur);
+        border-right: 1px solid var(--border);
+        padding: 70px 10px 20px;
+        z-index: 200;
+        display: flex;
+        flex-direction: column;
+        gap: 1px;
+        transform: translateX(0);
+        transition: transform 0.32s cubic-bezier(0.4, 0, 0.2, 1);
+        overflow-y: auto;
+        scrollbar-width: thin;
+      }
+      .sb.off {
+        transform: translateX(-100%);
+      }
+      .sb-user {
+        padding: 12px;
+        border-radius: var(--r2);
+        margin-bottom: 10px;
+        background: linear-gradient(
+          135deg,
+          rgba(124, 107, 239, 0.15),
+          rgba(0, 212, 204, 0.08)
+        );
+        border: 1px solid var(--border);
+      }
+      .sb-user .user-row {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+      .sb-user img {
+        width: 34px;
+        height: 34px;
+        border-radius: 50%;
+        border: 2px solid var(--p);
+      }
+      .sb-user .uname {
+        font-weight: 700;
+        font-size: 0.78rem;
+        line-height: 1.2;
+      }
+      .sb-user .umail {
+        font-size: 0.65rem;
+        color: var(--txt2);
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+      .gbtn {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        justify-content: center;
+        width: 100%;
+        padding: 9px;
+        border-radius: var(--r2);
+        background: #fff;
+        color: #3c4043;
+        border: 1px solid #dadce0;
+        font-weight: 600;
+        font-size: 0.78rem;
+        cursor: pointer;
+        font-family: inherit;
+        transition: var(--t);
+        box-shadow: var(--sh-soft);
+      }
+      .gbtn:hover {
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+        background: #f8f9fa;
+      }
+      .gbtn svg {
+        width: 16px;
+        height: 16px;
+      }
+      .nav {
+        padding: 10px 12px;
+        border-radius: var(--r2);
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 9px;
+        font-weight: 500;
+        color: var(--txt2);
+        font-size: 0.8rem;
+        transition: var(--t);
+        border: 1px solid transparent;
+        position: relative;
+        min-height: 42px;
+      }
+      .nav:hover {
+        background: rgba(124, 107, 239, 0.1);
+        color: var(--txt);
+      }
+      .nav.on {
+        background: rgba(124, 107, 239, 0.22);
+        color: #fff;
+        border: 1px solid rgba(124, 107, 239, 0.4);
+        font-weight: 700;
+        box-shadow: 0 0 20px rgba(124, 107, 239, 0.2);
+      }
+      .light .nav.on {
+        color: var(--txt);
+      }
+      .nav.on::before {
+        content: "";
+        position: absolute;
+        left: -1px;
+        top: 8px;
+        bottom: 8px;
+        width: 3px;
+        background: var(--a);
+        border-radius: 0 3px 3px 0;
+      }
+      .nb {
+        background: var(--a2);
+        color: #fff;
+        font-size: 0.55rem;
+        padding: 2px 6px;
+        border-radius: 8px;
+        margin-left: auto;
+        font-weight: 700;
+      }
+      .bdp {
+        display: none;
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.55);
+        z-index: 160;
+        backdrop-filter: blur(2px);
+      }
+      .bdp.on {
+        display: block;
+      }
+
+      /* CONTENT */
+      .cnt {
+        margin-left: var(--sb-w);
+        padding: 24px;
+        min-height: 100vh;
+        transition: margin-left 0.32s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+      .cnt.wide {
+        margin-left: 0;
+      }
+      .inner {
+        max-width: var(--reading-w);
+        margin: 0 auto;
+      }
+
+      /* SECTIONS */
+      .sec {
+        display: none;
+        animation: fs 0.32s var(--t);
+      }
+      .sec.on {
+        display: block;
+      }
+      @keyframes fs {
+        from {
+          opacity: 0;
+          transform: translateY(10px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+      .sec h2 {
+        font-size: 1.55rem;
+        font-weight: 900;
+        margin-bottom: 16px;
+        letter-spacing: -0.5px;
+      }
+      .subline {
+        color: var(--txt2);
+        margin-bottom: 14px;
+        font-size: 0.85rem;
+      }
+
+      /* CARDS — Glassmorphism 2.0 */
+      .card {
+        background: var(--glass);
+        backdrop-filter: var(--blur);
+        -webkit-backdrop-filter: var(--blur);
+        border-radius: var(--r);
+        padding: 22px;
+        margin-bottom: 16px;
+        border: 1px solid var(--border);
+        box-shadow:
+          var(--sh),
+          inset 0 1px 0 rgba(255, 255, 255, 0.05);
+        transition: var(--t);
+        position: relative;
+      }
+      .card:hover {
+        border-color: var(--border2);
+        box-shadow:
+          var(--sh2),
+          inset 0 1px 0 rgba(255, 255, 255, 0.08);
+      }
+      .card h3 {
+        font-size: 1rem;
+        font-weight: 700;
+        margin-bottom: 12px;
+      }
+      .sgrid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+        gap: 10px;
+        margin-bottom: 16px;
+      }
+      .scard {
+        background: var(--glass);
+        backdrop-filter: var(--blur);
+        border-radius: var(--r2);
+        padding: 16px 12px;
+        text-align: center;
+        border: 1px solid var(--border);
+        transition: var(--t);
+      }
+      .scard:hover {
+        transform: translateY(-3px);
+        border-color: var(--border2);
+      }
+      .snum {
+        font-size: 2rem;
+        font-weight: 900;
+        line-height: 1;
+        background: linear-gradient(135deg, var(--p2), var(--a));
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+      }
+      .slbl {
+        font-size: 0.72rem;
+        color: var(--txt2);
+        margin-top: 5px;
+        font-weight: 500;
+      }
+
+      /* TIMER */
+      .tdisp {
+        font-size: clamp(2.8rem, 9vw, 5.5rem);
+        font-weight: 900;
+        text-align: center;
+        letter-spacing: 4px;
+        font-variant-numeric: tabular-nums;
+        background: linear-gradient(135deg, var(--a), var(--p2));
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        line-height: 1;
+        margin: 10px 0;
+        text-shadow: 0 0 60px rgba(124, 107, 239, 0.3);
+      }
+      .tbtn-row {
+        display: flex;
+        gap: 8px;
+        justify-content: center;
+        flex-wrap: wrap;
+        margin: 10px 0;
+      }
+      .mode-btns {
+        display: flex;
+        gap: 6px;
+        justify-content: center;
+        flex-wrap: wrap;
+        margin: 8px 0;
+      }
+
+      /* CHAT */
+      .cbox {
+        max-height: 380px;
+        overflow-y: auto;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        padding: 14px;
+        background: rgba(0, 0, 0, 0.18);
+        border-radius: var(--r2);
+        margin-bottom: 10px;
+        scroll-behavior: smooth;
+        border: 1px solid var(--border);
+      }
+      .light .cbox {
+        background: rgba(0, 0, 0, 0.03);
+      }
+      .cmsg {
+        padding: 10px 14px;
+        border-radius: 18px;
+        max-width: 88%;
+        font-size: 0.85rem;
+        line-height: 1.55;
+      }
+      .cmsg.usr {
+        background: linear-gradient(135deg, var(--p), var(--p-deep));
+        color: #fff;
+        align-self: flex-end;
+        border-radius: 18px 18px 4px 18px;
+        box-shadow: 0 4px 12px rgba(124, 107, 239, 0.25);
+      }
+      .cmsg.ai {
+        background: var(--glass2);
+        color: var(--txt);
+        align-self: flex-start;
+        border: 1px solid var(--border);
+        border-radius: 18px 18px 18px 4px;
+      }
+      .cmsg.ai b,
+      .cmsg.ai strong {
+        color: var(--a);
+      }
+      .cmsg.ai em {
+        color: var(--a2);
+      }
+      .cinput {
+        display: flex;
+        gap: 8px;
+      }
+      .cinput input {
+        flex: 1;
+        border-radius: 25px !important;
+        min-height: 42px;
+      }
+      .ai-tag {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        background: rgba(124, 107, 239, 0.15);
+        border: 1px solid rgba(124, 107, 239, 0.3);
+        color: var(--p2);
+        font-size: 0.7rem;
+        font-weight: 700;
+        padding: 4px 12px;
+        border-radius: 20px;
+        margin-bottom: 10px;
+      }
+
+      /* SHIMMER */
+      .shimmer {
+        background: linear-gradient(
+          90deg,
+          var(--glass2) 0%,
+          rgba(124, 107, 239, 0.12) 50%,
+          var(--glass2) 100%
+        );
+        background-size: 200% 100%;
+        animation: shim 1.4s infinite;
+        border-radius: 8px;
+        min-height: 20px;
+      }
+      @keyframes shim {
+        0% {
+          background-position: 200% 0;
+        }
+        100% {
+          background-position: -200% 0;
+        }
+      }
+      .typing {
+        display: flex;
+        gap: 4px;
+        align-items: center;
+        padding: 10px 14px;
+      }
+      .dot {
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+        background: var(--p2);
+        animation: bounce 1.2s infinite;
+      }
+      .dot:nth-child(2) {
+        animation-delay: 0.2s;
+      }
+      .dot:nth-child(3) {
+        animation-delay: 0.4s;
+      }
+      @keyframes bounce {
+        0%,
+        80%,
+        100% {
+          transform: scale(0.8);
+          opacity: 0.5;
+        }
+        40% {
+          transform: scale(1.3);
+          opacity: 1;
+        }
+      }
+
+      /* FLASHCARD */
+      .fc {
+        perspective: 1200px;
+        height: 220px;
+        cursor: pointer;
+        margin: 14px 0;
+      }
+      .fci {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        transition: transform 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+        transform-style: preserve-3d;
+      }
+      .fc.flp .fci {
+        transform: rotateY(180deg);
+      }
+      .fcf,
+      .fcb {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        backface-visibility: hidden;
+        -webkit-backface-visibility: hidden;
+        border-radius: var(--r);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 24px;
+        text-align: center;
+        font-weight: 600;
+        font-size: 1.05rem;
+        box-shadow: var(--sh);
+      }
+      .fcf {
+        background: linear-gradient(135deg, var(--p), var(--p-deep));
+        color: #fff;
+        border: 1px solid rgba(255, 255, 255, 0.12);
+      }
+      .fcb {
+        background: linear-gradient(135deg, #1a1a35, #0f0f24);
+        color: var(--txt);
+        transform: rotateY(180deg);
+        border: 2px solid var(--p2);
+      }
+      .light .fcb {
+        background: linear-gradient(135deg, #fff, #f1f3fa);
+        color: var(--txt);
+      }
+
+      /* FORMULA */
+      .fbox {
+        font-family: "DM Mono", monospace;
+        font-size: 0.82rem;
+        background: rgba(0, 0, 0, 0.22);
+        border: 1px solid var(--border);
+        padding: 18px;
+        border-radius: var(--r2);
+        max-height: 420px;
+        overflow-y: auto;
+        white-space: pre-wrap;
+        line-height: 1.7;
+        color: var(--txt);
+      }
+      .light .fbox {
+        background: rgba(0, 0, 0, 0.03);
+      }
+      .fbox .cat {
+        color: var(--a);
+        font-weight: 700;
+        font-size: 0.92rem;
+      }
+      .fbox .formula {
+        color: var(--p2);
+      }
+
+      /* TASK/HW ITEMS */
+      .item {
+        display: flex;
+        gap: 8px;
+        align-items: center;
+        background: var(--glass2);
+        padding: 10px 14px;
+        border-radius: 10px;
+        margin-bottom: 5px;
+        transition: var(--t);
+        border: 1px solid transparent;
+      }
+      .item:hover {
+        border-color: var(--border);
+      }
+      .item.dn span {
+        text-decoration: line-through;
+        opacity: 0.45;
+      }
+      .item input[type="checkbox"] {
+        width: 18px;
+        height: 18px;
+        accent-color: var(--p);
+        cursor: pointer;
+        flex-shrink: 0;
+      }
+
+      /* MINDMAP */
+      .mm-canvas {
+        position: relative;
+        min-height: 380px;
+        border: 1px dashed var(--border);
+        border-radius: var(--r);
+        overflow: hidden;
+        background: rgba(0, 0, 0, 0.12);
+        margin-top: 12px;
+      }
+      .light .mm-canvas {
+        background: rgba(0, 0, 0, 0.02);
+      }
+      .mm-node {
+        position: absolute;
+        padding: 8px 14px;
+        border-radius: 22px;
+        font-weight: 700;
+        font-size: 0.8rem;
+        text-align: center;
+        cursor: default;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+        transition: var(--t);
+        white-space: nowrap;
+      }
+      .mm-node:hover {
+        transform: scale(1.06);
+      }
+      .mm-center {
+        background: linear-gradient(135deg, var(--p), var(--p-deep));
+        color: #fff;
+        font-size: 0.95rem;
+        border: 2px solid rgba(255, 255, 255, 0.2);
+      }
+      .mm-child {
+        color: #fff;
+        font-size: 0.75rem;
+      }
+      svg.mm-lines {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+        overflow: visible;
+      }
+
+      /* RESOURCE CARDS */
+      .res-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+        gap: 12px;
+      }
+      .rcard {
+        background: var(--glass2);
+        border: 1px solid var(--border);
+        border-radius: var(--r2);
+        padding: 16px;
+        transition: var(--t);
+        cursor: pointer;
+        text-decoration: none;
+        color: var(--txt);
+        display: block;
+      }
+      .rcard:hover {
+        border-color: var(--border2);
+        transform: translateY(-3px);
+        background: rgba(124, 107, 239, 0.08);
+      }
+      .rcard .ricon {
+        font-size: 1.9rem;
+        margin-bottom: 6px;
+      }
+      .rcard .rtitle {
+        font-weight: 700;
+        font-size: 0.9rem;
+      }
+      .rcard .rdesc {
+        font-size: 0.72rem;
+        color: var(--txt2);
+        margin-top: 4px;
+        line-height: 1.4;
+      }
+
+      /* MUSIC PLAYER */
+      .music-p {
+        background: rgba(0, 0, 0, 0.18);
+        border-radius: var(--r2);
+        padding: 14px;
+        border: 1px solid var(--border);
+        margin-top: 12px;
+      }
+      .light .music-p {
+        background: rgba(0, 0, 0, 0.03);
+      }
+      .music-p .track {
+        font-size: 0.78rem;
+        color: var(--a);
+        font-weight: 600;
+        margin-bottom: 8px;
+        text-align: center;
+      }
+      .music-p .mc {
+        display: flex;
+        gap: 6px;
+        align-items: center;
+        justify-content: center;
+        flex-wrap: wrap;
+      }
+      .vibe-sel {
+        font-size: 0.72rem !important;
+        padding: 6px 10px !important;
+        max-width: 130px !important;
+      }
+
+      /* TOAST */
+      .toast {
+        position: fixed;
+        bottom: 24px;
+        right: 24px;
+        padding: 12px 22px;
+        border-radius: 25px;
+        font-weight: 700;
+        font-size: 0.82rem;
+        color: #fff;
+        z-index: 9999;
+        animation: tin 0.35s ease;
+        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
+        pointer-events: none;
+        max-width: 90vw;
+      }
+      .toast.suc {
+        background: linear-gradient(135deg, var(--success), #1ea869);
+      }
+      .toast.err {
+        background: linear-gradient(135deg, var(--danger), #c4424f);
+      }
+      .toast.inf {
+        background: linear-gradient(135deg, var(--p), var(--p-deep));
+      }
+      @keyframes tin {
+        from {
+          opacity: 0;
+          transform: translateY(20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      /* FOCUS / ZEN MODE */
+      .fov {
+        display: none;
+        position: fixed;
+        inset: 0;
+        z-index: 800;
+        background: rgba(5, 5, 20, 0.96);
+        backdrop-filter: blur(20px);
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 20px;
+      }
+      .fov.on {
+        display: flex;
+      }
+      .fov textarea {
+        width: 85%;
+        max-width: 520px;
+        min-height: 80px;
+        resize: none;
+        background: rgba(255, 255, 255, 0.06);
+        color: #fff;
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        border-radius: var(--r2);
+        padding: 14px;
+        font-size: 1rem;
+        font-family: inherit;
+        outline: none;
+      }
+      .fov .tdisp {
+        margin: 0;
+      }
+
+      /* MODALS */
+      .modal {
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.6);
+        backdrop-filter: blur(8px);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 700;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.25s;
+        padding: 16px;
+      }
+      .modal.on {
+        opacity: 1;
+        pointer-events: all;
+      }
+      .mbox {
+        background: var(--glass-strong);
+        backdrop-filter: var(--blur);
+        border: 1px solid var(--border);
+        border-radius: var(--r);
+        padding: 28px;
+        width: 100%;
+        max-width: 460px;
+        box-shadow: var(--sh2);
+      }
+      .mbox h3 {
+        margin-bottom: 12px;
+        font-size: 1.15rem;
+      }
+      .mbox p {
+        font-size: 0.82rem;
+        color: var(--txt2);
+        margin-bottom: 12px;
+        line-height: 1.5;
+      }
+      .mbox input {
+        width: 100%;
+        margin: 8px 0;
+      }
+      .mbox .mbtns {
+        display: flex;
+        gap: 8px;
+        margin-top: 16px;
+        flex-wrap: wrap;
+      }
+
+      /* INPUT ROW */
+      .irow {
+        display: flex;
+        gap: 8px;
+        margin-bottom: 10px;
+        flex-wrap: wrap;
+      }
+      .irow input,
+      .irow select {
+        flex: 1;
+        min-width: 110px;
+      }
+
+      /* AI RESPONSE FORMATTING */
+      .ai-resp {
+        line-height: 1.7;
+        font-size: 0.85rem;
+      }
+      .ai-resp h1,
+      .ai-resp h2,
+      .ai-resp h3 {
+        color: var(--a);
+        margin: 12px 0 6px;
+        font-size: 1rem;
+      }
+      .ai-resp strong,
+      .ai-resp b {
+        color: var(--p2);
+      }
+      .ai-resp em {
+        color: var(--a2);
+      }
+      .ai-resp code {
+        background: rgba(0, 0, 0, 0.3);
+        padding: 1px 6px;
+        border-radius: 4px;
+        font-family: "DM Mono", monospace;
+        color: var(--a3);
+        font-size: 0.85em;
+      }
+      .ai-resp ul,
+      .ai-resp ol {
+        margin-left: 20px;
+        margin-top: 4px;
+      }
+      .ai-resp li {
+        margin-bottom: 4px;
+      }
+      .ai-resp hr {
+        border: none;
+        border-top: 1px solid var(--border);
+        margin: 10px 0;
+      }
+
+      /* CHART */
+      .chart-wrap {
+        max-width: 700px;
+        margin: 0 auto;
+        height: 240px;
+      }
+
+      /* NOTE CARDS */
+      .notes-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+        gap: 12px;
+      }
+      .ncard {
+        background: var(--glass2);
+        border: 1px solid var(--border);
+        border-radius: var(--r2);
+        padding: 16px;
+        transition: var(--t);
+      }
+      .ncard:hover {
+        border-color: var(--border2);
+        transform: translateY(-2px);
+      }
+      .ncard .nt {
+        font-weight: 700;
+        margin-bottom: 4px;
+      }
+      .ncard .nc {
+        font-size: 0.78rem;
+        color: var(--txt2);
+        line-height: 1.4;
+      }
+      .ncard small {
+        font-size: 0.65rem;
+        color: var(--txt2);
+        opacity: 0.7;
+      }
+
+      /* IFRAME WRAPPER */
+      .iframe-wrap {
+        border-radius: var(--r2);
+        overflow: hidden;
+        border: 1px solid var(--border);
+        background: #000;
+        margin-top: 10px;
+      }
+      .iframe-wrap iframe {
+        width: 100%;
+        height: 520px;
+        border: 0;
+        display: block;
+      }
+
+      /* RESPONSIVE */
+      @media (max-width: 1024px) {
         :root {
-            --bg: #0a0a14;
-            --glass-bg: rgba(20, 20, 40, 0.45);
-            --glass-border: rgba(255, 255, 255, 0.1);
-            --primary: #6c5ce7;
-            --primary2: #a29bfe;
-            --accent: #00cec9;
-            --accent2: #fd79a8;
-            --text: #e8e8f8;
-            --text2: #a0a0c0;
-            --danger: #e74c3c;
-            --success: #2ecc71;
-            --radius: 20px;
-            --radius-sm: 12px;
-            --transition: 0.3s cubic-bezier(0.4,0,0.2,1);
+          --sb-w: 215px;
         }
-        .light-mode {
-            --bg: #f0f2fa;
-            --glass-bg: rgba(255,255,255,0.7);
-            --glass-border: rgba(0,0,0,0.1);
-            --text: #1a1a2e;
-            --text2: #4a4a6a;
+      }
+      @media (max-width: 768px) {
+        :root {
+          --sb-w: 280px;
         }
-        *{margin:0;padding:0;box-sizing:border-box;}
-        body{
-            font-family:'Segoe UI',system-ui,-apple-system,sans-serif;
-            background:var(--bg);
-            background-image:radial-gradient(ellipse at 20% 10%, rgba(108,92,231,0.15) 0%, transparent 55%),
-                           radial-gradient(ellipse at 80% 90%, rgba(0,206,201,0.12) 0%, transparent 55%);
-            background-attachment:fixed;
-            color:var(--text);
-            min-height:100vh;
-            line-height:1.6;
-            transition:var(--transition);
-            overflow-x:hidden;
+        .sb {
+          transform: translateX(-100%) !important;
+          z-index: 250;
+          padding-top: 70px;
         }
-        ::-webkit-scrollbar{width:5px;}
-        ::-webkit-scrollbar-thumb{background:var(--primary);border-radius:10px;}
-        .header{
-            background:var(--glass-bg);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);
-            border-bottom:1px solid var(--glass-border);
-            padding:8px 16px;display:flex;align-items:center;justify-content:space-between;
-            flex-wrap:wrap;gap:6px;position:sticky;top:0;z-index:110;min-height:52px;
+        .sb.mob-on {
+          transform: translateX(0) !important;
         }
-        .logo-area{display:flex;align-items:center;gap:8px;min-width:0;}
-        .logo{
-            font-size:clamp(1.1rem,2.5vw,1.5rem);font-weight:900;
-            background:linear-gradient(135deg,var(--primary2),var(--accent));
-            -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
-            cursor:pointer;white-space:nowrap;
+        .cnt,
+        .cnt.wide {
+          margin-left: 0;
+          padding: 14px;
         }
-        .built-by{
-            font-size:0.65rem;color:var(--text2);background:rgba(108,92,231,0.15);
-            padding:3px 10px;border-radius:20px;border:1px solid rgba(108,92,231,0.3);
-            white-space:nowrap;letter-spacing:0.3px;flex-shrink:0;
+        .badge {
+          display: none;
         }
-        .header-actions{display:flex;gap:6px;align-items:center;flex-wrap:wrap;}
-        select,button,input,textarea{
-            padding:8px 12px;border-radius:25px;border:1px solid var(--glass-border);
-            background:rgba(34,34,64,0.6);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
-            color:var(--text);font-size:0.82rem;transition:var(--transition);font-family:inherit;outline:none;
+        .tdisp {
+          font-size: 2.8rem;
         }
-        button{
-            background:var(--primary);border:none;color:#fff;font-weight:600;cursor:pointer;
-            box-shadow:0 4px 15px rgba(108,92,231,0.3);display:inline-flex;align-items:center;gap:4px;justify-content:center;
+        .hdr-r select {
+          max-width: 80px;
+          font-size: 0.7rem;
+          padding: 6px 8px;
         }
-        button:hover{transform:translateY(-2px);box-shadow:0 8px 25px rgba(108,92,231,0.5);}
-        button.secondary{background:rgba(255,255,255,0.1);color:var(--text);border:1px solid var(--glass-border);box-shadow:none;}
-        button.accent{background:var(--accent);color:#000;}
-        button.danger{background:var(--danger);}
-        .btn-sm{padding:5px 11px;font-size:0.72rem;border-radius:18px;}
-        .btn-icon{width:34px;height:34px;border-radius:50%;padding:0;display:flex;align-items:center;justify-content:center;font-size:1.05rem;}
-        .hamburger{background:none;border:none;font-size:1.4rem;color:var(--text);cursor:pointer;padding:4px;display:flex;align-items:center;}
-        .sidebar{
-            position:fixed;top:0;left:0;height:100vh;width:250px;background:var(--glass-bg);
-            backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border-right:1px solid var(--glass-border);
-            padding:70px 8px 16px;z-index:200;display:flex;flex-direction:column;gap:2px;
-            transform:translateX(0);transition:transform 0.3s ease;overflow-y:auto;
+        .btn.ico {
+          width: 38px;
+          height: 38px;
         }
-        .sidebar.hidden{transform:translateX(-100%);}
-        .sidebar .nav-item{
-            padding:10px 14px;border-radius:var(--radius-sm);cursor:pointer;display:flex;align-items:center;gap:8px;
-            font-weight:500;color:var(--text2);font-size:0.82rem;transition:var(--transition);border:1px solid transparent;
-            position:relative;
+        .sgrid {
+          grid-template-columns: repeat(2, 1fr);
         }
-        .sidebar .nav-item:hover{background:rgba(108,92,231,0.15);color:var(--text);}
-        .sidebar .nav-item.active{
-            background:rgba(108,92,231,0.25);color:#fff;border:1px solid rgba(108,92,231,0.5);
-            box-shadow:0 0 20px rgba(108,92,231,0.25);font-weight:700;
+        .mm-canvas {
+          min-height: 300px;
         }
-        .sidebar .nav-item.active::before{
-            content:'';position:absolute;left:0;top:6px;bottom:6px;width:3px;background:var(--accent);
-            border-radius:0 4px 4px 0;box-shadow:0 0 10px var(--accent);
+        .iframe-wrap iframe {
+          height: 380px;
         }
-        .sidebar .badge-new{background:var(--accent2);color:#fff;font-size:0.58rem;padding:1px 6px;border-radius:8px;margin-left:auto;}
-        .backdrop{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.45);z-index:150;}
-        .content{margin-left:250px;padding:20px 20px 40px;transition:margin-left 0.3s ease;min-height:100vh;}
-        .content.expanded{margin-left:0;}
-        .page-section{display:none;animation:fadeSlide 0.35s ease;}
-        .page-section.active{display:block;}
-        @keyframes fadeSlide{from{opacity:0;transform:translateY(12px);} to{opacity:1;transform:translateY(0);}}
-        .card{
-            background:var(--glass-bg);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);
-            border-radius:var(--radius);padding:18px 20px;margin-bottom:16px;border:1px solid var(--glass-border);
-            box-shadow:0 8px 32px rgba(0,0,0,0.3);transition:var(--transition);
+      }
+      @media (max-width: 480px) {
+        .hdr {
+          padding: 0 10px;
+          height: 54px;
+          gap: 4px;
         }
-        .card:hover{border-color:rgba(108,92,231,0.3);box-shadow:0 12px 40px rgba(0,0,0,0.4);}
-        .stat-card{
-            background:var(--glass-bg);backdrop-filter:blur(18px);border-radius:var(--radius-sm);
-            padding:14px;text-align:center;border:1px solid var(--glass-border);transition:var(--transition);
+        .hdr-r {
+          gap: 4px;
         }
-        .stat-card:hover{transform:translateY(-2px);border-color:rgba(108,92,231,0.4);box-shadow:0 8px 25px rgba(0,0,0,0.3);}
-        .stat-card .num{
-            font-size:clamp(1.6rem,3.5vw,2.4rem);font-weight:900;
-            background:linear-gradient(135deg,var(--primary2),var(--accent));
-            -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+        .hdr-r select {
+          max-width: 68px;
+          font-size: 0.66rem;
+          padding: 5px 7px;
         }
-        .stat-card .lbl{font-size:0.75rem;color:var(--text2);margin-top:2px;}
-        .timer-display{
-            font-size:clamp(2.5rem,8vw,5rem);font-weight:900;text-align:center;letter-spacing:4px;
-            background:linear-gradient(135deg,var(--accent),var(--primary2));
-            -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;font-variant-numeric:tabular-nums;
+        .hdr-r .btn.ico {
+          width: 34px;
+          height: 34px;
+          font-size: 0.9rem;
         }
-        .chart-container{max-width:650px;margin:0 auto;min-height:250px;position:relative;}
-        .chart-container canvas{width:100%!important;height:100%!important;}
-        .flashcard{perspective:1200px;height:200px;cursor:pointer;margin:10px 0;}
-        .flashcard-inner{position:relative;width:100%;height:100%;transition:transform 0.7s cubic-bezier(0.4,0,0.2,1);transform-style:preserve-3d;}
-        .flashcard.flipped .flashcard-inner{transform:rotateY(180deg);}
-        .flashcard-front,.flashcard-back{
-            position:absolute;width:100%;height:100%;backface-visibility:hidden;border-radius:var(--radius);
-            display:flex;align-items:center;justify-content:center;padding:20px;text-align:center;font-weight:600;font-size:1rem;
+        .fc {
+          height: 180px;
         }
-        .flashcard-front{background:linear-gradient(135deg,var(--primary),#4a3db5);color:#fff;border:1px solid rgba(255,255,255,0.15);}
-        .flashcard-back{background:rgba(26,26,46,0.7);color:var(--text);transform:rotateY(180deg);border:2px solid var(--primary2);}
-        .chat-box{max-height:300px;overflow-y:auto;display:flex;flex-direction:column;gap:8px;padding:10px;background:rgba(0,0,0,0.15);border-radius:var(--radius-sm);margin-bottom:10px;}
-        .chat-msg{padding:8px 12px;border-radius:16px;max-width:84%;font-size:0.85rem;line-height:1.5;}
-        .chat-msg.user{background:var(--primary);color:#fff;align-self:flex-end;}
-        .chat-msg.ai{background:rgba(255,255,255,0.08);color:var(--text);align-self:flex-start;border:1px solid var(--glass-border);}
-        .toast{
-            position:fixed;bottom:24px;right:24px;background:var(--success);color:#fff;padding:10px 20px;
-            border-radius:25px;z-index:9999;font-weight:600;font-size:0.85rem;
-            animation:toastIn 0.4s ease,toastOut 0.4s ease 2.2s forwards;box-shadow:0 8px 30px rgba(46,204,113,0.4);
+        .snum {
+          font-size: 1.7rem;
         }
-        @keyframes toastIn{from{opacity:0;transform:translateY(30px);} to{opacity:1;transform:translateY(0);}}
-        @keyframes toastOut{from{opacity:1;} to{opacity:0;transform:translateY(20px);}}
-        body.focus-mode .header,body.focus-mode .sidebar,body.focus-mode .backdrop{display:none!important;}
-        body.focus-mode .content{margin-left:0;padding:0;}
-        .focus-overlay{
-            display:none;position:fixed;inset:0;background:rgba(0,0,0,0.88);backdrop-filter:blur(12px);
-            flex-direction:column;align-items:center;justify-content:center;gap:20px;z-index:500;
+        .cnt {
+          padding: 12px;
         }
-        body.focus-mode .focus-overlay{display:flex;}
-        .focus-overlay textarea{width:85%;max-width:480px;background:rgba(255,255,255,0.08);color:#fff;border:1px solid rgba(255,255,255,0.25);border-radius:var(--radius-sm);padding:14px;font-size:1rem;resize:none;min-height:70px;}
-        .modal{
-            position:fixed;inset:0;background:rgba(0,0,0,0.55);backdrop-filter:blur(5px);
-            display:flex;justify-content:center;align-items:center;z-index:600;
-            opacity:0;pointer-events:none;transition:opacity 0.3s;
+        .card {
+          padding: 18px;
         }
-        .modal.active{opacity:1;pointer-events:all;}
-        .modal-content{background:var(--glass-bg);backdrop-filter:blur(18px);padding:28px;border-radius:var(--radius);border:1px solid var(--glass-border);width:92%;max-width:420px;box-shadow:0 12px 50px rgba(0,0,0,0.5);}
-        .quick-task-item,.hw-item{display:flex;gap:8px;align-items:center;background:rgba(255,255,255,0.04);padding:8px 10px;border-radius:8px;margin-bottom:3px;transition:var(--transition);}
-        .quick-task-item:hover,.hw-item:hover{background:rgba(255,255,255,0.08);}
-        .quick-task-item.done span,.hw-item.done span{text-decoration:line-through;opacity:0.55;}
-        .music-meta{font-size:0.7rem;color:var(--accent);margin-top:4px;text-align:center;}
-        @media(max-width:1024px){.sidebar{width:230px;}.content{margin-left:230px;}.content.expanded{margin-left:0;}}
-        @media(max-width:768px){
-            .sidebar{width:270px;transform:translateX(-100%);z-index:250;padding-top:60px;}
-            .sidebar.open{transform:translateX(0);}
-            .content{margin-left:0;padding:12px;}
-            .backdrop.show{display:block;}
-            .timer-display{font-size:2.8rem;}
-            .header{padding:8px 10px;gap:4px;}
-            .header-actions{gap:3px;}
-            select{padding:7px 9px;font-size:0.72rem;}
-            .stat-card{padding:10px;}
-            .chart-container{min-height:200px;}
-            .flashcard{height:160px;}
-            .focus-overlay textarea{width:90%;}
-            .logo{font-size:1.1rem;}
-            .built-by{font-size:0.6rem;padding:2px 8px;}
+      }
+
+      /* FOCUS ON BODY: hide chrome */
+      body.focus-on .hdr,
+      body.focus-on .sb,
+      body.focus-on .bdp {
+        display: none !important;
+      }
+      body.focus-on .cnt {
+        margin-left: 0;
+      }
+
+      /* ─────────── VOICE TUTOR (mic button + pulse animation) ─────────── */
+      .voice-row {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-top: 10px;
+        flex-wrap: wrap;
+      }
+      .voice-btn {
+        position: relative;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 10px 18px;
+        border-radius: 30px;
+        border: 1px solid var(--border2);
+        background: linear-gradient(135deg, var(--p), var(--p-deep));
+        color: #fff;
+        font-weight: 700;
+        font-size: 0.85rem;
+        cursor: pointer;
+        transition: transform 0.18s, box-shadow 0.18s;
+        box-shadow: 0 6px 20px rgba(124, 107, 239, 0.35);
+      }
+      .voice-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 28px rgba(124, 107, 239, 0.55);
+      }
+      .voice-btn .mic-dot {
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        background: #fff;
+        flex-shrink: 0;
+      }
+      .voice-btn.listening {
+        background: linear-gradient(135deg, var(--danger), #ff8a8a);
+        animation: voicePulse 1.4s ease-in-out infinite;
+      }
+      .voice-btn.listening .mic-dot {
+        background: #fff;
+        animation: micDotPulse 0.9s ease-in-out infinite;
+      }
+      .voice-btn.speaking {
+        background: linear-gradient(135deg, var(--a), #19a39c);
+      }
+      @keyframes voicePulse {
+        0%, 100% {
+          box-shadow: 0 0 0 0 rgba(224, 82, 96, 0.7),
+            0 6px 20px rgba(224, 82, 96, 0.35);
         }
-        @media(max-width:400px){
-            select{max-width:70px;font-size:0.68rem;padding:6px 8px;}
-            .btn-icon{width:30px;height:30px;font-size:0.9rem;}
+        50% {
+          box-shadow: 0 0 0 14px rgba(224, 82, 96, 0),
+            0 6px 20px rgba(224, 82, 96, 0.45);
         }
+      }
+      @keyframes micDotPulse {
+        0%, 100% {
+          transform: scale(1);
+          opacity: 1;
+        }
+        50% {
+          transform: scale(1.5);
+          opacity: 0.6;
+        }
+      }
+      .voice-status {
+        font-size: 0.8rem;
+        color: var(--txt2);
+        font-style: italic;
+      }
+
+      /* ─────────── Sleeker Google login button ─────────── */
+      .gbtn {
+        position: relative;
+        overflow: hidden;
+        background: linear-gradient(
+          135deg,
+          rgba(255, 255, 255, 0.04),
+          rgba(255, 255, 255, 0.01)
+        );
+        border: 1px solid rgba(255, 255, 255, 0.12) !important;
+        backdrop-filter: blur(10px);
+        transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s !important;
+      }
+      .gbtn::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(
+          120deg,
+          transparent 30%,
+          rgba(255, 255, 255, 0.12) 50%,
+          transparent 70%
+        );
+        transform: translateX(-100%);
+        transition: transform 0.6s ease;
+      }
+      .gbtn:hover {
+        transform: translateY(-2px);
+        border-color: rgba(124, 107, 239, 0.6) !important;
+        box-shadow: 0 12px 28px rgba(124, 107, 239, 0.28) !important;
+      }
+      .gbtn:hover::before {
+        transform: translateX(100%);
+      }
     </style>
-</head>
-<body>
-    <div class="backdrop" id="backdrop" onclick="closeSidebar()"></div>
-    <nav class="sidebar" id="sidebar">
-        <div class="nav-item active" data-page="dashboard" onclick="showPage('dashboard')"><span class="icon">📊</span>Dashboard</div>
-        <div class="nav-item" data-page="timer" onclick="showPage('timer')"><span class="icon">⏱️</span>Timer<span class="badge-new">Pomodoro</span></div>
-        <div class="nav-item" data-page="pyq" onclick="showPage('pyq')"><span class="icon">📝</span>PYQ & Papers</div>
-        <div class="nav-item" data-page="predictor" onclick="showPage('predictor')"><span class="icon">🔮</span>CBQ Predictor</div>
-        <div class="nav-item" data-page="notes" onclick="showPage('notes')"><span class="icon">📒</span>Notes Maker</div>
-        <div class="nav-item" data-page="mindmap" onclick="showPage('mindmap')"><span class="icon">🧩</span>Mind Maps</div>
-        <div class="nav-item" data-page="quiz" onclick="showPage('quiz')"><span class="icon">❓</span>Quizzes</div>
-        <div class="nav-item" data-page="flashcards" onclick="showPage('flashcards')"><span class="icon">🃏</span>Flash Cards</div>
-        <div class="nav-item" data-page="formulas" onclick="showPage('formulas')"><span class="icon">📐</span>Formulas</div>
-        <div class="nav-item" data-page="homework" onclick="showPage('homework')"><span class="icon">✅</span>Homework</div>
-        <div class="nav-item" data-page="doubts" onclick="showPage('doubts')"><span class="icon">💬</span>AI Doubts</div>
-        <div class="nav-item" data-page="weaknesses" onclick="showPage('weaknesses')"><span class="icon">📉</span>Weak Areas</div>
-        <div class="nav-item" data-page="resources" onclick="showPage('resources')"><span class="icon">🔗</span>Resources</div>
-        <div class="nav-item" data-page="strategies" onclick="showPage('strategies')"><span class="icon">🎯</span>Strategies</div>
-        <div class="nav-item" data-page="motivation" onclick="showPage('motivation')"><span class="icon">🔥</span>Motivation</div>
+  </head>
+  <body>
+    <div class="bdp" id="bdp" onclick="closeSB()"></div>
+
+    <nav class="sb off" id="sb">
+      <!-- USER / GOOGLE LOGIN -->
+      <div class="sb-user" id="sbUser">
+        <div id="loggedOut">
+          <button class="gbtn" onclick="signInGoogle()">
+            <svg viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+              <path
+                fill="#FFC107"
+                d="M43.6 20.5H42V20H24v8h11.3c-1.6 4.6-6 8-11.3 8-6.6 0-12-5.4-12-12s5.4-12 12-12c3.1 0 5.9 1.2 8 3.1l5.7-5.7C34 6.1 29.3 4 24 4 12.9 4 4 12.9 4 24s8.9 20 20 20 20-8.9 20-20c0-1.3-.1-2.3-.4-3.5z"
+              />
+              <path
+                fill="#FF3D00"
+                d="M6.3 14.7l6.6 4.8C14.7 15.1 19 12 24 12c3.1 0 5.9 1.2 8 3.1l5.7-5.7C34 6.1 29.3 4 24 4 16.3 4 9.7 8.3 6.3 14.7z"
+              />
+              <path
+                fill="#4CAF50"
+                d="M24 44c5.2 0 9.9-2 13.4-5.2l-6.2-5.2C29.2 35.1 26.7 36 24 36c-5.3 0-9.7-3.4-11.3-8.1l-6.5 5C9.5 39.6 16.2 44 24 44z"
+              />
+              <path
+                fill="#1976D2"
+                d="M43.6 20.5H42V20H24v8h11.3c-.8 2.2-2.2 4.1-4.1 5.5l6.2 5.2C41.9 35.5 44 30.1 44 24c0-1.3-.1-2.3-.4-3.5z"
+              />
+            </svg>
+            Sign in with Google
+          </button>
+          <p
+            style="
+              font-size: 0.65rem;
+              color: var(--txt2);
+              text-align: center;
+              margin-top: 6px;
+            "
+          >
+            Sync flashcards across devices
+          </p>
+        </div>
+        <div id="loggedIn" style="display: none">
+          <div class="user-row">
+            <img id="uPhoto" alt="You" src="" />
+            <div style="overflow: hidden; flex: 1">
+              <div class="uname" id="uName">User</div>
+              <div class="umail" id="uMail"></div>
+            </div>
+          </div>
+          <button
+            class="btn sm sec full"
+            style="margin-top: 8px"
+            onclick="signOutGoogle()"
+          >
+            Sign out
+          </button>
+        </div>
+      </div>
+
+      <div class="nav on" data-p="dash" onclick="go('dash')">📊 Dashboard</div>
+      <div class="nav" data-p="timer" onclick="go('timer')">
+        ⏱️ Timer <span class="nb">Pomodoro</span>
+      </div>
+      <div class="nav" data-p="pyq" onclick="go('pyq')">📝 PYQ & Papers</div>
+      <div class="nav" data-p="pred" onclick="go('pred')">🔮 CBQ Predictor</div>
+      <div class="nav" data-p="notes" onclick="go('notes')">📒 Notes Maker</div>
+      <div class="nav" data-p="mm" onclick="go('mm')">🧩 Mind Maps</div>
+      <div class="nav" data-p="quiz" onclick="go('quiz')">
+        ❓ Quizzes <span class="nb">AI</span>
+      </div>
+      <div class="nav" data-p="fc" onclick="go('fc')">
+        🃏 Flash Cards
+        <span class="nb" id="fcSyncBadge" style="display: none">☁</span>
+      </div>
+      <div class="nav" data-p="form" onclick="go('form')">📐 Formulas</div>
+      <div class="nav" data-p="hw" onclick="go('hw')">✅ Homework</div>
+      <div class="nav" data-p="doubts" onclick="go('doubts')">
+        💬 AI Doubts <span class="nb">Live</span>
+      </div>
+      <div class="nav" data-p="weak" onclick="go('weak')">📉 Weak Areas</div>
+      <div class="nav" data-p="res" onclick="go('res')">🔗 Resources</div>
+      <div class="nav" data-p="strat" onclick="go('strat')">🎯 Strategies</div>
+      <div class="nav" data-p="motiv" onclick="go('motiv')">🔥 Motivation</div>
     </nav>
 
-    <header class="header">
-        <div class="logo-area">
-            <button class="hamburger" onclick="toggleSidebar()" aria-label="Menu">☰</button>
-            <div class="logo" onclick="showPage('dashboard')">🧠 StudyAI Pro</div>
-            <span class="built-by">✨ Built by Master Arhan</span>
-        </div>
-        <div class="header-actions">
-            <select id="boardSelect" onchange="saveBoard()"><option value="CBSE">CBSE</option><option value="ICSE">ICSE</option><option value="State-MH">Maharashtra</option><option value="State-TN">TN</option><option value="State-KA">Karnataka</option></select>
-            <select id="classSelect" onchange="saveClass()"><option value="9">Class 9</option><option value="10">Class 10</option><option value="11">Class 11</option><option value="12">Class 12</option></select>
-            <select id="subjectSelect" onchange="saveSubject()"><option value="Mathematics">Maths</option><option value="Physics">Physics</option><option value="Chemistry">Chemistry</option><option value="Biology">Biology</option><option value="English">English</option></select>
-            <button onclick="toggleTheme()" class="btn-icon secondary">🌓</button>
-            <button id="musicToggleBtn" class="btn-icon accent" onclick="toggleMusic()">🎵</button>
-            <button onclick="toggleFocusMode()" class="btn-icon accent" title="Focus (Ctrl+Shift+Z)">🧘</button>
-            <button onclick="openExamModal()" class="btn-icon accent">📅</button>
-            <button onclick="resetWeekData()" class="btn-icon danger">🔄</button>
-        </div>
+    <header class="hdr">
+      <div class="logo-area">
+        <button class="ham" onclick="toggleSB()" aria-label="Toggle sidebar">
+          ☰
+        </button>
+        <div class="logo" onclick="go('dash')">🧠 StudyAI Pro</div>
+        <span class="badge">✨ V2 by Master Arhan</span>
+      </div>
+      <div class="hdr-r">
+        <select id="brd" onchange="saveCtx()" title="Board">
+          <option>CBSE</option>
+          <option>ICSE</option>
+          <option>Maharashtra</option>
+          <option>Tamil Nadu</option>
+          <option>Karnataka</option>
+        </select>
+        <select id="cls" onchange="saveCtx()" title="Class">
+          <option>9</option>
+          <option>10</option>
+          <option>11</option>
+          <option>12</option>
+        </select>
+        <select id="sub" onchange="saveCtx()" title="Subject">
+          <option>Mathematics</option>
+          <option>Physics</option>
+          <option>Chemistry</option>
+          <option>Biology</option>
+          <option>English</option>
+        </select>
+        <button
+          class="btn ico sec"
+          onclick="toggleTheme()"
+          title="Toggle theme"
+        >
+          🌓
+        </button>
+        <button
+          class="btn ico acc"
+          id="musicBtn"
+          onclick="toggleMusic()"
+          title="Lo-Fi Music"
+        >
+          🎵
+        </button>
+        <button
+          class="btn ico acc"
+          onclick="toggleFocus()"
+          title="Zen Mode (Ctrl+Shift+Z)"
+        >
+          🧘
+        </button>
+        <button
+          class="btn ico acc"
+          onclick="toggleVoiceMode()"
+          title="Voice Tutor (speak your doubt)"
+        >
+          🎙
+        </button>
+        <button class="btn ico acc" onclick="openExam()" title="Set exam date">
+          📅
+        </button>
+        <button
+          class="btn ico"
+          style="background: rgba(124, 107, 239, 0.2); color: var(--p2)"
+          onclick="openAISetup()"
+          title="AI Settings"
+        >
+          🔑
+        </button>
+      </div>
     </header>
 
-    <div class="content" id="contentArea">
-        <section class="page-section active" id="page-dashboard">
-            <h2>📊 Command Center</h2>
-            <p style="color:var(--text2);margin-bottom:12px;">Board: <strong id="dashBoard"></strong> | Class: <strong id="dashClass"></strong> | Subject: <strong id="dashSubject"></strong></p>
-            <div id="statsGrid" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;"></div>
-            <div class="card" id="examCountdownCard" style="display:none;"><h3>📅 <span id="examCountdownDisplay">--</span> days until exam</h3></div>
-            <div class="card"><h3>✅ Quick Tasks</h3><div style="display:flex;gap:8px;"><input type="text" id="quickTaskInput" placeholder="Add task..." onkeypress="if(event.key==='Enter')addQuickTask()"><button onclick="addQuickTask()">➕</button></div><div id="quickTaskList" style="margin-top:8px;"></div></div>
-            <div class="card"><h3>📈 Weekly Progress</h3><div class="chart-container"><canvas id="weeklyChart"></canvas></div></div>
-        </section>
-
-        <section class="page-section" id="page-timer">
-            <div class="card" style="text-align:center;">
-                <div class="timer-display" id="timerDisplay">25:00</div>
-                <p id="timerLabel">Focus Session</p>
-                <div style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap;"><button onclick="startTimer()">▶ Start</button><button onclick="pauseTimer()" class="secondary">⏸ Pause</button><button onclick="resetTimer()" class="secondary">↺ Reset</button></div>
-                <div style="margin-top:8px;"><button class="btn-sm secondary" onclick="setTimerMode(25)">25m</button><button class="btn-sm secondary" onclick="setTimerMode(5)">5m</button><button class="btn-sm secondary" onclick="setTimerMode(15)">15m</button><button class="btn-sm secondary" onclick="setTimerMode(50)">50m</button></div>
-                <p>Sessions: <span id="sessionCount">0</span></p>
-                <div style="margin-top:8px;">
-                    <button id="lofiInlineBtn" onclick="toggleMusic()" class="btn-sm accent">🎵 Lo‑Fi</button>
-                    <button id="nextTrackBtn" onclick="nextTrack()" class="btn-sm secondary" style="margin-left:4px;" title="Next Track">⏭️</button>
-                </div>
-                <div class="music-meta" id="nowPlaying">Click 🎵 to start music</div>
+    <div class="cnt wide" id="cnt">
+      <div class="inner">
+        <!-- DASHBOARD -->
+        <section class="sec on" id="s-dash">
+          <h2>📊 Command Center</h2>
+          <p class="subline">
+            Board: <strong id="d-brd"></strong> · Class
+            <strong id="d-cls"></strong> · <strong id="d-sub"></strong>
+          </p>
+          <div class="sgrid" id="sgrid"></div>
+          <div class="card" id="cd-exam" style="display: none">
+            <h3>📅 <span id="cd-days">--</span> days until exam</h3>
+            <div
+              id="cd-bar"
+              style="
+                height: 8px;
+                background: var(--glass2);
+                border-radius: 4px;
+                margin-top: 8px;
+                overflow: hidden;
+              "
+            >
+              <div
+                id="cd-prog"
+                style="
+                  height: 100%;
+                  background: linear-gradient(90deg, var(--p), var(--a));
+                  border-radius: 4px;
+                  transition: width 1s;
+                "
+              ></div>
             </div>
+          </div>
+          <div class="card">
+            <h3>✅ Quick Tasks</h3>
+            <div class="irow">
+              <input
+                type="text"
+                id="qtI"
+                placeholder="Add quick task..."
+                onkeydown="if(event.key==='Enter')addQT()"
+              /><button class="btn" onclick="addQT()">➕ Add</button>
+            </div>
+            <div id="qtList"></div>
+          </div>
+          <div class="card">
+            <h3>📈 Weekly Study Hours</h3>
+            <div class="chart-wrap"><canvas id="wChart"></canvas></div>
+          </div>
         </section>
 
-        <section class="page-section" id="page-pyq"><h2>📝 PYQ & Papers</h2><div class="card"><p>Board: <strong id="pyqBoardLabel"></strong></p><div style="display:flex;gap:6px;flex-wrap:wrap;margin:8px 0;"><select id="pyqYear"><option>2024</option><option>2023</option></select><select id="pyqType"><option>Board Exam</option><option>Sample</option></select><button onclick="generatePYQ()">Generate</button></div><div id="pyqOutput" class="chat-box"></div><button onclick="downloadPYQ('txt')" class="btn-sm secondary">.txt</button><button onclick="downloadPYQ('pdf')" class="btn-sm accent" style="margin-left:6px;">PDF</button></div></section>
+        <!-- TIMER -->
+        <section class="sec" id="s-timer">
+          <div
+            class="card"
+            style="text-align: center; max-width: 540px; margin: 0 auto"
+          >
+            <p
+              id="tlbl"
+              style="
+                color: var(--txt2);
+                font-size: 0.85rem;
+                margin-bottom: 4px;
+                font-weight: 600;
+              "
+            >
+              🔥 Focus Session
+            </p>
+            <div class="tdisp" id="tDisp">25:00</div>
+            <div class="tbtn-row">
+              <button class="btn acc" onclick="startT()">▶ Start</button>
+              <button class="btn sec" onclick="pauseT()">⏸ Pause</button>
+              <button class="btn sec" onclick="resetT()">↺ Reset</button>
+            </div>
+            <div class="mode-btns">
+              <button class="btn sm sec" onclick="setMode(25)">
+                25m Focus
+              </button>
+              <button class="btn sm sec" onclick="setMode(5)">5m Break</button>
+              <button class="btn sm sec" onclick="setMode(15)">
+                15m Break
+              </button>
+              <button class="btn sm sec" onclick="setMode(50)">50m Deep</button>
+            </div>
+            <p style="color: var(--txt2); font-size: 0.8rem; margin-top: 6px">
+              🍅 Sessions today: <strong id="sessC">0</strong>
+            </p>
+            <div class="music-p">
+              <div class="track" id="trackName">
+                Click 🎵 to start Lo-Fi music
+              </div>
+              <div class="mc">
+                <button
+                  class="btn sm sec"
+                  onclick="prevTrack()"
+                  title="Previous"
+                >
+                  ⏮
+                </button>
+                <button
+                  class="btn sm acc"
+                  id="musicBtn2"
+                  onclick="toggleMusic()"
+                >
+                  🎵 Lo-Fi
+                </button>
+                <button class="btn sm sec" onclick="nextTrack()" title="Next">
+                  ⏭
+                </button>
+                <select class="vibe-sel" id="vibeSel" onchange="changeVibe()">
+                  <option value="0">🌙 Chill Lo-Fi</option>
+                  <option value="1">🌧️ Rainy Vibes</option>
+                  <option value="2">⚡ Synthwave</option>
+                  <option value="3">🌿 Nature</option>
+                </select>
+              </div>
+            </div>
+          </div>
+        </section>
 
-        <section class="page-section" id="page-predictor"><h2>🔮 CBQ Predictor</h2><div class="card"><button onclick="runPrediction()">Run Prediction</button><div id="predictionOutput" style="margin-top:10px;"></div></div><div class="card"><textarea id="customTopicInput" placeholder="Topic..."></textarea><button onclick="generateCustomQuestions()">Generate CBQs</button><div id="customQOutput" style="margin-top:8px;"></div></div></section>
+        <!-- PYQ -->
+        <section class="sec" id="s-pyq">
+          <h2>📝 PYQ & Papers</h2>
+          <div class="card">
+            <div class="ai-tag">📝 Board Examiner AI · Llama 3.3-70B</div>
+            <div class="irow">
+              <select id="pyqYr"></select>
+              <select id="pyqType">
+                <option>Board Exam</option>
+                <option>Sample Paper</option>
+                <option>Pre-Board</option>
+                <option>Mock Test</option>
+              </select>
+              <button class="btn acc" onclick="genPYQ()">Generate ✨</button>
+            </div>
+            <div class="cbox" id="pyqOut">
+              <div class="cmsg ai" style="color: var(--txt2)">
+                Select year and type, then click Generate to get AI-crafted
+                board exam questions.
+              </div>
+            </div>
+            <div style="display: flex; gap: 8px; flex-wrap: wrap">
+              <button class="btn sm sec" onclick="dlPYQ('txt')">📄 .txt</button>
+              <button class="btn sm acc" onclick="dlPYQ('pdf')">📑 PDF</button>
+            </div>
+          </div>
+        </section>
 
-        <section class="page-section" id="page-notes"><h2>📒 Notes</h2><div class="card"><input type="text" id="noteTitle" placeholder="Title"><textarea id="noteContent" placeholder="Write..."></textarea><div style="display:flex;gap:6px;margin-top:8px;"><button onclick="saveNote()">💾</button><button onclick="clearNoteForm()" class="secondary">Clear</button><button onclick="exportNotesPDF()" class="accent btn-sm">PDF</button><button onclick="notesToQuiz()" class="accent btn-sm">→Quiz</button><button onclick="readNoteAloud()" class="btn-sm secondary">🔊</button></div></div><div id="notesList" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px;"></div></section>
+        <!-- CBQ PREDICTOR -->
+        <section class="sec" id="s-pred">
+          <h2>🔮 CBQ Predictor</h2>
+          <div class="card">
+            <div class="ai-tag">🔮 Exam Oracle AI</div>
+            <p
+              style="
+                color: var(--txt2);
+                font-size: 0.82rem;
+                margin-bottom: 12px;
+              "
+            >
+              Get AI-predicted high-probability questions for your upcoming
+              exams.
+            </p>
+            <button class="btn" onclick="runPred()">🔮 Run Prediction</button>
+            <div id="predOut" style="margin-top: 14px"></div>
+          </div>
+          <div class="card">
+            <h3>Custom CBQ Generator</h3>
+            <div class="irow">
+              <input
+                type="text"
+                id="cbqTopic"
+                placeholder="Enter specific topic or chapter..."
+              />
+              <button class="btn acc" onclick="genCBQ()">Generate CBQs</button>
+            </div>
+            <div id="cbqOut" style="margin-top: 8px"></div>
+          </div>
+        </section>
 
-        <section class="page-section" id="page-mindmap"><h2>🧩 Mind Map</h2><div class="card"><input type="text" id="mindmapTopic" placeholder="Central topic"><button onclick="generateMindMap()">Generate</button><div id="mindmapCanvas" style="position:relative;min-height:300px;border:1px dashed rgba(255,255,255,0.15);margin-top:10px;border-radius:16px;overflow:hidden;"></div></div></section>
+        <!-- NOTES -->
+        <section class="sec" id="s-notes">
+          <h2>📒 Notes Maker</h2>
+          <div class="card">
+            <div class="ai-tag">📒 Master Scribe AI</div>
+            <div class="irow">
+              <input type="text" id="nTitle" placeholder="Note title..." />
+            </div>
+            <textarea
+              id="nContent"
+              placeholder="Write your notes or paste content — AI will structure it for you..."
+              rows="5"
+            ></textarea>
+            <div
+              style="display: flex; gap: 8px; flex-wrap: wrap; margin-top: 12px"
+            >
+              <button class="btn" onclick="saveNote()">💾 Save</button>
+              <button class="btn acc" onclick="aiEnhNote()">
+                ✨ AI Enhance
+              </button>
+              <button class="btn sm sec" onclick="exportNPDF()">📑 PDF</button>
+              <button class="btn sm sec" onclick="note2Quiz()">→ Quiz</button>
+              <button class="btn sm sec" onclick="readNote()">🔊 Read</button>
+              <button class="btn sm sec" onclick="clearNote()">🗑 Clear</button>
+            </div>
+          </div>
+          <div class="notes-grid" id="notesList"></div>
+        </section>
 
-        <section class="page-section" id="page-quiz"><div class="card"><button onclick="startQuiz()">▶ Start Quiz</button><div id="quizArea" style="margin-top:10px;"></div><div id="quizResult"></div></div></section>
+        <!-- MIND MAP -->
+        <section class="sec" id="s-mm">
+          <h2>🧩 Mind Map</h2>
+          <div class="card">
+            <div class="ai-tag">🧩 Concept Mapper AI</div>
+            <div class="irow">
+              <input
+                type="text"
+                id="mmTopic"
+                placeholder="Enter topic (e.g. Photosynthesis, Quadratic Equations)..."
+              />
+              <button class="btn acc" onclick="genMM()">🧩 Generate</button>
+            </div>
+            <div class="mm-canvas" id="mmCanvas">
+              <div
+                style="
+                  position: absolute;
+                  top: 50%;
+                  left: 50%;
+                  transform: translate(-50%, -50%);
+                  color: var(--txt2);
+                  font-size: 0.85rem;
+                  text-align: center;
+                "
+              >
+                Enter a topic and click Generate to create a visual mind map
+              </div>
+            </div>
+          </div>
+        </section>
 
-        <section class="page-section" id="page-flashcards"><div class="card"><div style="display:flex;gap:6px;"><input type="text" id="fcFront" placeholder="Front"><input type="text" id="fcBack" placeholder="Back"><button onclick="addFlashcard()">➕</button></div></div><div class="flashcard" id="flashcardDisplay" onclick="flipFlashcard()"><div class="flashcard-inner"><div class="flashcard-front" id="fcFrontText">Add cards</div><div class="flashcard-back" id="fcBackText">Answer</div></div></div><div style="display:flex;gap:6px;justify-content:center;margin-top:6px;"><button onclick="prevFlashcard()" class="secondary btn-sm">◀</button><span id="fcCounter">0/0</span><button onclick="nextFlashcard()" class="secondary btn-sm">▶</button><button onclick="shuffleFlashcards()" class="btn-sm secondary">🔀</button></div></section>
+        <!-- QUIZ -->
+        <section class="sec" id="s-quiz">
+          <h2>❓ AI Quiz</h2>
+          <div class="card">
+            <div class="ai-tag">❓ Quiz Master AI</div>
+            <div class="irow">
+              <input
+                type="text"
+                id="quizTopic"
+                placeholder="Topic for quiz (or leave blank for current subject)..."
+              />
+              <button class="btn acc" onclick="genQuiz()">
+                🎯 Generate Quiz
+              </button>
+            </div>
+            <div id="quizArea" style="margin-top: 14px"></div>
+            <div
+              id="quizRes"
+              style="margin-top: 8px; font-weight: 700; font-size: 1rem"
+            ></div>
+          </div>
+        </section>
 
-        <section class="page-section" id="page-formulas"><div class="card"><h3>Subject: <strong id="formulaSubject"></strong></h3><button onclick="generateFormulaSheet()">Refresh</button><div id="formulaOutput" style="white-space:pre-wrap;font-family:'Courier New',monospace;background:rgba(255,255,255,0.05);padding:12px;border-radius:10px;max-height:380px;overflow-y:auto;margin-top:8px;"></div><button onclick="copyFormulas()" class="btn-sm secondary" style="margin-top:6px;">📋 Copy</button></div></section>
+        <!-- FLASHCARDS -->
+        <section class="sec" id="s-fc">
+          <h2>
+            🃏 Flash Cards
+            <span
+              id="fcCloud"
+              style="
+                font-size: 0.7rem;
+                color: var(--a);
+                font-weight: 600;
+                display: none;
+              "
+              >· ☁ Synced to cloud</span
+            >
+          </h2>
+          <div class="card">
+            <div class="irow">
+              <input type="text" id="fcF" placeholder="Front (Question)" />
+              <input type="text" id="fcB" placeholder="Back (Answer)" />
+              <button class="btn" onclick="addFC()">➕ Add</button>
+            </div>
+          </div>
+          <div class="fc" id="fcCard" onclick="flipFC()">
+            <div class="fci">
+              <div class="fcf" id="fcFText">Add your first card above!</div>
+              <div class="fcb" id="fcBText">Answer appears here</div>
+            </div>
+          </div>
+          <div
+            style="
+              display: flex;
+              gap: 8px;
+              justify-content: center;
+              align-items: center;
+              margin: 10px 0;
+              flex-wrap: wrap;
+            "
+          >
+            <button class="btn sm sec" onclick="prevFC()">◀ Prev</button>
+            <span
+              id="fcCnt"
+              style="
+                color: var(--txt2);
+                font-size: 0.8rem;
+                min-width: 50px;
+                text-align: center;
+              "
+              >0/0</span
+            >
+            <button class="btn sm sec" onclick="nextFC()">Next ▶</button>
+            <button class="btn sm sec" onclick="shuffleFC()">🔀 Shuffle</button>
+            <button class="btn sm dng" onclick="delFC()">🗑 Delete</button>
+          </div>
+          <div
+            id="fcAllList"
+            style="
+              margin-top: 10px;
+              display: grid;
+              grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+              gap: 8px;
+            "
+          ></div>
+        </section>
 
-        <section class="page-section" id="page-homework"><div class="card"><div style="display:flex;gap:6px;flex-wrap:wrap;"><input type="text" id="hwInput" placeholder="Task"><input type="date" id="hwDate"><button onclick="addHomework()">➕</button></div></div><div id="hwList"></div><p style="color:var(--text2);">✅ Done: <strong id="hwDoneCount">0</strong> | 📋 Pending: <strong id="hwPendingCount">0</strong></p></section>
+        <!-- FORMULAS -->
+        <section class="sec" id="s-form">
+          <h2>📐 Formula Sheet</h2>
+          <div class="card">
+            <div
+              style="
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                margin-bottom: 12px;
+                flex-wrap: wrap;
+                gap: 8px;
+              "
+            >
+              <h3 style="margin: 0">
+                Subject: <strong id="fSubj" style="color: var(--a)"></strong>
+              </h3>
+              <div style="display: flex; gap: 6px">
+                <button class="btn sm sec" onclick="copyForm()">📋 Copy</button>
+                <button class="btn sm acc" onclick="dlFormPDF()">📑 PDF</button>
+              </div>
+            </div>
+            <div class="fbox" id="fBox"></div>
+          </div>
+        </section>
 
-        <section class="page-section" id="page-doubts"><div class="card"><div class="chat-box" id="doubtChat"></div><div style="display:flex;gap:6px;"><input type="text" id="doubtInput" placeholder="Ask doubt..."><button onclick="askDoubt()">Send</button></div></div></section>
+        <!-- HOMEWORK -->
+        <section class="sec" id="s-hw">
+          <h2>✅ Homework Tracker</h2>
+          <div class="card">
+            <div class="irow">
+              <input type="text" id="hwT" placeholder="Task description..." />
+              <input
+                type="date"
+                id="hwD"
+                style="max-width: 160px; border-radius: 25px !important"
+              />
+              <select id="hwPri" style="max-width: 110px">
+                <option value="high">🔴 High</option>
+                <option value="med" selected>🟡 Med</option>
+                <option value="low">🟢 Low</option>
+              </select>
+              <button class="btn" onclick="addHW()">➕ Add</button>
+            </div>
+          </div>
+          <div id="hwList"></div>
+          <p style="color: var(--txt2); font-size: 0.82rem; margin-top: 6px">
+            ✅ Done: <strong id="hwDone">0</strong> · 📋 Pending:
+            <strong id="hwPend">0</strong>
+          </p>
+        </section>
 
-        <section class="page-section" id="page-weaknesses"><div class="card"><h3>Weak Topics</h3><div style="display:flex;gap:6px;"><input type="text" id="weakTopicInput" placeholder="Add topic"><button onclick="addWeakTopic()">➕</button></div><div id="weakTopicsList" style="margin-top:8px;"></div></div><div class="card"><button onclick="generateRevisionPlan()">Generate Revision Plan</button><div id="revisionPlanOutput" style="margin-top:8px;"></div></div></section>
+        <!-- AI DOUBTS -->
+        <section class="sec" id="s-doubts">
+          <h2>💬 AI Doubts</h2>
+          <div class="card">
+            <div class="ai-tag">
+              💬 Feynman Tutor · Explains Simply Then Deeply
+            </div>
+            <div class="cbox" id="dChat">
+              <div class="cmsg ai">
+                👋 Hi! I'm your AI tutor. Ask me anything from your
+                <strong>curriculum</strong> — I'll explain it simply first, then
+                go deeper. What's your doubt?
+              </div>
+            </div>
+            <div class="cinput">
+              <input
+                type="text"
+                id="dInput"
+                placeholder="Type your doubt..."
+                onkeydown="if(event.key==='Enter')askDoubt()"
+              />
+              <button class="btn acc" onclick="askDoubt()">Send 🚀</button>
+            </div>
+            <div class="voice-row">
+              <button
+                class="voice-btn"
+                id="voiceBtn"
+                onclick="toggleVoiceMode()"
+                title="Speak your doubt out loud"
+              >
+                <span class="mic-dot"></span>
+                <span id="voiceBtnLbl">🎙 Voice Mode</span>
+              </button>
+              <button
+                class="btn sm sec"
+                onclick="stopSpeaking()"
+                title="Stop the AI from speaking"
+              >
+                🔇 Stop voice
+              </button>
+              <span class="voice-status" id="voiceStatus"
+                >Tap to speak — I'll listen, then reply out loud.</span
+              >
+            </div>
+            <button
+              class="btn sm sec"
+              style="margin-top: 10px"
+              onclick="clearChat('dChat')"
+            >
+              🗑 Clear Chat
+            </button>
+          </div>
+        </section>
 
-        <section class="page-section" id="page-resources"><div class="card"><h3>Official Resources</h3><div id="boardResourcesList"></div></div></section>
+        <!-- WEAK AREAS -->
+        <section class="sec" id="s-weak">
+          <h2>📉 Weak Areas</h2>
+          <div class="card">
+            <h3>My Weak Topics</h3>
+            <div class="irow">
+              <input
+                type="text"
+                id="wkI"
+                placeholder="Add a weak topic..."
+                onkeydown="if(event.key==='Enter')addWk()"
+              />
+              <button class="btn" onclick="addWk()">➕ Add</button>
+            </div>
+            <div id="wkList"></div>
+          </div>
+          <div class="card">
+            <div class="ai-tag">📉 Recovery Coach AI</div>
+            <button class="btn acc" onclick="genRecovery()">
+              📅 Generate 3-Day Recovery Plan
+            </button>
+            <div id="wkOut" style="margin-top: 14px"></div>
+          </div>
+        </section>
 
-        <section class="page-section" id="page-strategies"><div class="card"><button onclick="generateStrategy()">Get Strategy</button><div id="strategyOutput" style="margin-top:10px;"></div></div><div class="card"><div id="pressureTips"></div><button onclick="showPressureTips()" class="btn-sm secondary">Refresh</button></div></section>
+        <!-- RESOURCES -->
+        <section class="sec" id="s-res">
+          <h2>🔗 Resources</h2>
+          <div class="card">
+            <h3 id="resTitle">Official Study Resources</h3>
+            <div class="res-grid" id="resGrid"></div>
+          </div>
+          <div class="card">
+            <h3>📺 Stay-On-Site Viewer</h3>
+            <p
+              style="color: var(--txt2); font-size: 0.8rem; margin-bottom: 8px"
+            >
+              Open syllabus PDFs and videos right inside StudyAI Pro — no
+              leaving the app.
+            </p>
+            <div class="irow">
+              <select id="embedPick" onchange="loadEmbed()">
+                <option value="">— Select a resource —</option>
+              </select>
+            </div>
+            <div class="iframe-wrap" id="embedWrap" style="display: none">
+              <iframe
+                id="embedFrame"
+                allow="autoplay; encrypted-media"
+                allowfullscreen
+                referrerpolicy="no-referrer"
+              ></iframe>
+            </div>
+          </div>
+          <div class="card">
+            <h3>🎥 Recommended YouTube Channels</h3>
+            <div class="res-grid" id="ytGrid"></div>
+          </div>
+        </section>
 
-        <section class="page-section" id="page-motivation"><div class="card" style="text-align:center;"><h3 id="motivationQuote"></h3><p id="motivationAuthor"></p><button onclick="newMotivationQuote()">New Quote</button></div></section>
+        <!-- STRATEGIES -->
+        <section class="sec" id="s-strat">
+          <h2>🎯 Study Strategies</h2>
+          <div class="card">
+            <div class="ai-tag">🎯 Strategy Architect AI</div>
+            <p
+              style="
+                color: var(--txt2);
+                font-size: 0.82rem;
+                margin-bottom: 12px;
+              "
+            >
+              Get a personalized study strategy based on your board, class, and
+              subject.
+            </p>
+            <button class="btn" onclick="genStrat()">🎯 Get My Strategy</button>
+            <div id="stratOut" style="margin-top: 14px"></div>
+          </div>
+          <div class="card">
+            <h3>😌 Exam Pressure Tips</h3>
+            <div id="pressOut"></div>
+            <button
+              class="btn sm sec"
+              style="margin-top: 10px"
+              onclick="showPressure()"
+            >
+              🔄 Refresh Tips
+            </button>
+          </div>
+        </section>
+
+        <!-- MOTIVATION -->
+        <section class="sec" id="s-motiv">
+          <h2>🔥 Motivation</h2>
+          <div
+            class="card"
+            style="text-align: center; max-width: 520px; margin: 0 auto 16px"
+          >
+            <div style="font-size: 2.6rem; margin-bottom: 12px" id="mEmoji">
+              🌟
+            </div>
+            <h3
+              id="mQ"
+              style="
+                font-size: 1.18rem;
+                font-weight: 700;
+                line-height: 1.5;
+                margin-bottom: 8px;
+              "
+            >
+              "Success is not final, failure is not fatal."
+            </h3>
+            <p id="mA" style="color: var(--txt2); font-size: 0.85rem">
+              — Winston Churchill
+            </p>
+            <button
+              class="btn acc3"
+              style="margin-top: 14px"
+              onclick="newQuote()"
+            >
+              ✨ New Quote
+            </button>
+            <button
+              class="btn sec sm"
+              style="margin-top: 8px; margin-left: 6px"
+              onclick="aiMotivate()"
+            >
+              🤖 AI Motivate Me
+            </button>
+          </div>
+          <div
+            class="card"
+            id="aiMotivCard"
+            style="display: none; max-width: 520px; margin: 0 auto"
+          >
+            <div class="ai-tag">🔥 Personal AI Motivator</div>
+            <div id="motivOut"></div>
+          </div>
+        </section>
+      </div>
+      <!-- /inner -->
+    </div>
+    <!-- /cnt -->
+
+    <!-- FOCUS / ZEN OVERLAY -->
+    <div class="fov" id="fov">
+      <button
+        class="btn dng ico"
+        onclick="toggleFocus()"
+        style="position: absolute; top: 16px; right: 16px"
+      >
+        ✕
+      </button>
+      <div class="tdisp" id="fTDisp">25:00</div>
+      <p style="color: var(--txt2); font-size: 0.85rem">
+        Zen Mode — all distractions hidden
+      </p>
+      <textarea
+        id="fTask"
+        placeholder="What are you focusing on right now?"
+        rows="3"
+        oninput="S.focusTask=this.value;sv()"
+      ></textarea>
+      <div class="tbtn-row">
+        <button class="btn acc" onclick="startT()">▶ Start</button>
+        <button class="btn sec" onclick="pauseT()">⏸</button>
+        <button class="btn sec" onclick="resetT()">↺</button>
+      </div>
     </div>
 
-    <div class="focus-overlay" id="focusOverlay">
-        <button class="exit-focus danger" onclick="toggleFocusMode()" style="position:absolute;top:16px;right:16px;">✕</button>
-        <div class="timer-display" id="focusTimerDisplay">25:00</div>
-        <textarea id="focusTaskInput" placeholder="What are you focusing on?" oninput="saveFocusTask()"></textarea>
+    <!-- EXAM MODAL -->
+    <div class="modal" id="examM">
+      <div class="mbox">
+        <h3>📅 Set Exam Date</h3>
+        <input type="date" id="examD" />
+        <div class="mbtns">
+          <button class="btn" onclick="saveExam()">Save</button>
+          <button class="btn sec" onclick="closeModal('examM')">Cancel</button>
+        </div>
+      </div>
     </div>
-    <div class="modal" id="examModal"><div class="modal-content"><h3>Set Exam Date</h3><input type="date" id="examDateInput" style="width:100%;margin:12px 0;"><button onclick="saveExamDate()">Save</button><button onclick="closeExamModal()" class="secondary">Cancel</button></div></div>
-    <audio id="lofiAudio" loop preload="auto" style="display:none;"></audio>
-    <div class="toast" id="toast" style="display:none;"></div>
+
+    <!-- AI KEY MODAL -->
+    <div class="modal" id="aiM">
+      <div class="mbox">
+        <h3>🔑 Groq API Setup</h3>
+        <p>
+          Enter your <strong>Groq API Key</strong> to power all AI features
+          (free tier available). Stored locally in your browser only.
+        </p>
+        <input type="password" id="akIn" placeholder="gsk_..." />
+        <p style="font-size: 0.72rem; color: var(--txt2); margin-top: 6px">
+          Get a free key at
+          <a
+            href="https://console.groq.com/keys"
+            target="_blank"
+            style="color: var(--a)"
+            >console.groq.com/keys</a
+          >
+        </p>
+        <div class="mbtns">
+          <button class="btn acc" onclick="saveAK()">✅ Enable AI</button>
+          <button class="btn sec" onclick="closeModal('aiM')">Later</button>
+          <button class="btn sm dng" onclick="clearAK()">Clear Key</button>
+        </div>
+      </div>
+    </div>
+
+    <audio id="aud" preload="none" style="display: none"></audio>
+    <div id="toast" class="toast suc" style="display: none"></div>
 
     <script>
-        (function(){
-            const DEF={board:'CBSE',studentClass:'10',subject:'Mathematics',theme:'dark',timer:{seconds:1500,mode:25,running:false,interval:null,sessionsToday:0},stats:{studyHours:0,quizzes:0,hwDone:0,streak:0},dailySessions:{},lastActiveDate:null,lofiPlaying:false,notes:[],homework:[],flashcards:[],examDate:null,weakTopics:[],quickTasks:[],fcIndex:0,focusTask:'',currentTrackIndex:0};
-            let S=JSON.parse(localStorage.getItem('studyAIState'))||DEF;
-            S.stats={...DEF.stats,...S.stats};S.timer={...DEF.timer,...S.timer};S.dailySessions=S.dailySessions||{};S.notes=S.notes||[];S.homework=S.homework||[];S.flashcards=S.flashcards||[];S.weakTopics=S.weakTopics||[];S.quickTasks=S.quickTasks||[];
-            const save=()=>{try{localStorage.setItem('studyAIState',JSON.stringify(S));}catch(e){}};
-            const $=id=>document.getElementById(id);
-            let toastTimer;
-            const toast=msg=>{const t=$('toast');t.textContent=msg;t.style.display='block';t.style.animation='none';t.offsetHeight;t.style.animation='toastIn 0.35s ease,toastOut 0.35s ease 2.2s forwards';clearTimeout(toastTimer);toastTimer=setTimeout(()=>{t.style.display='none';},2400);};
+      (function () {
+        "use strict";
 
-            // Music playlist (royalty-free Lo-Fi tracks)
-            const playlist = [
-                { title: "Lofi Study", src: "https://cdn.pixabay.com/download/audio/2022/05/27/audio_1808fbf07a.mp3" },
-                { title: "Ambient Flow", src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" },
-                { title: "Chill Beat", src: "https://cdn.pixabay.com/download/audio/2022/01/18/audio_69cc1e5c6d.mp3" },
-                { title: "Gentle Rain", src: "https://cdn.pixabay.com/download/audio/2022/03/15/audio_9b3c6e9e2d.mp3" }
-            ];
+        /* ═══════════════════════════════════════════════════════════════════════════
+         * AI_CONFIG — Paste your keys ONCE and never see the popup again.
+         * (Whatever you put here is loaded automatically on every visit.)
+         * IMPORTANT: any keys you embed are visible to anyone who opens the file
+         * in a browser, so only use this on your own personal machine. Rotate
+         * your keys at console.groq.com / Firebase if you ever share the file.
+         * ═══════════════════════════════════════════════════════════════════════════ */
+        const AI_CONFIG = {
+          // Groq (Llama 3.3-70B) — paste your own gsk_... key between the quotes
+          GROQ_API_KEY: "",
+          GROQ_MODEL: "llama-3.3-70b-versatile",
+          // Firebase Web App config (Project Settings → Your apps → Web)
+          FIREBASE: {
+            apiKey: "YOUR_FIREBASE_API_KEY",
+            authDomain: "YOUR_PROJECT.firebaseapp.com",
+            projectId: "YOUR_PROJECT_ID",
+            storageBucket: "YOUR_PROJECT.appspot.com",
+            messagingSenderId: "YOUR_SENDER_ID",
+            appId: "YOUR_APP_ID",
+          },
+        };
+        // Backwards-compat aliases used elsewhere in the file
+        const FIREBASE_CONFIG = AI_CONFIG.FIREBASE;
+        const GROQ_MODEL = AI_CONFIG.GROQ_MODEL;
+        const GROQ_API_KEY_DEFAULT = AI_CONFIG.GROQ_API_KEY;
 
-            const audio=$('lofiAudio');
-            let currentTrack = S.currentTrackIndex || 0;
-
-            function loadTrack(index) {
-                if (index >= playlist.length) index = 0;
-                if (index < 0) index = playlist.length - 1;
-                currentTrack = index;
-                S.currentTrackIndex = index;
-                const track = playlist[index];
-                audio.src = track.src;
-                audio.load();
-                $('nowPlaying').textContent = '🎧 ' + track.title;
-                save();
+        /* ── STATE ──────────────────────────────────────────────────────────────── */
+        const DEF = {
+          board: "CBSE",
+          cls: "10",
+          sub: "Mathematics",
+          theme: "dark",
+          timer: { sec: 1500, mode: 25, running: false, sessToday: 0 },
+          stats: { hours: 0, quizzes: 0, hwDone: 0, streak: 0 },
+          sessions: {},
+          lastDate: null,
+          notes: [],
+          hw: [],
+          fc: [],
+          wk: [],
+          qt: [],
+          fcIdx: 0,
+          examDate: null,
+          focusTask: "",
+          lofi: false,
+          vibe: 0,
+          track: 0,
+        };
+        let S = {
+          ...DEF,
+          ...(() => {
+            try {
+              return JSON.parse(localStorage.getItem("sap_v4")) || {};
+            } catch (e) {
+              return {};
             }
+          })(),
+        };
+        S.timer = { ...DEF.timer, ...(S.timer || {}) };
+        S.stats = { ...DEF.stats, ...(S.stats || {}) };
+        ["notes", "hw", "fc", "wk", "qt"].forEach((k) => {
+          if (!Array.isArray(S[k])) S[k] = [];
+        });
+        S.sessions = S.sessions || {};
+        const sv = () => {
+          try {
+            localStorage.setItem("sap_v4", JSON.stringify(S));
+          } catch (e) {}
+        };
+        const $ = (id) => document.getElementById(id);
 
-            function playTrackWithRetry() {
-                audio.play().then(() => {
-                    S.lofiPlaying = true;
-                    $('musicToggleBtn').textContent = '⏸️';
-                    $('lofiInlineBtn').textContent = '⏸️ Lo‑Fi';
-                    $('nowPlaying').textContent = '🎧 ' + playlist[currentTrack].title;
-                }).catch(() => {
-                    // fallback to next track
-                    toast('⚠️ Track failed, trying next...');
-                    nextTrack();
-                });
+        /* ── AUTH STATE ─────────────────────────────────────────────────────────── */
+        let currentUser = null;
+        let fbAuth = null,
+          fbDB = null;
+        let fcUnsub = null;
+
+        /* ── TOAST ──────────────────────────────────────────────────────────────── */
+        let tTm;
+        const toast = (msg, type = "suc") => {
+          const t = $("toast");
+          t.textContent = msg;
+          t.className = `toast ${type}`;
+          t.style.display = "block";
+          clearTimeout(tTm);
+          tTm = setTimeout(() => (t.style.display = "none"), 2800);
+        };
+
+        /* ═══════════════════════════════════════════════════════════════════════════
+         * AI PERSONALITIES — system prompts that change by section
+         * ═══════════════════════════════════════════════════════════════════════════ */
+        const PERS = {
+          notes: {
+            name: "Master Scribe",
+            sys: `You are the Master Scribe — an expert at creating structured study notes for Indian board exams.
+Transform any input into beautifully structured notes:
+## [Topic Title]
+**Key Concepts:** (bullet points)
+**Important Definitions:** (key terms explained simply)
+**Formulas/Dates/Facts:** (highlighted)
+**Memory Tricks:** (mnemonics)
+**Key Terms Summary:** (3-6 must-know terms with one-line definitions)
+**Exam Tips:** (what examiners look for)
+Concise but complete for board exam preparation.`,
+          },
+
+          pyq: {
+            name: "Board Examiner",
+            sys: `You are a senior Board Examiner creating authentic exam papers for Indian board exams.
+Generate questions with proper mark allocation:
+**1-mark questions:** MCQs and very short answers (3-4 questions)
+**2-mark questions:** Short answer (2 questions)
+**3-mark questions:** Application-based (2 questions)
+**5-mark questions:** Long answer or case study (1-2 questions)
+Match the exact style, language and difficulty of official board papers from the requested year.
+Start with a header containing board, class, subject, and year.`,
+          },
+
+          pred: {
+            name: "Exam Oracle",
+            sys: `You are an Exam Oracle analyzing Indian board exam patterns.
+For the given board/class/subject, predict:
+1. **Top 5 Most Likely Topics** with probability %
+2. **3 High-Probability CBQs** (with model answers)
+3. **Chapter Priority Ranking** (most to least important)
+4. **Common Pitfalls** (what students get wrong)
+Be specific, data-driven, and genuinely helpful for last-minute prep.`,
+          },
+
+          doubts: {
+            name: "Feynman Tutor",
+            sys: `You are a brilliant teacher using the Feynman Technique. For every question, structure your answer as:
+
+**🟢 Simple Explanation** (explain like the student is 12, no jargon)
+**📚 Academic Answer** (proper terminology and detail for board exams)
+**🌍 Real-World Analogy** (a relatable everyday example)
+**⚠️ Common Mistake** (what students usually get wrong)
+**💡 Memory Trick** (a quick way to remember for exams)
+
+Focus on CBSE/ICSE Class 9-12 curriculum. Be warm, clear, encouraging and board-exam focused.`,
+          },
+
+          weak: {
+            name: "Recovery Coach",
+            sys: `You are a Study Recovery Coach. Create a targeted 3-day recovery plan for weak topics.
+
+**📅 DAY 1 — Foundation (2-3 hrs)**
+- Hour 1: [specific activity]
+- Hour 2: [specific activity]
+
+**📅 DAY 2 — Practice (2-3 hrs)**
+- Hour 1: [specific activity]
+- Hour 2: [specific activity]
+
+**📅 DAY 3 — Mastery + Mock (2-3 hrs)**
+- Hour 1: [specific activity]
+- Hour 2: [specific activity]
+- Quick self-test checklist
+
+Include: NCERT chapters, specific YouTube searches, practice question types. Be realistic and motivating.`,
+          },
+
+          mm: {
+            name: "Concept Mapper",
+            sys: `Return ONLY valid JSON (no markdown, no extra text) for a mind map:
+{"center":"Topic Name","branches":[{"label":"Branch","color":"#hex","children":["sub1","sub2","sub3"]}]}
+Use 4-6 branches each with 2-4 children. Short labels (2-4 words).`,
+          },
+
+          quiz: {
+            name: "Quiz Master",
+            sys: `Return ONLY a valid JSON array (no markdown, no explanation, no code fences):
+[{"q":"Question?","opts":["A","B","C","D"],"ans":0,"exp":"Why correct"}]
+Generate exactly 5 multiple choice questions. ans is 0-indexed. Make them board-exam style with good distractors.`,
+          },
+
+          strat: {
+            name: "Strategy Architect",
+            sys: `You are a Study Strategy Architect for Indian board exam students. Provide:
+📅 **Weekly Timetable** (subject-wise daily plan)
+📊 **Topic Priority Matrix** (high/medium/low priority)
+✍️ **Answer Writing Tips** (score maximum marks)
+🧠 **Memory Techniques** (spaced repetition, mind maps)
+😌 **Exam Day Tips** (dos and don'ts)
+Be practical, specific to the board/class, results-focused.`,
+          },
+
+          motiv: {
+            name: "Personal Motivator",
+            sys: `You are an inspiring personal coach for an Indian board exam student.
+Give a personalized motivational message (150-200 words) that:
+- Acknowledges the hard work
+- Addresses common exam anxiety
+- Uses a powerful analogy or metaphor
+- Ends with a strong actionable affirmation
+- Is warm, real, never preachy
+Be genuine and uplifting.`,
+          },
+        };
+
+        /* ═══════════════════════════════════════════════════════════════════════════
+         * GROQ AI — single global call function. Auto-detects active tab via persona.
+         * ═══════════════════════════════════════════════════════════════════════════ */
+        async function callAI(prompt, persona = "doubts") {
+          const key =
+            localStorage.getItem("sap_groq_key") || GROQ_API_KEY_DEFAULT;
+          if (!key) {
+            openAISetup();
+            toast("🔑 Add Groq API key first", "inf");
+            return null;
+          }
+          const p = PERS[persona] || PERS.doubts;
+          const ctx = `[Board: ${S.board}, Class: ${S.cls}, Subject: ${S.sub}]`;
+          try {
+            const r = await fetch(
+              "https://api.groq.com/openai/v1/chat/completions",
+              {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                  Authorization: "Bearer " + key,
+                },
+                body: JSON.stringify({
+                  model: GROQ_MODEL,
+                  temperature: 0.6,
+                  max_tokens: 2048,
+                  messages: [
+                    { role: "system", content: p.sys + "\n\n" + ctx },
+                    { role: "user", content: prompt },
+                  ],
+                }),
+              },
+            );
+            if (!r.ok) {
+              const e = await r.json().catch(() => ({}));
+              throw new Error(e.error?.message || "API " + r.status);
             }
+            const d = await r.json();
+            return d.choices?.[0]?.message?.content || "No response.";
+          } catch (e) {
+            toast("⚠️ " + e.message, "err");
+            return null;
+          }
+        }
 
-            window.toggleMusic = () => {
-                if (S.lofiPlaying) {
-                    audio.pause();
-                    S.lofiPlaying = false;
-                    $('musicToggleBtn').textContent = '🎵';
-                    $('lofiInlineBtn').textContent = '🎵 Lo‑Fi';
-                    $('nowPlaying').textContent = 'Music paused';
-                } else {
-                    if (!audio.src || audio.src === window.location.href) {
-                        loadTrack(currentTrack);
-                    }
-                    playTrackWithRetry();
-                }
-                save();
-            };
+        /* Detects current active tab, then calls AI with that persona */
+        async function getAIResponse(input) {
+          const active =
+            document.querySelector(".sec.on")?.id?.replace("s-", "") ||
+            "doubts";
+          const map = {
+            dash: "doubts",
+            timer: "doubts",
+            pyq: "pyq",
+            pred: "pred",
+            notes: "notes",
+            mm: "mm",
+            quiz: "quiz",
+            fc: "doubts",
+            form: "doubts",
+            hw: "doubts",
+            doubts: "doubts",
+            weak: "weak",
+            res: "doubts",
+            strat: "strat",
+            motiv: "motiv",
+          };
+          return callAI(input, map[active] || "doubts");
+        }
+        window.getAIResponse = getAIResponse;
 
-            window.nextTrack = () => {
-                currentTrack = (currentTrack + 1) % playlist.length;
-                loadTrack(currentTrack);
-                if (S.lofiPlaying) {
-                    playTrackWithRetry();
-                }
-            };
+        function showLoader(elId) {
+          $(elId).innerHTML =
+            `<div class="cmsg ai"><div class="typing"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div></div>`;
+        }
+        function fmtAI(txt) {
+          if (!txt) return "";
+          return String(txt)
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;")
+            .replace(/^### (.*)$/gm, "<h3>$1</h3>")
+            .replace(/^## (.*)$/gm, "<h2>$1</h2>")
+            .replace(/^# (.*)$/gm, "<h1>$1</h1>")
+            .replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>")
+            .replace(/\*(.*?)\*/g, "<em>$1</em>")
+            .replace(/`(.*?)`/g, "<code>$1</code>")
+            .replace(/^- (.*)$/gm, "<li>$1</li>")
+            .replace(/^\d+\. (.*)$/gm, "<li>$1</li>")
+            .replace(/(<li>.*?<\/li>)(\s*<li>)/g, "$1$2")
+            .replace(/\n\n/g, "<br><br>")
+            .replace(/\n/g, "<br>");
+        }
 
-            // When a track ends, play the next one automatically
-            audio.addEventListener('ended', () => {
-                currentTrack = (currentTrack + 1) % playlist.length;
-                loadTrack(currentTrack);
-                if (S.lofiPlaying) {
-                    playTrackWithRetry();
-                }
+        /* ── API KEY ────────────────────────────────────────────────────────────── */
+        window.openAISetup = () => {
+          const k = localStorage.getItem("sap_groq_key");
+          if (k) $("akIn").value = k;
+          openModal("aiM");
+        };
+        window.saveAK = () => {
+          const v = $("akIn").value.trim();
+          if (!v || !v.startsWith("gsk_"))
+            return toast("⚠️ Groq keys start with gsk_", "err");
+          localStorage.setItem("sap_groq_key", v);
+          closeModal("aiM");
+          toast("✅ AI enabled! Powered by Llama 3.3-70B 🚀");
+        };
+        window.clearAK = () => {
+          localStorage.removeItem("sap_groq_key");
+          $("akIn").value = "";
+          toast("Key cleared", "inf");
+        };
+
+        /* ── MODALS ─────────────────────────────────────────────────────────────── */
+        const openModal = (id) => $(id).classList.add("on");
+        const closeModal = (id) => $(id).classList.remove("on");
+        window.closeModal = closeModal;
+        window.openExam = () => {
+          if (S.examDate) $("examD").value = S.examDate;
+          openModal("examM");
+        };
+        window.saveExam = () => {
+          const v = $("examD").value;
+          if (v) {
+            S.examDate = v;
+            sv();
+            updExam();
+            toast("📅 Saved");
+          }
+          closeModal("examM");
+        };
+
+        /* ── THEME ──────────────────────────────────────────────────────────────── */
+        window.toggleTheme = () => {
+          document.body.classList.toggle("light");
+          S.theme = document.body.classList.contains("light")
+            ? "light"
+            : "dark";
+          sv();
+        };
+
+        /* ── SIDEBAR ────────────────────────────────────────────────────────────── */
+        window.toggleSB = () => {
+          const sb = $("sb"),
+            bd = $("bdp"),
+            ct = $("cnt");
+          const isMob = window.innerWidth < 768;
+          if (isMob) {
+            sb.classList.toggle("mob-on");
+            bd.classList.toggle("on");
+          } else {
+            const off = sb.classList.toggle("off");
+            ct.classList.toggle("wide", off);
+          }
+        };
+        window.closeSB = () => {
+          $("sb").classList.remove("mob-on");
+          $("bdp").classList.remove("on");
+        };
+
+        /* ── NAVIGATION ─────────────────────────────────────────────────────────── */
+        window.go = (name) => {
+          document
+            .querySelectorAll(".sec")
+            .forEach((s) => s.classList.remove("on"));
+          document
+            .querySelectorAll(".nav")
+            .forEach((n) => n.classList.remove("on"));
+          const sec = $("s-" + name);
+          if (sec) sec.classList.add("on");
+          const nav = document.querySelector(`.nav[data-p="${name}"]`);
+          if (nav) nav.classList.add("on");
+          window.scrollTo(0, 0);
+          if (name === "dash") refreshDash();
+          if (name === "form") renderForm();
+          if (name === "res") renderRes();
+          if (window.innerWidth < 768) closeSB();
+          setTimeout(() => {
+            if (wChart) wChart.resize();
+          }, 350);
+        };
+
+        /* ── CONTEXT SELECTS ────────────────────────────────────────────────────── */
+        window.saveCtx = () => {
+          S.board = $("brd").value;
+          S.cls = $("cls").value;
+          S.sub = $("sub").value;
+          sv();
+          refreshDash();
+          renderForm();
+          renderRes();
+        };
+
+        /* ═══════════════════════════════════════════════════════════════════════════
+         * DASHBOARD
+         * ═══════════════════════════════════════════════════════════════════════════ */
+        function refreshDash() {
+          $("d-brd").textContent = S.board;
+          $("d-cls").textContent = S.cls;
+          $("d-sub").textContent = S.sub;
+          $("sgrid").innerHTML = `
+    <div class="scard"><div class="snum">${(S.stats.hours || 0).toFixed(1)}</div><div class="slbl">📖 Study Hrs</div></div>
+    <div class="scard"><div class="snum">${S.stats.quizzes || 0}</div><div class="slbl">❓ Quizzes Done</div></div>
+    <div class="scard"><div class="snum">${S.stats.hwDone || 0}</div><div class="slbl">✅ HW Done</div></div>
+    <div class="scard"><div class="snum">${S.stats.streak || 0}</div><div class="slbl">🔥 Day Streak</div></div>
+    <div class="scard"><div class="snum">${S.notes.length || 0}</div><div class="slbl">📒 Notes</div></div>
+    <div class="scard"><div class="snum">${S.fc.length || 0}</div><div class="slbl">🃏 Flashcards</div></div>
+  `;
+          $("sessC").textContent = S.timer.sessToday || 0;
+          updExam();
+          renderQT();
+          updChart();
+        }
+        function updExam() {
+          if (!S.examDate) {
+            $("cd-exam").style.display = "none";
+            return;
+          }
+          const diff = Math.ceil(
+            (new Date(S.examDate) - new Date()) / 86400000,
+          );
+          $("cd-exam").style.display = "block";
+          $("cd-days").textContent =
+            diff > 0 ? diff : diff === 0 ? "Today!" : "Passed";
+          const pct = Math.max(0, Math.min(100, 100 - (diff / 90) * 100));
+          $("cd-prog").style.width = pct + "%";
+        }
+
+        /* ── QUICK TASKS ────────────────────────────────────────────────────────── */
+        window.addQT = () => {
+          const v = $("qtI").value.trim();
+          if (!v) return;
+          S.qt.push({ t: v, d: false });
+          $("qtI").value = "";
+          sv();
+          renderQT();
+        };
+        window.tgQT = (i) => {
+          S.qt[i].d = !S.qt[i].d;
+          sv();
+          renderQT();
+        };
+        window.delQT = (i) => {
+          S.qt.splice(i, 1);
+          sv();
+          renderQT();
+        };
+        function renderQT() {
+          $("qtList").innerHTML = S.qt.length
+            ? S.qt
+                .map(
+                  (t, i) => `<div class="item ${t.d ? "dn" : ""}">
+        <input type="checkbox" ${t.d ? "checked" : ""} onchange="tgQT(${i})">
+        <span style="flex:1;">${escapeHtml(t.t)}</span>
+        <button class="btn sm dng" onclick="delQT(${i})">✕</button></div>`,
+                )
+                .join("")
+            : '<p style="color:var(--txt2);font-size:0.82rem;">No tasks yet. Add one above!</p>';
+        }
+
+        /* ── CHART ──────────────────────────────────────────────────────────────── */
+        let wChart;
+        function initChart() {
+          const ctx = $("wChart").getContext("2d");
+          const g = ctx.createLinearGradient(0, 0, 0, 240);
+          g.addColorStop(0, "rgba(124,107,239,0.85)");
+          g.addColorStop(1, "rgba(0,212,204,0.3)");
+          wChart = new Chart(ctx, {
+            type: "bar",
+            data: {
+              labels: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
+              datasets: [
+                {
+                  data: [0, 0, 0, 0, 0, 0, 0],
+                  backgroundColor: g,
+                  borderColor: "#7c6bef",
+                  borderWidth: 2,
+                  borderRadius: 8,
+                  borderSkipped: false,
+                },
+              ],
+            },
+            options: {
+              responsive: true,
+              maintainAspectRatio: false,
+              plugins: {
+                legend: { display: false },
+                tooltip: {
+                  callbacks: { label: (d) => `${d.raw.toFixed(1)} hrs` },
+                },
+              },
+              scales: {
+                y: {
+                  beginAtZero: true,
+                  ticks: { color: "#8888aa", font: { family: "Outfit" } },
+                  grid: { color: "rgba(255,255,255,0.04)" },
+                },
+                x: {
+                  ticks: { color: "#8888aa", font: { family: "Outfit" } },
+                  grid: { display: false },
+                },
+              },
+            },
+          });
+        }
+        function updChart() {
+          if (!wChart) return;
+          const mon = new Date();
+          mon.setDate(mon.getDate() - ((mon.getDay() + 6) % 7));
+          const data = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"].map(
+            (_, i) => {
+              const d = new Date(mon);
+              d.setDate(mon.getDate() + i);
+              return (S.sessions[d.toLocaleDateString()] || 0) * 0.4;
+            },
+          );
+          wChart.data.datasets[0].data = data;
+          wChart.update();
+        }
+        function addStudyHours(h) {
+          const today = new Date().toLocaleDateString();
+          S.sessions[today] = (S.sessions[today] || 0) + 1;
+          S.stats.hours = (S.stats.hours || 0) + h;
+          const yd = new Date(Date.now() - 86400000).toLocaleDateString();
+          if (S.lastDate === yd) S.stats.streak = (S.stats.streak || 0) + 1;
+          else if (S.lastDate !== today) S.stats.streak = 1;
+          S.lastDate = today;
+          sv();
+          refreshDash();
+          // Push study_streak + total_hours to Firestore (debounced)
+          if (window.saveCloudStats) window.saveCloudStats();
+        }
+
+        /* ═══════════════════════════════════════════════════════════════════════════
+         * TIMER
+         * ═══════════════════════════════════════════════════════════════════════════ */
+        function updTDisp() {
+          const m = String(Math.floor(S.timer.sec / 60)).padStart(2, "0");
+          const s = String(S.timer.sec % 60).padStart(2, "0");
+          const str = `${m}:${s}`;
+          $("tDisp").textContent = str;
+          $("fTDisp").textContent = str;
+        }
+        window.setMode = (min) => {
+          S.timer = { ...S.timer, mode: min, sec: min * 60, running: false };
+          clearInterval(S.timer.iv);
+          $("tlbl").textContent =
+            min >= 25 ? "🔥 Focus Session" : "☕ Break Time";
+          sv();
+          updTDisp();
+        };
+        window.startT = () => {
+          if (S.timer.running) return;
+          S.timer.running = true;
+          S.timer.iv = setInterval(() => {
+            if (S.timer.sec > 0) {
+              S.timer.sec--;
+              updTDisp();
+            } else {
+              clearInterval(S.timer.iv);
+              S.timer.running = false;
+              if (S.timer.mode >= 25) {
+                S.timer.sessToday++;
+                addStudyHours(0.4);
+                toast("🎉 Session done! +0.4h");
+              } else toast("☕ Break over! Back to work.");
+              $("tlbl").textContent = "✅ Done!";
+              try {
+                new Audio(
+                  "https://cdn.pixabay.com/download/audio/2022/09/07/audio_edd4bb9ac4.mp3",
+                ).play();
+              } catch (e) {}
+            }
+          }, 1000);
+          sv();
+        };
+        window.pauseT = () => {
+          S.timer.running = false;
+          clearInterval(S.timer.iv);
+          sv();
+        };
+        window.resetT = () => {
+          S.timer.running = false;
+          clearInterval(S.timer.iv);
+          S.timer.sec = S.timer.mode * 60;
+          updTDisp();
+          sv();
+        };
+
+        /* ═══════════════════════════════════════════════════════════════════════════
+         * INFINITE LO-FI MUSIC ENGINE — royalty-free, ad-free
+         * ═══════════════════════════════════════════════════════════════════════════ */
+        const VIBES = [
+          {
+            name: "🌙 Chill Lo-Fi",
+            tracks: [
+              {
+                t: "Lofi Study",
+                s: "https://cdn.pixabay.com/download/audio/2023/10/12/audio_1808fbf07a.mp3?filename=lofi-study-112191.mp3",
+              },
+              {
+                t: "Coffee Shop",
+                s: "https://cdn.pixabay.com/download/audio/2024/01/05/audio_d1718beefe.mp3?filename=coffee-shop-181970.mp3",
+              },
+              {
+                t: "Chill Hop",
+                s: "https://cdn.pixabay.com/download/audio/2022/05/27/audio_1808fbf07a.mp3",
+              },
+              {
+                t: "Midnight Study",
+                s: "https://cdn.pixabay.com/download/audio/2022/03/15/audio_c8e2cfa0e0.mp3",
+              },
+              {
+                t: "Calm Beats",
+                s: "https://cdn.pixabay.com/download/audio/2023/06/19/audio_4a32b7e4ab.mp3",
+              },
+              {
+                t: "Late Night Vibes",
+                s: "https://cdn.pixabay.com/download/audio/2024/02/04/audio_734c4b6e88.mp3",
+              },
+            ],
+          },
+          {
+            name: "🌧️ Rainy Vibes",
+            tracks: [
+              {
+                t: "Rain & Piano",
+                s: "https://cdn.pixabay.com/download/audio/2022/03/15/audio_1cd55a90d2.mp3",
+              },
+              {
+                t: "Soft Rain",
+                s: "https://cdn.pixabay.com/download/audio/2022/10/30/audio_347111d654.mp3",
+              },
+            ],
+          },
+          {
+            name: "⚡ Synthwave",
+            tracks: [
+              {
+                t: "Retro Wave",
+                s: "https://cdn.pixabay.com/download/audio/2022/08/04/audio_2dde668d05.mp3",
+              },
+              {
+                t: "Neon Drive",
+                s: "https://cdn.pixabay.com/download/audio/2022/11/22/audio_febc508a42.mp3",
+              },
+            ],
+          },
+          {
+            name: "🌿 Nature",
+            tracks: [
+              {
+                t: "Forest Ambient",
+                s: "https://cdn.pixabay.com/download/audio/2022/03/10/audio_d20c0d29d4.mp3",
+              },
+              {
+                t: "Flowing Creek",
+                s: "https://cdn.pixabay.com/download/audio/2021/10/25/audio_94fd0eddf5.mp3",
+              },
+            ],
+          },
+        ];
+        const aud = $("aud");
+        function loadTrack() {
+          const vibe = VIBES[S.vibe] || VIBES[0];
+          const track = vibe.tracks[S.track % vibe.tracks.length];
+          aud.src = track.s;
+          aud.load();
+          $("trackName").textContent = "🎧 " + track.t + " · " + vibe.name;
+        }
+        function playAud() {
+          aud
+            .play()
+            .then(() => {
+              S.lofi = true;
+              $("musicBtn").textContent = "⏸️";
+              $("musicBtn2").textContent = "⏸️ Lo-Fi";
+              sv();
+            })
+            .catch(() => {
+              toast("⚠️ Trying next track…", "inf");
+              skipNext();
             });
+        }
+        function skipNext() {
+          const len = VIBES[S.vibe]?.tracks.length || 1;
+          S.track = (S.track + 1) % len;
+          loadTrack();
+          if (S.lofi) playAud();
+        }
+        window.toggleMusic = () => {
+          if (S.lofi) {
+            aud.pause();
+            S.lofi = false;
+            $("musicBtn").textContent = "🎵";
+            $("musicBtn2").textContent = "🎵 Lo-Fi";
+            $("trackName").textContent = "Music paused";
+            sv();
+          } else {
+            if (!aud.src || aud.src === location.href) loadTrack();
+            playAud();
+          }
+        };
+        window.nextTrack = skipNext;
+        window.prevTrack = () => {
+          const len = VIBES[S.vibe]?.tracks.length || 1;
+          S.track = (S.track - 1 + len) % len;
+          loadTrack();
+          if (S.lofi) playAud();
+        };
+        window.changeVibe = () => {
+          S.vibe = parseInt($("vibeSel").value) || 0;
+          S.track = 0;
+          loadTrack();
+          if (S.lofi) playAud();
+          sv();
+        };
+        aud.addEventListener("ended", skipNext);
 
-            // Preload first track
-            loadTrack(currentTrack);
+        /* ═══════════════════════════════════════════════════════════════════════════
+         * PYQ
+         * ═══════════════════════════════════════════════════════════════════════════ */
+        function fillYears() {
+          const sel = $("pyqYr");
+          sel.innerHTML = "";
+          for (let y = 2025; y >= 2015; y--) {
+            const o = document.createElement("option");
+            o.value = y;
+            o.textContent = y;
+            if (y === 2024) o.selected = true;
+            sel.appendChild(o);
+          }
+        }
+        window.genPYQ = async () => {
+          showLoader("pyqOut");
+          const yr = $("pyqYr").value,
+            tp = $("pyqType").value;
+          const r = await callAI(
+            `Generate a complete ${tp} for ${S.board} Class ${S.cls} ${S.sub} (${yr} style). Include all question types with proper marks.`,
+            "pyq",
+          );
+          if (r)
+            $("pyqOut").innerHTML =
+              `<div class="cmsg ai ai-resp">${fmtAI(r)}</div>`;
+        };
+        window.dlPYQ = (fmt) => {
+          const txt = $("pyqOut").innerText;
+          if (!txt || txt.includes("Select year"))
+            return toast("Generate a paper first", "inf");
+          if (fmt === "txt") {
+            const a = Object.assign(document.createElement("a"), {
+              href: URL.createObjectURL(new Blob([txt])),
+              download: "PYQ.txt",
+            });
+            a.click();
+          } else {
+            const { jsPDF } = window.jspdf;
+            const d = new jsPDF();
+            d.setFontSize(12);
+            d.text(
+              "PYQ - " + S.board + " Class " + S.cls + " " + S.sub,
+              20,
+              20,
+            );
+            let y = 30;
+            txt.split("\n").forEach((l) => {
+              if (y > 275) {
+                d.addPage();
+                y = 20;
+              }
+              d.setFontSize(9);
+              d.text(l.substring(0, 95), 20, y);
+              y += 6;
+            });
+            d.save("PYQ.pdf");
+          }
+        };
 
-            function updateStreak(){const today=new Date().toLocaleDateString();const sessions=S.dailySessions[today]||0;if(sessions>=1){if(!S.lastActiveDate||S.lastActiveDate!==today){const yd=new Date(Date.now()-86400000).toLocaleDateString();S.stats.streak=(S.lastActiveDate===yd)?(S.stats.streak||0)+1:1;S.lastActiveDate=today;}}else if(S.lastActiveDate&&S.lastActiveDate!==today){const yd=new Date(Date.now()-86400000).toLocaleDateString();if(S.lastActiveDate!==yd) S.stats.streak=0;}save();}
-            function addStudyHours(h){const today=new Date().toLocaleDateString();S.dailySessions[today]=(S.dailySessions[today]||0)+1;S.stats.studyHours=(S.stats.studyHours||0)+h;updateStreak();save();refreshDashboard();updateChart();}
+        /* ── CBQ PREDICTOR ──────────────────────────────────────────────────────── */
+        window.runPred = async () => {
+          $("predOut").innerHTML =
+            '<div class="shimmer" style="height:120px;"></div>';
+          const r = await callAI(
+            `Predict the most important and likely questions for ${S.board} Class ${S.cls} ${S.sub} upcoming board exam.`,
+            "pred",
+          );
+          if (r)
+            $("predOut").innerHTML = `<div class="ai-resp">${fmtAI(r)}</div>`;
+        };
+        window.genCBQ = async () => {
+          const topic = $("cbqTopic").value.trim() || S.sub;
+          $("cbqOut").innerHTML =
+            '<div class="shimmer" style="height:80px;"></div>';
+          const r = await callAI(
+            `Generate 3 Competency-Based Questions (CBQs) with model answers for the topic: ${topic}. Board: ${S.board}, Class: ${S.cls}.`,
+            "pred",
+          );
+          if (r)
+            $("cbqOut").innerHTML = `<div class="ai-resp">${fmtAI(r)}</div>`;
+        };
 
-            function updateExamCountdown(){const card=$('examCountdownCard');if(S.examDate){const exam=new Date(S.examDate);const diff=Math.ceil((exam-new Date())/86400000);$('examCountdownDisplay').textContent=diff>0?diff:(diff===0?'0 (Today!)':'passed');card.style.display='block';}else card.style.display='none';}
-            window.openExamModal=()=>{$('examModal').classList.add('active');if(S.examDate)$('examDateInput').value=S.examDate;};
-            window.closeExamModal=()=>$('examModal').classList.remove('active');
-            window.saveExamDate=()=>{const v=$('examDateInput').value;if(v){S.examDate=v;save();updateExamCountdown();toast('📅 Saved!');}closeExamModal();};
-
-            let weeklyChart;
-            function initChart(){const ctx=$('weeklyChart').getContext('2d');const grad=ctx.createLinearGradient(0,0,0,250);grad.addColorStop(0,'rgba(108,92,231,0.8)');grad.addColorStop(1,'rgba(0,206,201,0.25)');weeklyChart=new Chart(ctx,{type:'bar',data:{labels:['Mon','Tue','Wed','Thu','Fri','Sat','Sun'],datasets:[{data:[0,0,0,0,0,0,0],backgroundColor:grad,borderColor:'#6c5ce7',borderWidth:1,borderRadius:6}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{beginAtZero:true,ticks:{color:'#a0a0c0'},grid:{color:'rgba(255,255,255,0.05)'}},x:{ticks:{color:'#a0a0c0'},grid:{display:false}}}}});}
-            function updateChart(){const days=['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];const mon=new Date();mon.setDate(mon.getDate()-((mon.getDay()+6)%7));const data=days.map((_,i)=>{const d=new Date(mon);d.setDate(mon.getDate()+i);return (S.dailySessions[d.toLocaleDateString()]||0)*0.4;});weeklyChart.data.datasets[0].data=data;weeklyChart.update();}
-
-            window.toggleSidebar=()=>{const sb=$('sidebar'),bd=$('backdrop'),ct=$('contentArea');const isHidden=sb.classList.contains('hidden');if(isHidden){sb.classList.remove('hidden');ct.classList.remove('expanded');if(window.innerWidth<=768){bd.classList.add('show');sb.classList.add('open');}}else{sb.classList.add('hidden');ct.classList.add('expanded');bd.classList.remove('show');sb.classList.remove('open');}};
-            window.closeSidebar=()=>{$('sidebar').classList.add('hidden');$('contentArea').classList.add('expanded');$('backdrop').classList.remove('show');$('sidebar').classList.remove('open');};
-            window.showPage=name=>{
-                document.querySelectorAll('.page-section').forEach(s=>s.classList.remove('active'));
-                document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
-                const sec=$('page-'+name);if(sec)sec.classList.add('active');
-                const nav=document.querySelector(`.nav-item[data-page="${name}"]`);if(nav)nav.classList.add('active');
-                if(name==='dashboard')refreshDashboard();
-                if(name==='formulas')updateFormulaSubject();
-                if(name==='pyq')$('pyqBoardLabel').textContent=S.board+' Class '+S.studentClass;
-                if(name==='weaknesses')renderWeakTopics();
-                if(name==='resources')renderBoardResources();
-                $('contentArea').scrollTop=0;
-                if(window.innerWidth<768)closeSidebar();
-                // Resize chart after sidebar transition
-                setTimeout(()=>{if(weeklyChart)weeklyChart.resize();},350);
-            };
-
-            window.saveBoard=()=>{S.board=$('boardSelect').value;save();refreshDashboard();updateFormulaSubject();};
-            window.saveClass=()=>{S.studentClass=$('classSelect').value;save();refreshDashboard();};
-            window.saveSubject=()=>{S.subject=$('subjectSelect').value;save();refreshDashboard();updateFormulaSubject();};
-
-            function refreshDashboard(){$('dashBoard').textContent=S.board;$('dashClass').textContent='Class '+S.studentClass;$('dashSubject').textContent=S.subject;$('statsGrid').innerHTML=`<div class="stat-card"><div class="num">${(S.stats.studyHours||0).toFixed(1)}</div><div class="lbl">📖 Hours</div></div><div class="stat-card"><div class="num">${S.stats.quizzes||0}</div><div class="lbl">❓ Quizzes</div></div><div class="stat-card"><div class="num">${S.stats.hwDone||0}</div><div class="lbl">✅ HW</div></div><div class="stat-card"><div class="num">${S.stats.streak||0}</div><div class="lbl">🔥 Streak</div></div><div class="stat-card"><div class="num">${S.notes.length||0}</div><div class="lbl">📒 Notes</div></div>`;$('sessionCount').textContent=S.timer.sessionsToday||0;renderQuickTasks();updateExamCountdown();}
-
-            window.toggleTheme=()=>{document.body.classList.toggle('light-mode');S.theme=document.body.classList.contains('light-mode')?'light':'dark';save();};
-
-            function updateTimerDisplay(){const m=Math.floor(S.timer.seconds/60),s=S.timer.seconds%60;const str=String(m).padStart(2,'0')+':'+String(s).padStart(2,'0');$('timerDisplay').textContent=str;$('focusTimerDisplay').textContent=str;}
-            window.setTimerMode=min=>{S.timer.mode=min;S.timer.seconds=min*60;S.timer.running=false;clearInterval(S.timer.interval);updateTimerDisplay();$('timerLabel').textContent=min>=25?'Focus Session 🔥':'Break Time ☕';save();};
-            window.startTimer=()=>{if(S.timer.running)return;S.timer.running=true;S.timer.interval=setInterval(()=>{if(S.timer.seconds>0){S.timer.seconds--;updateTimerDisplay();}else{clearInterval(S.timer.interval);S.timer.running=false;if(S.timer.mode>=25){S.timer.sessionsToday++;addStudyHours(0.4);if(Notification.permission==='granted')new Notification('🍅 Pomodoro Complete',{body:'+0.4h'});toast('🎉 +0.4h');}else toast('☕ Break over');$('timerLabel').textContent='Done!';}},1000);save();};
-            window.pauseTimer=()=>{S.timer.running=false;clearInterval(S.timer.interval);save();};
-            window.resetTimer=()=>{S.timer.running=false;clearInterval(S.timer.interval);S.timer.seconds=S.timer.mode*60;updateTimerDisplay();$('timerLabel').textContent=S.timer.mode>=25?'Focus Session':'Break Time';save();};
-
-            window.toggleFocusMode=()=>{
-                document.body.classList.toggle('focus-mode');
-                if(document.body.classList.contains('focus-mode')){
-                    $('focusTaskInput').value=S.focusTask||'';
-                    updateTimerDisplay();
-                    $('focusTaskInput').focus();
-                } else {
-                    S.focusTask=$('focusTaskInput').value;save();
-                }
-            };
-            window.saveFocusTask=()=>{S.focusTask=$('focusTaskInput').value;save();};
-            document.addEventListener('keydown',e=>{if(e.ctrlKey&&e.shiftKey&&e.key==='Z'){e.preventDefault();toggleFocusMode();}});
-
-            window.addQuickTask=()=>{const v=$('quickTaskInput').value.trim();if(!v)return;S.quickTasks.push({text:v,done:false});$('quickTaskInput').value='';save();renderQuickTasks();};
-            window.toggleQuickTask=i=>{S.quickTasks[i].done=!S.quickTasks[i].done;save();renderQuickTasks();};
-            window.deleteQuickTask=i=>{S.quickTasks.splice(i,1);save();renderQuickTasks();};
-            function renderQuickTasks(){const c=$('quickTaskList');if(!S.quickTasks.length)c.innerHTML='<p style="color:var(--text2);">No tasks.</p>';else c.innerHTML=S.quickTasks.map((t,i)=>`<div class="quick-task-item ${t.done?'done':''}"><input type="checkbox" ${t.done?'checked':''} onchange="toggleQuickTask(${i})"><span style="flex:1;">${t.text}</span><button class="btn-sm danger" onclick="deleteQuickTask(${i})">✕</button></div>`).join('');}
-
-            window.saveNote=()=>{const t=$('noteTitle').value.trim(),c=$('noteContent').value.trim();if(!t||!c)return toast('Fill both');S.notes.unshift({title:t,content:c,date:new Date().toLocaleDateString()});clearNoteForm();save();renderNotes();refreshDashboard();};
-            window.clearNoteForm=()=>{$('noteTitle').value='';$('noteContent').value='';};
-            function renderNotes(){const c=$('notesList');if(!S.notes.length)c.innerHTML='<div class="card" style="color:var(--text2);">No notes.</div>';else c.innerHTML=S.notes.map((n,i)=>`<div class="card"><small>${n.date}</small><h4>${n.title}</h4><p>${n.content.substring(0,120)}...</p><button class="btn-sm danger" onclick="deleteNote(${i})">🗑</button></div>`).join('');}
-            window.deleteNote=i=>{S.notes.splice(i,1);save();renderNotes();refreshDashboard();};
-            window.exportNotesPDF=()=>{if(!S.notes.length)return toast('No notes');const{jsPDF}=window.jspdf;const doc=new jsPDF();doc.setFontSize(14);doc.text('Notes',20,20);let y=30;S.notes.forEach(n=>{if(y>270){doc.addPage();y=20;}doc.setFontSize(11);doc.text(n.title+' ('+n.date+')',20,y);y+=7;doc.setFontSize(9);doc.text(n.content.substring(0,160),20,y);y+=12;});doc.save('notes.pdf');toast('PDF done');};
-            window.notesToQuiz=()=>{if(!S.notes.length)return toast('Save a note first');const n=S.notes[0];window._quiz={questions:[{q:'Based on "'+n.title+'": main idea?',o:[n.content.split(' ')[0]||'A','B','C','D'],c:0},{q:'Application?',o:['Real A','Real B','Theory','None'],c:0}],score:0,idx:0};showPage('quiz');showQuizQuestion();};
-            window.readNoteAloud=()=>{const t=$('noteContent').value.trim();if(!t)return;if('speechSynthesis' in window){const u=new SpeechSynthesisUtterance(t);u.rate=0.95;speechSynthesis.cancel();speechSynthesis.speak(u);toast('🔊 Reading...');}else toast('Not supported');};
-
-            window.startQuiz=()=>{window._quiz={questions:[{q:'Sin 30°?',o:['0','1/2','1','√3/2'],c:1},{q:'pH of water?',o:['0','5','7','14'],c:2}],score:0,idx:0};showQuizQuestion();};
-            function showQuizQuestion(){const qz=window._quiz;if(!qz||qz.idx>=qz.questions.length){$('quizArea').innerHTML='<h3>Done!</h3>';$('quizResult').innerHTML=`Score: ${qz.score}/${qz.questions.length}`;S.stats.quizzes=(S.stats.quizzes||0)+1;save();refreshDashboard();return;}const q=qz.questions[qz.idx];$('quizArea').innerHTML=`<h4>Q${qz.idx+1}: ${q.q}</h4>${q.o.map((o,i)=>`<button onclick="answerQuiz(${i},${q.c})" class="secondary" style="display:block;width:100%;margin:3px 0;">${String.fromCharCode(65+i)}. ${o}</button>`).join('')}`;}
-            window.answerQuiz=(sel,cor)=>{if(sel===cor)window._quiz.score++;window._quiz.idx++;showQuizQuestion();};
-
-            window.addFlashcard=()=>{const f=$('fcFront').value.trim(),b=$('fcBack').value.trim();if(!f||!b)return;S.flashcards.push({front:f,back:b});S.fcIndex=S.flashcards.length-1;$('fcFront').value='';$('fcBack').value='';save();updateFlashcardDisplay();};
-            function updateFlashcardDisplay(){if(!S.flashcards.length){$('fcFrontText').textContent='Add cards';$('fcBackText').textContent='Answer';$('fcCounter').textContent='0/0';$('flashcardDisplay').classList.remove('flipped');return;}const c=S.flashcards[S.fcIndex];$('fcFrontText').textContent=c.front;$('fcBackText').textContent=c.back;$('fcCounter').textContent=(S.fcIndex+1)+'/'+S.flashcards.length;$('flashcardDisplay').classList.remove('flipped');}
-            window.flipFlashcard=()=>$('flashcardDisplay').classList.toggle('flipped');
-            window.nextFlashcard=()=>{if(!S.flashcards.length)return;S.fcIndex=(S.fcIndex+1)%S.flashcards.length;updateFlashcardDisplay();};
-            window.prevFlashcard=()=>{if(!S.flashcards.length)return;S.fcIndex=(S.fcIndex-1+S.flashcards.length)%S.flashcards.length;updateFlashcardDisplay();};
-            window.shuffleFlashcards=()=>{S.flashcards.sort(()=>Math.random()-0.5);S.fcIndex=0;updateFlashcardDisplay();};
-
-            window.generatePYQ=()=>{const bank={CBSE:{Mathematics:['Q1. Solve 2x²-7x+3=0.']}};const qs=bank[S.board]?.[S.subject]||['Q1. Practice.'];$('pyqOutput').innerHTML=qs.map(q=>`<div class="chat-msg ai">📝 ${q}</div>`).join('');};
-            window.downloadPYQ=fmt=>{const txt=$('pyqOutput').innerText||'';if(fmt==='txt'){const b=new Blob([txt]);const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='PYQ.txt';a.click();}else{const{jsPDF}=window.jspdf;const doc=new jsPDF();doc.setFontSize(12);doc.text('PYQ',20,20);let y=30;txt.split('\n').forEach(l=>{if(y>270){doc.addPage();y=20;}doc.setFontSize(9);doc.text(l,20,y);y+=6;});doc.save('PYQ.pdf');}};
-
-            window.runPrediction=()=>{$('predictionOutput').innerHTML='<p>📌 Case study likely.</p>';};
-            window.generateCustomQuestions=()=>{$('customQOutput').innerHTML='<p>✨ CBQs generated.</p>';};
-
-            window.generateMindMap=()=>{$('mindmapCanvas').innerHTML='<div style="position:absolute;top:38%;left:36%;background:var(--primary);color:#fff;padding:10px 18px;border-radius:22px;">🧠 '+($('mindmapTopic').value||'Topic')+'</div><div style="position:absolute;top:8%;left:3%;border:2px solid var(--accent);padding:8px 14px;border-radius:16px;">📌 Concept</div>';};
-
-            function updateFormulaSubject(){$('formulaSubject').textContent=S.subject;}
-            window.generateFormulaSheet=()=>{$('formulaOutput').textContent='Formulas for '+S.subject;}
-            window.copyFormulas=()=>navigator.clipboard.writeText($('formulaOutput').textContent).then(()=>toast('Copied'));
-
-            window.addHomework=()=>{const t=$('hwInput').value.trim(),d=$('hwDate').value||new Date().toISOString().slice(0,10);if(!t)return;S.homework.unshift({task:t,date:d,done:false});$('hwInput').value='';save();renderHomework();};
-            window.toggleHW=i=>{S.homework[i].done=!S.homework[i].done;S.stats.hwDone=S.homework.filter(h=>h.done).length;save();renderHomework();refreshDashboard();};
-            window.deleteHW=i=>{S.homework.splice(i,1);S.stats.hwDone=S.homework.filter(h=>h.done).length;save();renderHomework();refreshDashboard();};
-            function renderHomework(){const c=$('hwList');if(!S.homework.length)c.innerHTML='';else c.innerHTML=S.homework.map((h,i)=>`<div class="hw-item ${h.done?'done':''}"><input type="checkbox" ${h.done?'checked':''} onchange="toggleHW(${i})"><span style="flex:1;">${h.task} <small>${h.date}</small></span><button class="btn-sm danger" onclick="deleteHW(${i})">🗑</button></div>`).join('');$('hwDoneCount').textContent=S.homework.filter(h=>h.done).length;$('hwPendingCount').textContent=S.homework.filter(h=>!h.done).length;}
-
-            window.askDoubt=()=>{const q=$('doubtInput').value.trim();if(!q)return;const chat=$('doubtChat');chat.innerHTML+=`<div class="chat-msg user">🧑‍🎓 ${q}</div>`;$('doubtInput').value='';chat.innerHTML+=`<div class="chat-msg ai"><em>🤔 Thinking...</em></div>`;chat.scrollTop=chat.scrollHeight;setTimeout(()=>{const last=chat.querySelector('.chat-msg:last-child');if(last)last.innerHTML='🤖 Study smarter, not harder!';},1200);};
-
-            window.addWeakTopic=()=>{const v=$('weakTopicInput').value.trim();if(!v)return;S.weakTopics.push(v);$('weakTopicInput').value='';save();renderWeakTopics();};
-            window.removeWeakTopic=i=>{S.weakTopics.splice(i,1);save();renderWeakTopics();};
-            function renderWeakTopics(){$('weakTopicsList').innerHTML=S.weakTopics.length?S.weakTopics.map((t,i)=>`<div style="display:flex;justify-content:space-between;padding:6px;background:rgba(255,255,255,0.04);border-radius:6px;">📉 ${t}<button class="btn-sm danger" onclick="removeWeakTopic(${i})">✕</button></div>`).join(''):'<p style="color:var(--text2);">No weak topics.</p>';}
-            window.generateRevisionPlan=()=>{$('revisionPlanOutput').innerHTML=S.weakTopics.length?`<p>📅 Today's plan: ${S.weakTopics.map(t=>'30 min '+t).join(', ')}</p>`:'<p>Add topics first.</p>';};
-
-            function renderBoardResources(){$('boardResourcesList').innerHTML='<p>📘 <a href="https://ncert.nic.in" target="_blank" style="color:var(--accent);">NCERT</a></p>';}
-            window.generateStrategy=()=>{$('strategyOutput').innerHTML='<p>🎯 Study strategy for '+S.board+'...</p>';};
-            window.showPressureTips=()=>{$('pressureTips').innerHTML='<p>😌 Breathe, stay hydrated.</p>';};
-            const quotes=[{q:'Believe you can.',a:'Roosevelt'},{q:'Push yourself.',a:'Unknown'}];
-            window.newMotivationQuote=()=>{const r=quotes[Math.floor(Math.random()*quotes.length)];$('motivationQuote').textContent='"'+r.q+'"';$('motivationAuthor').textContent='— '+r.a;};
-
-            window.resetWeekData=()=>{S.dailySessions={};save();updateChart();toast('Week reset');};
-
-            function init(){
-                $('boardSelect').value=S.board;$('classSelect').value=S.studentClass;$('subjectSelect').value=S.subject;
-                if(S.theme==='light')document.body.classList.add('light-mode');
-                $('hwDate').valueAsDate=new Date();
-                document.querySelectorAll('.page-section').forEach((s,i)=>s.classList.toggle('active',i===0));
-                updateTimerDisplay();refreshDashboard();renderNotes();renderHomework();updateFlashcardDisplay();updateFormulaSubject();
-                initChart();updateChart();newMotivationQuote();showPressureTips();renderWeakTopics();
-                if(Notification.permission!=='granted')Notification.requestPermission();
-                if(S.lofiPlaying){$('musicToggleBtn').textContent='⏸️';$('lofiInlineBtn').textContent='⏸️ Lo‑Fi';}
-                if(window.innerWidth>768){$('sidebar').classList.remove('hidden','open');$('contentArea').classList.remove('expanded');}else{$('sidebar').classList.add('hidden');$('contentArea').classList.add('expanded');}
+        /* ═══════════════════════════════════════════════════════════════════════════
+         * NOTES
+         * ═══════════════════════════════════════════════════════════════════════════ */
+        window.saveNote = () => {
+          const t = $("nTitle").value.trim(),
+            c = $("nContent").value.trim();
+          if (!t || !c) return toast("Fill title and content", "inf");
+          S.notes.unshift({
+            title: t,
+            content: c,
+            date: new Date().toLocaleDateString(),
+          });
+          clearNote();
+          sv();
+          renderNotes();
+          refreshDash();
+          toast("📒 Note saved!");
+        };
+        window.clearNote = () => {
+          $("nTitle").value = "";
+          $("nContent").value = "";
+        };
+        window.aiEnhNote = async () => {
+          const t = $("nTitle").value.trim(),
+            c = $("nContent").value.trim();
+          const input = t || c;
+          if (!input) return toast("Write something first", "inf");
+          toast("✨ Enhancing with AI…", "inf");
+          const r = await callAI(
+            `Create structured study notes for: ${t || "the following content"}\n\n${c}`,
+            "notes",
+          );
+          if (r) $("nContent").value = r;
+        };
+        window.note2Quiz = () => {
+          if (!S.notes.length) return toast("Save a note first", "inf");
+          $("quizTopic").value = S.notes[0].title;
+          go("quiz");
+          genQuiz();
+        };
+        window.readNote = () => {
+          const t = $("nContent").value.trim();
+          if (!t) return;
+          if ("speechSynthesis" in window) {
+            const u = new SpeechSynthesisUtterance(t);
+            u.rate = 0.92;
+            speechSynthesis.cancel();
+            speechSynthesis.speak(u);
+            toast("🔊 Reading aloud…");
+          }
+        };
+        window.exportNPDF = () => {
+          if (!S.notes.length) return toast("No notes to export", "inf");
+          const { jsPDF } = window.jspdf;
+          const d = new jsPDF();
+          d.setFontSize(14);
+          d.text("Study Notes — " + S.sub, 20, 20);
+          let y = 30;
+          S.notes.forEach((n) => {
+            if (y > 265) {
+              d.addPage();
+              y = 20;
             }
-            init();
-            window.addEventListener('resize',()=>{if(window.innerWidth>768){$('sidebar').classList.remove('hidden','open');$('contentArea').classList.remove('expanded');}else if(!$('sidebar').classList.contains('open')){$('sidebar').classList.add('hidden');$('contentArea').classList.add('expanded');}});
-        })();
+            d.setFontSize(11);
+            d.text(n.title + " (" + n.date + ")", 20, y);
+            y += 7;
+            d.setFontSize(9);
+            const lines = d.splitTextToSize(n.content, 170);
+            lines.forEach((l) => {
+              if (y > 275) {
+                d.addPage();
+                y = 20;
+              }
+              d.text(l, 20, y);
+              y += 5.5;
+            });
+            y += 5;
+          });
+          d.save("notes.pdf");
+          toast("📑 PDF ready");
+        };
+        window.delNote = (i) => {
+          S.notes.splice(i, 1);
+          sv();
+          renderNotes();
+          refreshDash();
+        };
+        function renderNotes() {
+          $("notesList").innerHTML = S.notes.length
+            ? S.notes
+                .map(
+                  (n, i) => `<div class="ncard">
+        <small>${escapeHtml(n.date)}</small>
+        <div class="nt">${escapeHtml(n.title)}</div>
+        <div class="nc">${escapeHtml(n.content.substring(0, 140))}${n.content.length > 140 ? "…" : ""}</div>
+        <div style="margin-top:8px;display:flex;gap:6px;">
+          <button class="btn sm sec" onclick="loadNote(${i})">✏️ Edit</button>
+          <button class="btn sm dng" onclick="delNote(${i})">🗑</button>
+        </div>
+      </div>`,
+                )
+                .join("")
+            : '<div class="ncard" style="color:var(--txt2);text-align:center;padding:24px;">No notes yet. Write your first note above!</div>';
+        }
+        window.loadNote = (i) => {
+          $("nTitle").value = S.notes[i].title;
+          $("nContent").value = S.notes[i].content;
+          window.scrollTo(0, 0);
+        };
+
+        /* ═══════════════════════════════════════════════════════════════════════════
+         * MIND MAP
+         * ═══════════════════════════════════════════════════════════════════════════ */
+        window.genMM = async () => {
+          const topic = $("mmTopic").value.trim();
+          if (!topic) return toast("Enter a topic", "inf");
+          $("mmCanvas").innerHTML =
+            '<div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);"><div class="dot"></div></div>';
+          toast("🧩 Generating mind map…", "inf");
+          const r = await callAI(
+            `Create a mind map for: ${topic}. Keep branch labels short (2-4 words). Sub-items should be specific concepts.`,
+            "mm",
+          );
+          if (!r) return;
+          try {
+            const clean = r.replace(/```json|```/g, "").trim();
+            const m = clean.match(/\{[\s\S]*\}/);
+            const data = JSON.parse(m ? m[0] : clean);
+            renderMM(data);
+          } catch (e) {
+            $("mmCanvas").innerHTML =
+              `<div style="padding:20px;color:var(--txt2);font-size:0.82rem;">${fmtAI(r)}</div>`;
+          }
+        };
+        function renderMM(data) {
+          const c = $("mmCanvas");
+          const W = c.offsetWidth || 600,
+            H = Math.max(380, c.offsetHeight);
+          c.style.height = H + "px";
+          const cx = W / 2,
+            cy = H / 2;
+          const branches = data.branches || [];
+          const COLORS = [
+            "#7c6bef",
+            "#00d4cc",
+            "#ff6eb4",
+            "#ffd166",
+            "#55efc4",
+            "#74b9ff",
+          ];
+          let html = '<svg class="mm-lines" viewBox="0 0 ' + W + " " + H + '">';
+          const nodes = [];
+          nodes.push({
+            x: cx,
+            y: cy,
+            label: data.center,
+            cls: "mm-center mm-node",
+            w: 160,
+          });
+          branches.forEach((b, bi) => {
+            const angle = (bi / branches.length) * 2 * Math.PI - Math.PI / 2;
+            const R = Math.min(W, H) * 0.28;
+            const bx = cx + R * Math.cos(angle),
+              by = cy + R * Math.sin(angle);
+            const col = b.color || COLORS[bi % COLORS.length];
+            nodes.push({ x: bx, y: by, label: b.label, col, w: 120 });
+            html += `<line x1="${cx}" y1="${cy}" x2="${bx}" y2="${by}" stroke="${col}" stroke-width="2.5" stroke-linecap="round" opacity="0.7"/>`;
+            (b.children || []).forEach((ch, ci) => {
+              const spread = (ci - (b.children.length - 1) / 2) * 0.35;
+              const childAngle = angle + spread;
+              const cR = Math.min(W, H) * 0.18;
+              const chx = bx + cR * Math.cos(childAngle),
+                chy = by + cR * Math.sin(childAngle);
+              nodes.push({
+                x: chx,
+                y: chy,
+                label: ch,
+                col,
+                w: 100,
+                isChild: true,
+              });
+              html += `<line x1="${bx}" y1="${by}" x2="${chx}" y2="${chy}" stroke="${col}" stroke-width="1.5" stroke-linecap="round" opacity="0.5"/>`;
+            });
+          });
+          html += "</svg>";
+          nodes.forEach((n) => {
+            const fs = n.isChild
+              ? "0.68rem"
+              : n.cls?.includes("center")
+                ? "0.95rem"
+                : "0.78rem";
+            const bg = n.cls?.includes("center")
+              ? "linear-gradient(135deg,var(--p),#3d2db8)"
+              : n.col
+                ? n.col + "cc"
+                : "rgba(30,30,60,0.9)";
+            html += `<div class="mm-node ${n.cls || "mm-child"}" style="
+      left:${n.x - n.w / 2}px; top:${n.y - 18}px; width:${n.w}px;
+      background:${bg}; color:#fff; font-size:${fs};
+      border:1px solid rgba(255,255,255,0.15);
+    ">${escapeHtml(n.label || "")}</div>`;
+          });
+          c.innerHTML = html;
+        }
+
+        /* ═══════════════════════════════════════════════════════════════════════════
+         * AI QUIZ
+         * ═══════════════════════════════════════════════════════════════════════════ */
+        let _quiz = null;
+        window.genQuiz = async () => {
+          const topic = $("quizTopic").value.trim() || S.sub;
+          $("quizArea").innerHTML =
+            '<div class="shimmer" style="height:100px;"></div>';
+          $("quizRes").innerHTML = "";
+          const r = await callAI(
+            `Generate 5 MCQ quiz questions for topic: ${topic}, Board: ${S.board}, Class: ${S.cls}.`,
+            "quiz",
+          );
+          if (!r) return;
+          try {
+            const clean = r.replace(/```json|```/g, "").trim();
+            const m = clean.match(/\[[\s\S]*\]/);
+            _quiz = { qs: JSON.parse(m ? m[0] : clean), idx: 0, score: 0 };
+            renderQQ();
+          } catch (e) {
+            $("quizArea").innerHTML =
+              '<p style="color:var(--txt2);">Could not parse questions. Try again.</p>';
+          }
+        };
+        function renderQQ() {
+          if (!_quiz || _quiz.idx >= (_quiz.qs?.length || 0)) {
+            $("quizArea").innerHTML =
+              '<p style="text-align:center;font-size:1.1rem;">🎉 Quiz Complete!</p>';
+            $("quizRes").innerHTML =
+              `Score: <span style="color:var(--a);font-size:1.3rem;">${_quiz.score}/${_quiz.qs.length}</span> ${_quiz.score >= 3 ? "🌟 Great!" : "📚 Keep studying!"}`;
+            S.stats.quizzes = (S.stats.quizzes || 0) + 1;
+            sv();
+            refreshDash();
+            if (window.saveCloudStats) window.saveCloudStats();
+            return;
+          }
+          const q = _quiz.qs[_quiz.idx];
+          $("quizArea").innerHTML = `
+    <p style="font-weight:700;margin-bottom:10px;">Q${_quiz.idx + 1}/${_quiz.qs.length}: ${escapeHtml(q.q)}</p>
+    ${(q.opts || []).map((o, i) => `<button class="btn sec" style="display:block;width:100%;margin:5px 0;text-align:left;border-radius:12px!important;" onclick="ansQ(${i})">${String.fromCharCode(65 + i)}. ${escapeHtml(o)}</button>`).join("")}
+  `;
+        }
+        window.ansQ = (i) => {
+          if (!_quiz) return;
+          const q = _quiz.qs[_quiz.idx];
+          const correct = i === q.ans;
+          if (correct) _quiz.score++;
+          const opts = document.querySelectorAll("#quizArea button");
+          opts.forEach((b, j) => {
+            if (j === q.ans) b.style.background = "var(--success)";
+            else if (j === i && !correct) b.style.background = "var(--danger)";
+            b.disabled = true;
+          });
+          if (q.exp)
+            $("quizArea").innerHTML +=
+              `<p style="color:var(--txt2);font-size:0.78rem;margin-top:10px;padding:10px;background:rgba(0,0,0,0.18);border-radius:8px;">💡 ${escapeHtml(q.exp)}</p>`;
+          $("quizArea").innerHTML +=
+            `<div style="text-align:right;margin-top:10px;"><button class="btn sm acc" onclick="_quiz.idx++;renderQQ();">Next ▶</button></div>`;
+        };
+
+        /* ═══════════════════════════════════════════════════════════════════════════
+         * FLASHCARDS — Local + Firestore CRUD
+         * ═══════════════════════════════════════════════════════════════════════════ */
+        window.addFC = () => {
+          const f = $("fcF").value.trim(),
+            b = $("fcB").value.trim();
+          if (!f || !b) return toast("Fill both sides", "inf");
+          S.fc.push({ f, b, ts: Date.now() });
+          S.fcIdx = S.fc.length - 1;
+          $("fcF").value = "";
+          $("fcB").value = "";
+          sv();
+          updFC();
+          renderFCList();
+          refreshDash();
+          syncFCToCloud();
+          toast("🃏 Card added!");
+        };
+        function updFC() {
+          if (!S.fc.length) {
+            $("fcFText").textContent = "Add your first card above!";
+            $("fcBText").textContent = "Answer appears here";
+            $("fcCnt").textContent = "0/0";
+            $("fcCard").classList.remove("flp");
+            return;
+          }
+          const c = S.fc[S.fcIdx];
+          $("fcFText").textContent = c.f;
+          $("fcBText").textContent = c.b;
+          $("fcCnt").textContent = `${S.fcIdx + 1}/${S.fc.length}`;
+          $("fcCard").classList.remove("flp");
+        }
+        window.flipFC = () => $("fcCard").classList.toggle("flp");
+        window.nextFC = () => {
+          if (!S.fc.length) return;
+          S.fcIdx = (S.fcIdx + 1) % S.fc.length;
+          updFC();
+        };
+        window.prevFC = () => {
+          if (!S.fc.length) return;
+          S.fcIdx = (S.fcIdx - 1 + S.fc.length) % S.fc.length;
+          updFC();
+        };
+        window.shuffleFC = () => {
+          S.fc.sort(() => Math.random() - 0.5);
+          S.fcIdx = 0;
+          sv();
+          updFC();
+          renderFCList();
+          syncFCToCloud();
+          toast("🔀 Shuffled!");
+        };
+        window.delFC = () => {
+          if (!S.fc.length) return;
+          S.fc.splice(S.fcIdx, 1);
+          S.fcIdx = Math.min(S.fcIdx, S.fc.length - 1);
+          sv();
+          updFC();
+          renderFCList();
+          refreshDash();
+          syncFCToCloud();
+          toast("Card deleted");
+        };
+        function renderFCList() {
+          $("fcAllList").innerHTML = S.fc
+            .map(
+              (c, i) => `
+    <div class="item" style="flex-direction:column;align-items:flex-start;gap:4px;cursor:pointer;" onclick="S.fcIdx=${i};updFC();">
+      <span style="font-weight:700;font-size:0.8rem;">Q: ${escapeHtml(c.f.substring(0, 60))}</span>
+      <span style="color:var(--txt2);font-size:0.75rem;">A: ${escapeHtml(c.b.substring(0, 60))}</span>
+    </div>`,
+            )
+            .join("");
+        }
+
+        /* Firestore sync — only when signed in (Firebase v9+ Modular) */
+        function syncFCToCloud() {
+          if (!currentUser || !fbDB || !window.FB) return;
+          try {
+            const ref = window.FB.doc(fbDB, "users", currentUser.uid);
+            window.FB
+              .setDoc(
+                ref,
+                { flashcards: S.fc, updatedAt: Date.now() },
+                { merge: true },
+              )
+              .catch((e) => console.warn("FC sync failed", e));
+          } catch (e) {
+            console.warn(e);
+          }
+        }
+        function attachFCListener() {
+          if (!currentUser || !fbDB || !window.FB) return;
+          if (fcUnsub) {
+            fcUnsub();
+            fcUnsub = null;
+          }
+          try {
+            const ref = window.FB.doc(fbDB, "users", currentUser.uid);
+            fcUnsub = window.FB.onSnapshot(
+              ref,
+              (snap) => {
+                const d = snap.data();
+                if (d && Array.isArray(d.flashcards)) {
+                  // merge: cloud is source of truth on login
+                  S.fc = d.flashcards;
+                  S.fcIdx = Math.min(S.fcIdx, Math.max(0, S.fc.length - 1));
+                  sv();
+                  updFC();
+                  renderFCList();
+                  refreshDash();
+                }
+              },
+              (e) => console.warn("FC listener", e),
+            );
+          } catch (e) {
+            console.warn(e);
+          }
+        }
+
+        /* ═══════════════════════════════════════════════════════════════════════════
+         * FORMULAS
+         * ═══════════════════════════════════════════════════════════════════════════ */
+        const FORMULAS = {
+          Mathematics: `<span class="cat">━━ ALGEBRA ━━</span>
+<span class="formula">Quadratic Formula:</span> x = (−b ± √(b²−4ac)) / 2a
+<span class="formula">AP nth term:</span> aₙ = a + (n−1)d
+<span class="formula">AP Sum:</span> Sₙ = n/2 · [2a + (n−1)d]
+<span class="formula">GP nth term:</span> aₙ = ar^(n−1)
+<span class="formula">GP Sum:</span> Sₙ = a(rⁿ−1)/(r−1)
+
+<span class="cat">━━ TRIGONOMETRY ━━</span>
+<span class="formula">Identities:</span>
+  sin²θ + cos²θ = 1
+  1 + tan²θ = sec²θ
+  1 + cot²θ = cosec²θ
+<span class="formula">Values:</span>
+  sin30°=½  cos30°=√3/2  tan30°=1/√3
+  sin45°=cos45°=1/√2  tan45°=1
+  sin60°=√3/2  cos60°=½  tan60°=√3
+<span class="formula">Addition:</span> sin(A+B) = sinAcosB + cosAsinB
+
+<span class="cat">━━ COORDINATE GEOMETRY ━━</span>
+<span class="formula">Distance:</span> d = √((x₂-x₁)² + (y₂-y₁)²)
+<span class="formula">Midpoint:</span> M = ((x₁+x₂)/2, (y₁+y₂)/2)
+<span class="formula">Section formula:</span> (mx₂+nx₁)/(m+n), (my₂+ny₁)/(m+n)
+<span class="formula">Slope:</span> m = (y₂-y₁)/(x₂-x₁) = tanθ
+
+<span class="cat">━━ MENSURATION ━━</span>
+  Circle: A = πr², C = 2πr
+  Sphere: SA = 4πr², V = 4/3πr³
+  Cylinder: V = πr²h, CSA = 2πrh
+  Cone: V = 1/3πr²h, l = √(r²+h²)
+  Cuboid: V = lbh, TSA = 2(lb+bh+hl)
+
+<span class="cat">━━ STATISTICS ━━</span>
+<span class="formula">Mean (grouped):</span> x̄ = Σfx / Σf
+<span class="formula">Median:</span> l + [(n/2 − cf)/f] × h
+<span class="formula">Mode:</span> l + [(f₁−f₀)/(2f₁−f₀−f₂)] × h`,
+
+          Physics: `<span class="cat">━━ MOTION ━━</span>
+<span class="formula">Equations of motion:</span>
+  v = u + at
+  s = ut + ½at²
+  v² = u² + 2as
+  s = (u+v)/2 × t
+<span class="formula">Newton's Laws:</span> F = ma, p = mv
+<span class="formula">Impulse:</span> J = Ft = Δp
+
+<span class="cat">━━ WORK, ENERGY, POWER ━━</span>
+  W = Fs·cosθ
+  KE = ½mv²
+  PE = mgh
+  Power P = W/t = Fv
+  Efficiency = (Output/Input) × 100%
+
+<span class="cat">━━ ELECTRICITY ━━</span>
+<span class="formula">Ohm's Law:</span> V = IR
+  P = VI = I²R = V²/R
+  Energy E = Pt = VIt
+  Series: R = R₁+R₂+R₃
+  Parallel: 1/R = 1/R₁+1/R₂+1/R₃
+
+<span class="cat">━━ LIGHT & OPTICS ━━</span>
+  Mirror formula: 1/f = 1/v + 1/u
+  Lens formula: 1/f = 1/v − 1/u
+  Magnification: m = v/u = h'/h
+  Snell's Law: n₁sinθ₁ = n₂sinθ₂
+  n = c/v (refractive index)
+
+<span class="cat">━━ WAVES ━━</span>
+  v = fλ (Speed = Freq × Wavelength)
+  Doppler effect: f' = f(v±vo)/(v∓vs)`,
+
+          Chemistry: `<span class="cat">━━ IMPORTANT REACTIONS ━━</span>
+  Photosynthesis: 6CO₂ + 6H₂O → C₆H₁₂O₆ + 6O₂
+  Respiration: C₆H₁₂O₆ + 6O₂ → 6CO₂ + 6H₂O + energy
+  Water electrolysis: 2H₂O → 2H₂ + O₂
+  Neutralisation: Acid + Base → Salt + H₂O
+
+<span class="cat">━━ ACID-BASE ━━</span>
+  pH 0-6: Acidic | pH 7: Neutral | pH 8-14: Basic
+  Strong acids: HCl, H₂SO₄, HNO₃
+  Strong bases: NaOH, KOH, Ca(OH)₂
+  Acid + Metal → Salt + H₂↑
+  Acid + Carbonate → Salt + H₂O + CO₂
+
+<span class="cat">━━ MOLE CONCEPT ━━</span>
+  Mole = mass (g) / molar mass (g/mol)
+  1 mole = 6.022 × 10²³ particles
+  Molarity = moles / volume (L)
+  Molar mass of H₂O = 18 g/mol
+  Molar mass of CO₂ = 44 g/mol
+
+<span class="cat">━━ PERIODIC TABLE TRENDS ━━</span>
+  Atomic radius: → period decreases, ↓ group increases
+  Ionisation energy: → period increases, ↓ group decreases
+  Electronegativity: highest at F (3.98)
+  Metallic character: increases down a group
+
+<span class="cat">━━ ORGANIC ━━</span>
+  Alkanes: CₙH₂ₙ₊₂ (methane, ethane…)
+  Alkenes: CₙH₂ₙ (ethene…)
+  Alkynes: CₙH₂ₙ₋₂ (ethyne…)`,
+
+          Biology: `<span class="cat">━━ LIFE PROCESSES ━━</span>
+  Photosynthesis: CO₂ + H₂O + light → Glucose + O₂
+  Aerobic respiration: Glucose + O₂ → CO₂ + H₂O + 38 ATP
+  Anaerobic (yeast): Glucose → Ethanol + CO₂ + 2 ATP
+  Blood pressure: Normal = 120/80 mmHg
+
+<span class="cat">━━ GENETICS ━━</span>
+  Mendel's F2 ratio: 3 dominant : 1 recessive
+  Probability of dominant trait: 75%
+  Chromosomes: Human = 46 (23 pairs)
+  Sex chromosomes: XX = female, XY = male
+  DNA → mRNA (Transcription) → Protein (Translation)
+
+<span class="cat">━━ ECOLOGY ━━</span>
+  10% energy rule: Only 10% transferred each trophic level
+  Biodiversity: Hotspots = areas with endemic species
+  Carbon cycle: CO₂ → Photosynthesis → Respiration → CO₂
+  Nitrogen cycle: N₂ → Fixation → NH₃ → Nitrates → N₂
+
+<span class="cat">━━ HUMAN BODY ━━</span>
+  Normal heart rate: 72 beats/min
+  Normal RBC count: 5 million/mm³
+  Normal WBC count: 6000-8000/mm³
+  Normal blood glucose: 70-110 mg/dL
+  Hormones: Insulin (pancreas), Adrenalin (adrenal), Thyroxine (thyroid)`,
+
+          English: `<span class="cat">━━ GRAMMAR ESSENTIALS ━━</span>
+  Active to Passive: Object + is/am/are/was/were + V3 + by + Subject
+  Reported Speech: say→said, is→was, will→would, today→that day
+  Articles: a (before consonant), an (before vowel), the (specific)
+  Conditionals:
+    Type 0: If + present, present (universal truth)
+    Type 1: If + present, will + V1 (likely future)
+    Type 2: If + past, would + V1 (unlikely/hypothetical)
+    Type 3: If + past perfect, would have + V3 (impossible past)
+
+<span class="cat">━━ WRITING TIPS ━━</span>
+  Essay structure: Introduction → Body (3 paragraphs) → Conclusion
+  Letter format: Address > Date > Salutation > Body > Subscription
+  Formal: Dear Sir/Madam, Yours faithfully
+  Informal: Dear [Name], Yours sincerely/Lovingly
+  Word limit: Stay within ±10% of given limit
+
+<span class="cat">━━ LITERARY DEVICES ━━</span>
+  Simile: comparison using like/as
+  Metaphor: direct comparison (is/are)
+  Alliteration: same consonant sound repeated
+  Personification: giving human qualities to non-human
+  Irony: saying opposite of what you mean
+  Oxymoron: contradictory terms together`,
+        };
+        function renderForm() {
+          $("fSubj").textContent = S.sub;
+          $("fBox").innerHTML =
+            FORMULAS[S.sub] ||
+            `No formula sheet available for ${S.sub}. Use AI Doubts for formulas!`;
+        }
+        window.copyForm = () => {
+          navigator.clipboard
+            .writeText($("fBox").innerText || "")
+            .then(() => toast("📋 Copied!"));
+        };
+        window.dlFormPDF = () => {
+          const { jsPDF } = window.jspdf;
+          const d = new jsPDF();
+          d.setFontSize(13);
+          d.text(S.sub + " — Formula Sheet", 20, 20);
+          let y = 30;
+          const lines = $("fBox").innerText.split("\n");
+          lines.forEach((l) => {
+            if (y > 275) {
+              d.addPage();
+              y = 20;
+            }
+            d.setFontSize(8.5);
+            d.text(l.substring(0, 100), 20, y);
+            y += 5.5;
+          });
+          d.save("formulas_" + S.sub + ".pdf");
+          toast("📑 PDF ready");
+        };
+
+        /* ═══════════════════════════════════════════════════════════════════════════
+         * HOMEWORK
+         * ═══════════════════════════════════════════════════════════════════════════ */
+        window.addHW = () => {
+          const t = $("hwT").value.trim();
+          const dv = $("hwD").value || new Date().toISOString().slice(0, 10);
+          const p = $("hwPri").value;
+          if (!t) return;
+          S.hw.unshift({ t, d: dv, pri: p, done: false });
+          $("hwT").value = "";
+          sv();
+          renderHW();
+        };
+        window.tgHW = (i) => {
+          S.hw[i].done = !S.hw[i].done;
+          S.stats.hwDone = S.hw.filter((h) => h.done).length;
+          sv();
+          renderHW();
+          refreshDash();
+          if (window.saveCloudStats) window.saveCloudStats();
+        };
+        window.delHW = (i) => {
+          S.hw.splice(i, 1);
+          S.stats.hwDone = S.hw.filter((h) => h.done).length;
+          sv();
+          renderHW();
+          refreshDash();
+          if (window.saveCloudStats) window.saveCloudStats();
+        };
+        function renderHW() {
+          const PICO = { high: "🔴", med: "🟡", low: "🟢" };
+          $("hwList").innerHTML = S.hw.length
+            ? S.hw
+                .map(
+                  (h, i) => `<div class="item ${h.done ? "dn" : ""}">
+        <input type="checkbox" ${h.done ? "checked" : ""} onchange="tgHW(${i})">
+        <span style="flex:1;"><span>${PICO[h.pri] || "📋"} ${escapeHtml(h.t)}</span><small style="color:var(--txt2);margin-left:8px;">${h.d}</small></span>
+        <button class="btn sm dng" onclick="delHW(${i})">🗑</button>
+      </div>`,
+                )
+                .join("")
+            : '<p style="color:var(--txt2);font-size:0.82rem;padding:8px;">No homework. Add a task above!</p>';
+          $("hwDone").textContent = S.hw.filter((h) => h.done).length;
+          $("hwPend").textContent = S.hw.filter((h) => !h.done).length;
+        }
+
+        /* ═══════════════════════════════════════════════════════════════════════════
+         * AI DOUBTS
+         * ═══════════════════════════════════════════════════════════════════════════ */
+        window.askDoubt = async () => {
+          const q = $("dInput").value.trim();
+          if (!q) return;
+          $("dInput").value = "";
+          const chat = $("dChat");
+          chat.innerHTML += `<div class="cmsg usr">🧑‍🎓 ${escapeHtml(q)}</div>`;
+          chat.innerHTML += `<div class="cmsg ai" id="d-typing"><div class="typing"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div></div>`;
+          chat.scrollTop = chat.scrollHeight;
+          const r = await callAI(q, "doubts");
+          const typing = $("d-typing");
+          if (typing)
+            typing.outerHTML = `<div class="cmsg ai ai-resp">${fmtAI(r || "Sorry, could not get a response.")}</div>`;
+          chat.scrollTop = chat.scrollHeight;
+        };
+        window.clearChat = (id) => {
+          const el = $(id);
+          if (!el) return;
+          el.innerHTML =
+            '<div class="cmsg ai">Chat cleared. Ask me anything! 👋</div>';
+        };
+
+        /* ═══════════════════════════════════════════════════════════════════════════
+         * VOICE TUTOR MODE — Web Speech API (recognition + synthesis)
+         * ═══════════════════════════════════════════════════════════════════════════ */
+        const SR =
+          window.SpeechRecognition || window.webkitSpeechRecognition || null;
+        let _recog = null;
+        let _voiceOn = false;
+        function setVoiceUI(state, msg) {
+          const btn = $("voiceBtn");
+          const lbl = $("voiceBtnLbl");
+          const st = $("voiceStatus");
+          if (!btn) return;
+          btn.classList.remove("listening", "speaking");
+          if (state === "listening") {
+            btn.classList.add("listening");
+            lbl.textContent = "🔴 Listening…";
+          } else if (state === "speaking") {
+            btn.classList.add("speaking");
+            lbl.textContent = "🗣 Speaking…";
+          } else if (state === "thinking") {
+            lbl.textContent = "🤔 Thinking…";
+          } else {
+            lbl.textContent = "🎙 Voice Mode";
+          }
+          if (st && msg) st.textContent = msg;
+        }
+        function speakText(text) {
+          if (!("speechSynthesis" in window) || !text) return;
+          window.speechSynthesis.cancel();
+          // Strip markdown/HTML for cleaner spoken output
+          const clean = String(text)
+            .replace(/<[^>]+>/g, " ")
+            .replace(/[*_`#>]/g, "")
+            .replace(/\s+/g, " ")
+            .trim();
+          // Split long answers into chunks the TTS engine can handle
+          const chunks = clean.match(/[^.!?]+[.!?]?/g) || [clean];
+          setVoiceUI("speaking", "🗣 Speaking the answer…");
+          let i = 0;
+          const playNext = () => {
+            if (i >= chunks.length) {
+              setVoiceUI(
+                "idle",
+                _voiceOn
+                  ? "Voice Mode ON — tap mic to ask another."
+                  : "Tap to speak — I'll listen, then reply out loud.",
+              );
+              // Auto-restart listening so it feels like a real conversation
+              if (_voiceOn) setTimeout(startListening, 350);
+              return;
+            }
+            const u = new SpeechSynthesisUtterance(chunks[i++].trim());
+            u.rate = 0.96;
+            u.pitch = 1.0;
+            u.lang = "en-IN";
+            u.onend = playNext;
+            u.onerror = playNext;
+            window.speechSynthesis.speak(u);
+          };
+          playNext();
+        }
+        window.stopSpeaking = () => {
+          if ("speechSynthesis" in window) window.speechSynthesis.cancel();
+          if (_recog) {
+            try {
+              _recog.stop();
+            } catch (e) {}
+          }
+          setVoiceUI("idle", "Voice stopped.");
+        };
+        function startListening() {
+          if (!SR) {
+            toast("⚠️ Voice not supported in this browser", "err");
+            return;
+          }
+          if (!_recog) {
+            _recog = new SR();
+            _recog.lang = "en-IN";
+            _recog.interimResults = false;
+            _recog.continuous = false;
+            _recog.maxAlternatives = 1;
+            _recog.onresult = async (ev) => {
+              const txt = ev.results[0][0].transcript.trim();
+              if (!txt) return;
+              // Show user speech in the chat
+              const chat = $("dChat");
+              if (chat) {
+                chat.innerHTML += `<div class="cmsg usr">🎙 ${escapeHtml(txt)}</div>`;
+                chat.innerHTML += `<div class="cmsg ai" id="d-typing-voice"><div class="typing"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div></div>`;
+                chat.scrollTop = chat.scrollHeight;
+              }
+              setVoiceUI("thinking", "🤔 Asking the AI…");
+              const r = await callAI(txt, "doubts");
+              const typing = $("d-typing-voice");
+              const reply =
+                r || "Sorry, I couldn't get a response. Please try again.";
+              if (typing)
+                typing.outerHTML = `<div class="cmsg ai ai-resp">${fmtAI(reply)}</div>`;
+              if (chat) chat.scrollTop = chat.scrollHeight;
+              speakText(reply);
+            };
+            _recog.onerror = (e) => {
+              setVoiceUI("idle", "⚠️ " + (e.error || "voice error"));
+              if (e.error === "not-allowed")
+                toast("🎤 Please allow microphone access", "err");
+            };
+            _recog.onend = () => {
+              // If user toggled voice off mid-listen, just reset
+              if (!_voiceOn) setVoiceUI("idle", "Voice Mode off.");
+            };
+          }
+          try {
+            _recog.start();
+            setVoiceUI("listening", "🔴 Listening… speak now.");
+          } catch (e) {
+            // Already started — just ignore
+          }
+        }
+        window.toggleVoiceMode = () => {
+          if (!SR) {
+            toast(
+              "⚠️ Your browser doesn't support voice. Try Chrome or Edge.",
+              "err",
+            );
+            return;
+          }
+          // Make sure the user is on the doubts tab (the chat lives there)
+          const active = document.querySelector(".sec.on")?.id;
+          if (active !== "s-doubts") go("doubts");
+
+          if (_voiceOn) {
+            _voiceOn = false;
+            if (_recog) {
+              try {
+                _recog.stop();
+              } catch (e) {}
+            }
+            window.speechSynthesis?.cancel();
+            setVoiceUI("idle", "Voice Mode off.");
+            toast("🎙 Voice Mode off", "inf");
+          } else {
+            _voiceOn = true;
+            toast("🎙 Voice Mode on — speak your doubt!", "suc");
+            startListening();
+          }
+        };
+
+        /* ═══════════════════════════════════════════════════════════════════════════
+         * WEAK AREAS
+         * ═══════════════════════════════════════════════════════════════════════════ */
+        window.addWk = () => {
+          const v = $("wkI").value.trim();
+          if (!v) return;
+          S.wk.push(v);
+          $("wkI").value = "";
+          sv();
+          renderWk();
+        };
+        window.delWk = (i) => {
+          S.wk.splice(i, 1);
+          sv();
+          renderWk();
+        };
+        function renderWk() {
+          $("wkList").innerHTML = S.wk.length
+            ? S.wk
+                .map(
+                  (t, i) =>
+                    `<div class="item">📉 <span style="flex:1;">${escapeHtml(t)}</span><button class="btn sm dng" onclick="delWk(${i})">✕</button></div>`,
+                )
+                .join("")
+            : '<p style="color:var(--txt2);font-size:0.82rem;">Add your weak topics to get a recovery plan.</p>';
+        }
+        window.genRecovery = async () => {
+          if (!S.wk.length) return toast("Add weak topics first", "inf");
+          $("wkOut").innerHTML =
+            '<div class="shimmer" style="height:160px;"></div>';
+          const r = await callAI(
+            `My weak topics are: ${S.wk.join(", ")}. Create a 3-day recovery plan. Board: ${S.board}, Class: ${S.cls}, Subject: ${S.sub}.`,
+            "weak",
+          );
+          if (r)
+            $("wkOut").innerHTML = `<div class="ai-resp">${fmtAI(r)}</div>`;
+        };
+
+        /* ═══════════════════════════════════════════════════════════════════════════
+         * RESOURCES (with on-site iframe viewer)
+         * ═══════════════════════════════════════════════════════════════════════════ */
+        const RES_DATA = {
+          CBSE: [
+            {
+              icon: "📗",
+              t: "NCERT Official",
+              d: "Free NCERT textbooks & solutions",
+              u: "https://ncert.nic.in",
+              embed: true,
+            },
+            {
+              icon: "📋",
+              t: "CBSE Official",
+              d: "Syllabus, sample papers, circulars",
+              u: "https://cbseacademic.nic.in/web_material/CurriculumMain25/SrSec/English_SrSec_2024-25.pdf",
+              embed: true,
+            },
+            {
+              icon: "📝",
+              t: "CBSE Sample Papers",
+              d: "Latest pattern sample papers",
+              u: "https://cbseacademic.nic.in",
+              embed: false,
+            },
+            {
+              icon: "🎓",
+              t: "DIKSHA Platform",
+              d: "Free digital content by NCERT",
+              u: "https://diksha.gov.in",
+              embed: false,
+            },
+          ],
+          ICSE: [
+            {
+              icon: "📗",
+              t: "CISCE Official",
+              d: "Syllabus & specimen papers",
+              u: "https://cisce.org",
+              embed: false,
+            },
+            {
+              icon: "📚",
+              t: "Selina Publishers",
+              d: "ICSE textbook solutions",
+              u: "https://www.selinapublishers.com",
+              embed: false,
+            },
+            {
+              icon: "📝",
+              t: "ISC & ICSE Papers",
+              d: "Past year question papers",
+              u: "https://cisce.org/specimen-papers.aspx",
+              embed: false,
+            },
+          ],
+          Maharashtra: [
+            {
+              icon: "📗",
+              t: "Balbharati",
+              d: "Maharashtra State board books",
+              u: "https://balbharati.in",
+              embed: false,
+            },
+            {
+              icon: "📋",
+              t: "MSBSHSE",
+              d: "Maharashtra board official site",
+              u: "https://mahahsscboard.in",
+              embed: false,
+            },
+          ],
+          "Tamil Nadu": [
+            {
+              icon: "📗",
+              t: "Samacheer Kalvi",
+              d: "TN State board textbooks",
+              u: "https://www.textbooksonline.tn.gov.in",
+              embed: false,
+            },
+            {
+              icon: "📋",
+              t: "TNDGE",
+              d: "Tamil Nadu board official",
+              u: "https://www.dge.tn.gov.in",
+              embed: false,
+            },
+          ],
+          Karnataka: [
+            {
+              icon: "📗",
+              t: "KTBS",
+              d: "Karnataka textbook society",
+              u: "https://ktbs.kar.nic.in",
+              embed: false,
+            },
+            {
+              icon: "📋",
+              t: "KSEEB",
+              d: "Karnataka board official",
+              u: "https://kseab.karnataka.gov.in",
+              embed: false,
+            },
+          ],
+        };
+        const YT_DATA = [
+          {
+            icon: "▶️",
+            t: "Khan Academy India",
+            d: "Free world-class education",
+            u: "https://www.khanacademy.org",
+          },
+          {
+            icon: "▶️",
+            t: "Vedantu",
+            d: "Live classes, CBSE/ICSE",
+            u: "https://www.vedantu.com",
+          },
+          {
+            icon: "▶️",
+            t: "BYJU'S",
+            d: "Animated concept videos",
+            u: "https://byjus.com",
+          },
+          {
+            icon: "▶️",
+            t: "Physics Wallah",
+            d: "Affordable quality education",
+            u: "https://pw.live",
+          },
+          {
+            icon: "▶️",
+            t: "Unacademy",
+            d: "All boards, all subjects",
+            u: "https://unacademy.com",
+          },
+          {
+            icon: "▶️",
+            t: "Doubtnut",
+            d: "Instant doubt solving",
+            u: "https://www.doubtnut.com",
+          },
+        ];
+        function renderRes() {
+          $("resTitle").textContent = S.board + " Official Resources";
+          const resources = RES_DATA[S.board] || RES_DATA.CBSE;
+          $("resGrid").innerHTML = resources
+            .map(
+              (r) =>
+                `<a href="${r.u}" target="_blank" rel="noopener" class="rcard"><div class="ricon">${r.icon}</div><div class="rtitle">${escapeHtml(r.t)}</div><div class="rdesc">${escapeHtml(r.d)}</div></a>`,
+            )
+            .join("");
+          $("ytGrid").innerHTML = YT_DATA.map(
+            (r) =>
+              `<a href="${r.u}" target="_blank" rel="noopener" class="rcard"><div class="ricon">${r.icon}</div><div class="rtitle">${escapeHtml(r.t)}</div><div class="rdesc">${escapeHtml(r.d)}</div></a>`,
+          ).join("");
+          // Embed dropdown
+          const sel = $("embedPick");
+          sel.innerHTML = '<option value="">— Select a resource —</option>';
+          resources
+            .filter((r) => r.embed)
+            .forEach((r) => {
+              const o = document.createElement("option");
+              o.value = r.u;
+              o.textContent = r.icon + " " + r.t;
+              sel.appendChild(o);
+            });
+        }
+        window.loadEmbed = () => {
+          const u = $("embedPick").value;
+          if (!u) {
+            $("embedWrap").style.display = "none";
+            return;
+          }
+          $("embedFrame").src = u;
+          $("embedWrap").style.display = "block";
+        };
+
+        /* ═══════════════════════════════════════════════════════════════════════════
+         * STRATEGIES + PRESSURE TIPS
+         * ═══════════════════════════════════════════════════════════════════════════ */
+        window.genStrat = async () => {
+          $("stratOut").innerHTML =
+            '<div class="shimmer" style="height:160px;"></div>';
+          const r = await callAI(
+            `Create a personalized study strategy for ${S.board} Class ${S.cls} student focusing on ${S.sub}.`,
+            "strat",
+          );
+          if (r)
+            $("stratOut").innerHTML = `<div class="ai-resp">${fmtAI(r)}</div>`;
+        };
+        const PRESSURE_TIPS = [
+          [
+            "🧘",
+            "Deep breathing: 4-7-8 technique. Inhale 4s, hold 7s, exhale 8s. Repeat 3x.",
+          ],
+          [
+            "💧",
+            "Stay hydrated! Drink water every 45 minutes. Dehydration reduces focus by 20%.",
+          ],
+          [
+            "🚶",
+            "Take a 5-minute walk after every hour of study. Movement boosts memory consolidation.",
+          ],
+          [
+            "📵",
+            "Phone-free study blocks. Place phone in another room, not just face-down.",
+          ],
+          [
+            "🌙",
+            "Sleep 7-8 hours. Memory is consolidated during sleep. All-nighters are counterproductive.",
+          ],
+          [
+            "🎯",
+            "Use the 2-minute rule: If a task takes under 2 minutes, do it immediately.",
+          ],
+          [
+            "📝",
+            "Write exam anxiety on paper, then fold and put away. Externalizing fear reduces it.",
+          ],
+          [
+            "💪",
+            'Say: "I have prepared well. I can handle this." Positive self-talk works scientifically.',
+          ],
+        ];
+        window.showPressure = () => {
+          const tips = [...PRESSURE_TIPS]
+            .sort(() => Math.random() - 0.5)
+            .slice(0, 3);
+          $("pressOut").innerHTML = tips
+            .map((t) => `<div class="item">${t[0]} <span>${t[1]}</span></div>`)
+            .join("");
+        };
+
+        /* ═══════════════════════════════════════════════════════════════════════════
+         * MOTIVATION
+         * ═══════════════════════════════════════════════════════════════════════════ */
+        const QUOTES = [
+          {
+            q: "The expert in anything was once a beginner.",
+            a: "Helen Hayes",
+            e: "🌱",
+          },
+          {
+            q: "Education is the passport to the future.",
+            a: "Malcolm X",
+            e: "🎓",
+          },
+          {
+            q: "Success is no accident. It is hard work and perseverance.",
+            a: "Pelé",
+            e: "⚽",
+          },
+          {
+            q: "The secret of getting ahead is getting started.",
+            a: "Mark Twain",
+            e: "🚀",
+          },
+          {
+            q: "Don't watch the clock; do what it does. Keep going.",
+            a: "Sam Levenson",
+            e: "⏰",
+          },
+          {
+            q: "Believe you can and you're halfway there.",
+            a: "Theodore Roosevelt",
+            e: "💫",
+          },
+          {
+            q: "It does not matter how slowly you go, so long as you do not stop.",
+            a: "Confucius",
+            e: "🐢",
+          },
+          {
+            q: "The only way to do great work is to love what you do.",
+            a: "Steve Jobs",
+            e: "❤️",
+          },
+          {
+            q: "Your only competition is who you were yesterday.",
+            a: "Anonymous",
+            e: "🪞",
+          },
+          {
+            q: "Small steps every day lead to giant leaps eventually.",
+            a: "Anonymous",
+            e: "👣",
+          },
+        ];
+        window.newQuote = () => {
+          const r = QUOTES[Math.floor(Math.random() * QUOTES.length)];
+          $("mQ").textContent = `"${r.q}"`;
+          $("mA").textContent = `— ${r.a}`;
+          $("mEmoji").textContent = r.e;
+        };
+        window.aiMotivate = async () => {
+          $("aiMotivCard").style.display = "block";
+          $("motivOut").innerHTML =
+            '<div class="shimmer" style="height:100px;"></div>';
+          const r = await callAI(
+            `Give me a heartfelt motivational message. I'm a Class ${S.cls} student preparing for ${S.board} ${S.sub} exam. I've been studying hard and feeling nervous.`,
+            "motiv",
+          );
+          if (r)
+            $("motivOut").innerHTML = `<div class="ai-resp">${fmtAI(r)}</div>`;
+        };
+
+        /* ═══════════════════════════════════════════════════════════════════════════
+         * FOCUS / ZEN MODE
+         * ═══════════════════════════════════════════════════════════════════════════ */
+        window.toggleFocus = () => {
+          document.body.classList.toggle("focus-on");
+          const fov = $("fov");
+          if (fov.classList.toggle("on")) {
+            $("fTask").value = S.focusTask || "";
+            updTDisp();
+            $("fTask").focus();
+          } else {
+            S.focusTask = $("fTask").value;
+            sv();
+          }
+        };
+        document.addEventListener("keydown", (e) => {
+          if (e.ctrlKey && e.shiftKey && (e.key === "Z" || e.key === "z")) {
+            e.preventDefault();
+            toggleFocus();
+          }
+        });
+
+        /* ═══════════════════════════════════════════════════════════════════════════
+         * FIREBASE AUTH (Google) + FLASHCARD SYNC + STATS SYNC
+         * Uses Firebase v9+ Modular SDK exposed via window.FB
+         * ═══════════════════════════════════════════════════════════════════════════ */
+        let fbApp = null;
+        function initFirebase() {
+          if (FIREBASE_CONFIG.apiKey === "YOUR_FIREBASE_API_KEY") {
+            console.info("Firebase not configured — login disabled.");
+            $("loggedOut").innerHTML =
+              `<p style="font-size:0.7rem;color:var(--txt2);text-align:center;line-height:1.4;">⚠ Add your Firebase config in the AI_CONFIG.FIREBASE block to enable Google login &amp; cloud sync.</p>`;
+            return;
+          }
+          if (!window.FB) {
+            // Modular SDK not loaded yet — wait for it
+            window.addEventListener("fb-ready", initFirebase, { once: true });
+            return;
+          }
+          try {
+            fbApp = window.FB.initializeApp(FIREBASE_CONFIG);
+            fbAuth = window.FB.getAuth(fbApp);
+            fbDB = window.FB.getFirestore(fbApp);
+            window.FB.onAuthStateChanged(fbAuth, async (user) => {
+              currentUser = user;
+              if (user) {
+                $("loggedOut").style.display = "none";
+                $("loggedIn").style.display = "block";
+                $("uName").textContent = user.displayName || "Student";
+                $("uMail").textContent = user.email || "";
+                $("uPhoto").src = user.photoURL || "";
+                $("fcCloud").style.display = "inline";
+                $("fcSyncBadge").style.display = "inline-block";
+                await loadCloudStats();
+                attachFCListener();
+                toast(
+                  "👋 Welcome " +
+                    (user.displayName?.split(" ")[0] || "back") +
+                    "!",
+                );
+              } else {
+                $("loggedOut").style.display = "block";
+                $("loggedIn").style.display = "none";
+                $("fcCloud").style.display = "none";
+                $("fcSyncBadge").style.display = "none";
+                if (fcUnsub) {
+                  fcUnsub();
+                  fcUnsub = null;
+                }
+              }
+            });
+          } catch (e) {
+            console.warn("Firebase init failed", e);
+          }
+        }
+        window.signInGoogle = async () => {
+          if (!fbAuth) return toast("Firebase not configured", "err");
+          try {
+            const provider = new window.FB.GoogleAuthProvider();
+            await window.FB.signInWithPopup(fbAuth, provider);
+          } catch (e) {
+            toast("Sign in failed: " + e.message, "err");
+          }
+        };
+        window.signOutGoogle = async () => {
+          if (!fbAuth) return;
+          await window.FB.signOut(fbAuth);
+          toast("Signed out", "inf");
+        };
+
+        /* Pull study_streak + total_hours from Firestore on login.
+         * Local + cloud are merged by taking the MAX of each value, so the
+         * student never loses progress whether they study online or offline. */
+        async function loadCloudStats() {
+          if (!currentUser || !fbDB || !window.FB) return;
+          try {
+            const ref = window.FB.doc(fbDB, "users", currentUser.uid);
+            const snap = await window.FB.getDoc(ref);
+            const local = S.stats || {};
+            if (snap.exists()) {
+              const cloud = snap.data() || {};
+              S.stats.streak = Math.max(
+                Number(local.streak) || 0,
+                Number(cloud.study_streak) || 0,
+              );
+              S.stats.hours = Math.max(
+                Number(local.hours) || 0,
+                Number(cloud.total_hours) || 0,
+              );
+              S.stats.quizzes = Math.max(
+                Number(local.quizzes) || 0,
+                Number(cloud.quizzes) || 0,
+              );
+              S.stats.hwDone = Math.max(
+                Number(local.hwDone) || 0,
+                Number(cloud.hwDone) || 0,
+              );
+              if (cloud.lastDate && !S.lastDate) S.lastDate = cloud.lastDate;
+            }
+            sv();
+            refreshDash();
+            // Push the merged values back so cloud stays authoritative
+            saveCloudStats();
+          } catch (e) {
+            console.warn("loadCloudStats", e);
+          }
+        }
+        let _statsSaveTm;
+        function saveCloudStats() {
+          if (!currentUser || !fbDB || !window.FB) return;
+          clearTimeout(_statsSaveTm);
+          _statsSaveTm = setTimeout(() => {
+            try {
+              const ref = window.FB.doc(fbDB, "users", currentUser.uid);
+              window.FB
+                .setDoc(
+                  ref,
+                  {
+                    study_streak: Number(S.stats.streak) || 0,
+                    total_hours: Number(S.stats.hours) || 0,
+                    quizzes: Number(S.stats.quizzes) || 0,
+                    hwDone: Number(S.stats.hwDone) || 0,
+                    lastDate: S.lastDate || null,
+                    updatedAt: Date.now(),
+                  },
+                  { merge: true },
+                )
+                .catch((e) => console.warn("saveCloudStats", e));
+            } catch (e) {
+              console.warn(e);
+            }
+          }, 600);
+        }
+        // Expose so addStudyHours / quiz / hw handlers can call it cheaply
+        window.saveCloudStats = saveCloudStats;
+
+        /* ── UTIL ───────────────────────────────────────────────────────────────── */
+        function escapeHtml(s) {
+          return String(s ?? "").replace(
+            /[&<>"']/g,
+            (c) =>
+              ({
+                "&": "&amp;",
+                "<": "&lt;",
+                ">": "&gt;",
+                '"': "&quot;",
+                "'": "&#39;",
+              })[c],
+          );
+        }
+
+        /* ═══════════════════════════════════════════════════════════════════════════
+         * INIT
+         * ═══════════════════════════════════════════════════════════════════════════ */
+        function init() {
+          $("brd").value = S.board || "CBSE";
+          $("cls").value = S.cls || "10";
+          $("sub").value = S.sub || "Mathematics";
+          $("vibeSel").value = S.vibe || 0;
+          if (S.theme === "light") document.body.classList.add("light");
+          $("hwD").valueAsDate = new Date();
+
+          fillYears();
+          updTDisp();
+          initChart();
+          refreshDash();
+          renderNotes();
+          renderHW();
+          updFC();
+          renderFCList();
+          renderForm();
+          renderRes();
+          renderWk();
+          newQuote();
+          showPressure();
+          loadTrack();
+          if (S.lofi) {
+            $("musicBtn").textContent = "⏸️";
+            $("musicBtn2").textContent = "⏸️ Lo-Fi";
+          }
+
+          // Sidebar default state — hidden on mobile, hidden on desktop too (toggle via ☰)
+          if (window.innerWidth >= 768) {
+            $("sb").classList.remove("mob-on");
+            $("sb").classList.remove("off");
+            $("cnt").classList.remove("wide");
+          } else {
+            $("sb").classList.add("off");
+            $("cnt").classList.add("wide");
+          }
+
+          initFirebase();
+
+          // First-time API key prompt
+          if (
+            !localStorage.getItem("sap_groq_key") &&
+            !GROQ_API_KEY_DEFAULT &&
+            !localStorage.getItem("sap_seen")
+          ) {
+            localStorage.setItem("sap_seen", "1");
+            setTimeout(() => openModal("aiM"), 1200);
+          }
+        }
+        window.addEventListener("resize", () => {
+          if (window.innerWidth >= 768) {
+            $("sb").classList.remove("mob-on");
+            $("bdp").classList.remove("on");
+          } else if (!$("sb").classList.contains("mob-on")) {
+            $("sb").classList.add("off");
+            $("cnt").classList.add("wide");
+          }
+          if (wChart) wChart.resize();
+        });
+
+        init();
+      })();
     </script>
-</body>
+  </body>
 </html>
