@@ -1,20 +1,14 @@
-<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1.0, viewport-fit=cover"
-    />
-    <meta name="theme-color" content="#07071a" />
+<!DOCTYPE html>
+<!-- saved from url=(0071)https://login-progress-saver.preview.emergentagent.com/studyai_pro.html -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="theme-color" content="#07071a">
     <title>StudyAI Pro V2 | #1 Study Hub by Master Arhan</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800;900&family=DM+Mono:ital,wght@0,400;0,500;1,400&display=swap"
-      rel="stylesheet"
-    />
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com/">
+    <link href="./By Emergient AI StudyAI Pro V2 _ #1 Study Hub by Master Arhan_files/css2" rel="stylesheet">
+    <script src="./By Emergient AI StudyAI Pro V2 _ #1 Study Hub by Master Arhan_files/cb=gapi.loaded_0" async=""></script><script src="./By Emergient AI StudyAI Pro V2 _ #1 Study Hub by Master Arhan_files/chart.umd.min.js.download"></script>
+    <script src="./By Emergient AI StudyAI Pro V2 _ #1 Study Hub by Master Arhan_files/jspdf.umd.min.js.download"></script>
     <!-- Firebase v10 (Modular / v9+) — exposed on window.FB for the main script -->
     <script type="module">
       import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-app.js";
@@ -1184,6 +1178,80 @@
         display: block;
       }
 
+      /* HEADER LOGIN PILL + AVATAR (visible on every screen) */
+      .hdr-auth {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        margin-left: 4px;
+      }
+      .hdr-signin {
+        display: inline-flex;
+        align-items: center;
+        gap: 7px;
+        padding: 8px 14px;
+        border-radius: 22px;
+        background: #fff;
+        color: #1a1a2e;
+        font-size: 0.78rem;
+        font-weight: 700;
+        border: 1px solid rgba(0, 0, 0, 0.08);
+        cursor: pointer;
+        box-shadow: 0 4px 14px rgba(0, 0, 0, 0.18);
+        transition: transform 0.18s, box-shadow 0.18s, filter 0.18s;
+        white-space: nowrap;
+        font-family: inherit;
+        min-height: 38px;
+      }
+      .hdr-signin:hover {
+        transform: translateY(-1px);
+        filter: brightness(1.04);
+        box-shadow: 0 8px 22px rgba(124, 107, 239, 0.32);
+      }
+      .hdr-signin svg { width: 16px; height: 16px; flex-shrink: 0; }
+      .hdr-avatar {
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        cursor: pointer;
+        object-fit: cover;
+        border: 2px solid rgba(124, 107, 239, 0.55);
+        box-shadow: 0 4px 12px rgba(124, 107, 239, 0.3);
+        transition: transform 0.18s;
+        background: var(--glass2);
+      }
+      .hdr-avatar:hover { transform: scale(1.08); }
+      .hdr-menu {
+        position: fixed;
+        right: 12px;
+        top: 64px;
+        background: var(--glass-strong);
+        backdrop-filter: var(--blur);
+        -webkit-backdrop-filter: var(--blur);
+        border: 1px solid var(--border);
+        border-radius: 14px;
+        padding: 14px;
+        min-width: 230px;
+        box-shadow: var(--sh2);
+        z-index: 300;
+        display: none;
+      }
+      .hdr-menu.on { display: block; }
+      .hdr-menu .uname { font-weight: 800; font-size: 0.95rem; }
+      .hdr-menu .umail { font-size: 0.72rem; color: var(--txt2); margin: 2px 0 12px; word-break: break-all; }
+      .hdr-menu .sync-pill {
+        display: inline-block;
+        font-size: 0.68rem;
+        color: var(--success);
+        background: rgba(41, 199, 127, 0.12);
+        padding: 3px 9px;
+        border-radius: 12px;
+        margin-bottom: 10px;
+      }
+
+      /* Mobile context bar (board / class / subject), hidden by default */
+      .ctx-bar { display: none; }
+
       /* RESPONSIVE */
       @media (max-width: 1024px) {
         :root {
@@ -1213,11 +1281,31 @@
         .tdisp {
           font-size: 2.8rem;
         }
-        .hdr-r select {
-          max-width: 80px;
-          font-size: 0.7rem;
-          padding: 6px 8px;
+        /* Hide board/class/subject from header on phones (moved to context bar) */
+        .hdr-r .ctx-sel { display: none !important; }
+        .ctx-bar {
+          display: flex !important;
+          gap: 6px;
+          padding: 8px 12px;
+          background: var(--glass);
+          backdrop-filter: var(--blur);
+          -webkit-backdrop-filter: var(--blur);
+          border-bottom: 1px solid var(--border);
+          position: sticky;
+          top: 60px;
+          z-index: 110;
+          overflow-x: auto;
+          -webkit-overflow-scrolling: touch;
         }
+        .ctx-bar select {
+          flex: 1 1 auto;
+          min-width: 0;
+          max-width: none !important;
+          font-size: 0.78rem;
+          padding: 8px 12px;
+        }
+        .hdr-signin .signin-label { display: none; }
+        .hdr-signin { padding: 7px 10px; }
         .btn.ico {
           width: 38px;
           height: 38px;
@@ -1231,6 +1319,9 @@
         .iframe-wrap iframe {
           height: 380px;
         }
+        .hdr { flex-wrap: nowrap; overflow: hidden; }
+        .hdr-r { flex-wrap: nowrap; overflow-x: auto; -webkit-overflow-scrolling: touch; max-width: 65vw; scrollbar-width: none; }
+        .hdr-r::-webkit-scrollbar { display: none; }
       }
       @media (max-width: 480px) {
         .hdr {
@@ -1241,16 +1332,13 @@
         .hdr-r {
           gap: 4px;
         }
-        .hdr-r select {
-          max-width: 68px;
-          font-size: 0.66rem;
-          padding: 5px 7px;
-        }
         .hdr-r .btn.ico {
           width: 34px;
           height: 34px;
           font-size: 0.9rem;
         }
+        .hdr-avatar { width: 32px; height: 32px; }
+        .logo { font-size: 1.05rem; }
         .fc {
           height: 180px;
         }
@@ -1263,6 +1351,8 @@
         .card {
           padding: 18px;
         }
+        /* hide low-priority header icons on tiny screens */
+        .hdr-r .btn.ico.opt-hide { display: none; }
       }
 
       /* FOCUS ON BODY: hide chrome */
@@ -1382,228 +1472,226 @@
         transform: translateX(100%);
       }
     </style>
-  </head>
+  <script src="./By Emergient AI StudyAI Pro V2 _ #1 Study Hub by Master Arhan_files/api.js.download" type="text/javascript" charset="UTF-8" gapi_processed="true"></script></head>
   <body>
     <div class="bdp" id="bdp" onclick="closeSB()"></div>
 
-    <nav class="sb off" id="sb">
+    <nav class="sb" id="sb">
       <!-- USER / GOOGLE LOGIN -->
       <div class="sb-user" id="sbUser">
-        <div id="loggedOut">
-          <button class="gbtn" onclick="signInGoogle()">
+        <div id="loggedOut" style="display: block;">
+          <button class="gbtn" onclick="signInGoogle()" fdprocessedid="2cbyz">
             <svg viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
-              <path
-                fill="#FFC107"
-                d="M43.6 20.5H42V20H24v8h11.3c-1.6 4.6-6 8-11.3 8-6.6 0-12-5.4-12-12s5.4-12 12-12c3.1 0 5.9 1.2 8 3.1l5.7-5.7C34 6.1 29.3 4 24 4 12.9 4 4 12.9 4 24s8.9 20 20 20 20-8.9 20-20c0-1.3-.1-2.3-.4-3.5z"
-              />
-              <path
-                fill="#FF3D00"
-                d="M6.3 14.7l6.6 4.8C14.7 15.1 19 12 24 12c3.1 0 5.9 1.2 8 3.1l5.7-5.7C34 6.1 29.3 4 24 4 16.3 4 9.7 8.3 6.3 14.7z"
-              />
-              <path
-                fill="#4CAF50"
-                d="M24 44c5.2 0 9.9-2 13.4-5.2l-6.2-5.2C29.2 35.1 26.7 36 24 36c-5.3 0-9.7-3.4-11.3-8.1l-6.5 5C9.5 39.6 16.2 44 24 44z"
-              />
-              <path
-                fill="#1976D2"
-                d="M43.6 20.5H42V20H24v8h11.3c-.8 2.2-2.2 4.1-4.1 5.5l6.2 5.2C41.9 35.5 44 30.1 44 24c0-1.3-.1-2.3-.4-3.5z"
-              />
+              <path fill="#FFC107" d="M43.6 20.5H42V20H24v8h11.3c-1.6 4.6-6 8-11.3 8-6.6 0-12-5.4-12-12s5.4-12 12-12c3.1 0 5.9 1.2 8 3.1l5.7-5.7C34 6.1 29.3 4 24 4 12.9 4 4 12.9 4 24s8.9 20 20 20 20-8.9 20-20c0-1.3-.1-2.3-.4-3.5z"></path>
+              <path fill="#FF3D00" d="M6.3 14.7l6.6 4.8C14.7 15.1 19 12 24 12c3.1 0 5.9 1.2 8 3.1l5.7-5.7C34 6.1 29.3 4 24 4 16.3 4 9.7 8.3 6.3 14.7z"></path>
+              <path fill="#4CAF50" d="M24 44c5.2 0 9.9-2 13.4-5.2l-6.2-5.2C29.2 35.1 26.7 36 24 36c-5.3 0-9.7-3.4-11.3-8.1l-6.5 5C9.5 39.6 16.2 44 24 44z"></path>
+              <path fill="#1976D2" d="M43.6 20.5H42V20H24v8h11.3c-.8 2.2-2.2 4.1-4.1 5.5l6.2 5.2C41.9 35.5 44 30.1 44 24c0-1.3-.1-2.3-.4-3.5z"></path>
             </svg>
             Sign in with Google
           </button>
-          <p
-            style="
+          <p style="
               font-size: 0.65rem;
               color: var(--txt2);
               text-align: center;
               margin-top: 6px;
-            "
-          >
+            ">
             Sync flashcards across devices
           </p>
         </div>
         <div id="loggedIn" style="display: none">
           <div class="user-row">
-            <img id="uPhoto" alt="You" src="" />
+            <img id="uPhoto" alt="You" src="https://login-progress-saver.preview.emergentagent.com/studyai_pro.html">
             <div style="overflow: hidden; flex: 1">
               <div class="uname" id="uName">User</div>
               <div class="umail" id="uMail"></div>
             </div>
           </div>
-          <button
-            class="btn sm sec full"
-            style="margin-top: 8px"
-            onclick="signOutGoogle()"
-          >
+          <button class="btn sm sec full" style="margin-top: 8px" onclick="signOutGoogle()">
             Sign out
           </button>
         </div>
       </div>
 
-      <div class="nav on" data-p="dash" onclick="go('dash')">📊 Dashboard</div>
-      <div class="nav" data-p="timer" onclick="go('timer')">
+      <div class="nav on" data-p="dash" onclick="go(&#39;dash&#39;)">📊 Dashboard</div>
+      <div class="nav" data-p="timer" onclick="go(&#39;timer&#39;)">
         ⏱️ Timer <span class="nb">Pomodoro</span>
       </div>
-      <div class="nav" data-p="pyq" onclick="go('pyq')">📝 PYQ & Papers</div>
-      <div class="nav" data-p="pred" onclick="go('pred')">🔮 CBQ Predictor</div>
-      <div class="nav" data-p="notes" onclick="go('notes')">📒 Notes Maker</div>
-      <div class="nav" data-p="mm" onclick="go('mm')">🧩 Mind Maps</div>
-      <div class="nav" data-p="quiz" onclick="go('quiz')">
+      <div class="nav" data-p="pyq" onclick="go(&#39;pyq&#39;)">📝 PYQ &amp; Papers</div>
+      <div class="nav" data-p="pred" onclick="go(&#39;pred&#39;)">🔮 CBQ Predictor</div>
+      <div class="nav" data-p="notes" onclick="go(&#39;notes&#39;)">📒 Notes Maker</div>
+      <div class="nav" data-p="mm" onclick="go(&#39;mm&#39;)">🧩 Mind Maps</div>
+      <div class="nav" data-p="quiz" onclick="go(&#39;quiz&#39;)">
         ❓ Quizzes <span class="nb">AI</span>
       </div>
-      <div class="nav" data-p="fc" onclick="go('fc')">
+      <div class="nav" data-p="fc" onclick="go(&#39;fc&#39;)">
         🃏 Flash Cards
         <span class="nb" id="fcSyncBadge" style="display: none">☁</span>
       </div>
-      <div class="nav" data-p="form" onclick="go('form')">📐 Formulas</div>
-      <div class="nav" data-p="hw" onclick="go('hw')">✅ Homework</div>
-      <div class="nav" data-p="doubts" onclick="go('doubts')">
+      <div class="nav" data-p="form" onclick="go(&#39;form&#39;)">📐 Formulas</div>
+      <div class="nav" data-p="hw" onclick="go(&#39;hw&#39;)">✅ Homework</div>
+      <div class="nav" data-p="doubts" onclick="go(&#39;doubts&#39;)">
         💬 AI Doubts <span class="nb">Live</span>
       </div>
-      <div class="nav" data-p="weak" onclick="go('weak')">📉 Weak Areas</div>
-      <div class="nav" data-p="res" onclick="go('res')">🔗 Resources</div>
-      <div class="nav" data-p="strat" onclick="go('strat')">🎯 Strategies</div>
-      <div class="nav" data-p="motiv" onclick="go('motiv')">🔥 Motivation</div>
+      <div class="nav" data-p="weak" onclick="go(&#39;weak&#39;)">📉 Weak Areas</div>
+      <div class="nav" data-p="res" onclick="go(&#39;res&#39;)">🔗 Resources</div>
+      <div class="nav" data-p="strat" onclick="go(&#39;strat&#39;)">🎯 Strategies</div>
+      <div class="nav" data-p="motiv" onclick="go(&#39;motiv&#39;)">🔥 Motivation</div>
     </nav>
 
     <header class="hdr">
       <div class="logo-area">
-        <button class="ham" onclick="toggleSB()" aria-label="Toggle sidebar">
+        <button class="ham" onclick="toggleSB()" aria-label="Toggle sidebar" fdprocessedid="qrbi29">
           ☰
         </button>
-        <div class="logo" onclick="go('dash')">🧠 StudyAI Pro</div>
+        <div class="logo" onclick="go(&#39;dash&#39;)">🧠 StudyAI Pro</div>
         <span class="badge">✨ V2 by Master Arhan</span>
       </div>
       <div class="hdr-r">
-        <select id="brd" onchange="saveCtx()" title="Board">
+        <select id="brd" class="ctx-sel" onchange="saveCtx()" title="Board" data-testid="header-board-select" fdprocessedid="zmfg8vs">
           <option>CBSE</option>
           <option>ICSE</option>
           <option>Maharashtra</option>
           <option>Tamil Nadu</option>
           <option>Karnataka</option>
         </select>
-        <select id="cls" onchange="saveCtx()" title="Class">
+        <select id="cls" class="ctx-sel" onchange="saveCtx()" title="Class" data-testid="header-class-select" fdprocessedid="43f63">
           <option>9</option>
           <option>10</option>
           <option>11</option>
           <option>12</option>
         </select>
-        <select id="sub" onchange="saveCtx()" title="Subject">
+        <select id="sub" class="ctx-sel" onchange="saveCtx()" title="Subject" data-testid="header-subject-select" fdprocessedid="0861fj">
           <option>Mathematics</option>
           <option>Physics</option>
           <option>Chemistry</option>
           <option>Biology</option>
           <option>English</option>
         </select>
-        <button
-          class="btn ico sec"
-          onclick="toggleTheme()"
-          title="Toggle theme"
-        >
+        <button class="btn ico sec" onclick="toggleTheme()" title="Toggle theme" data-testid="theme-toggle-btn">
           🌓
         </button>
-        <button
-          class="btn ico acc"
-          id="musicBtn"
-          onclick="toggleMusic()"
-          title="Lo-Fi Music"
-        >
+        <button class="btn ico acc" id="musicBtn" onclick="toggleMusic()" title="Lo-Fi Music" data-testid="music-toggle-btn" fdprocessedid="1dvhqo">
           🎵
         </button>
-        <button
-          class="btn ico acc"
-          onclick="toggleFocus()"
-          title="Zen Mode (Ctrl+Shift+Z)"
-        >
+        <button class="btn ico acc opt-hide" onclick="toggleFocus()" title="Zen Mode (Ctrl+Shift+Z)" data-testid="focus-toggle-btn" fdprocessedid="9382xo">
           🧘
         </button>
-        <button
-          class="btn ico acc"
-          onclick="toggleVoiceMode()"
-          title="Voice Tutor (speak your doubt)"
-        >
+        <button class="btn ico acc opt-hide" onclick="toggleVoiceMode()" title="Voice Tutor (speak your doubt)" data-testid="voice-toggle-btn" fdprocessedid="r0vm4">
           🎙
         </button>
-        <button class="btn ico acc" onclick="openExam()" title="Set exam date">
+        <button class="btn ico acc opt-hide" onclick="openExam()" title="Set exam date" data-testid="exam-date-btn" fdprocessedid="33rs1s">
           📅
         </button>
-        <button
-          class="btn ico"
-          style="background: rgba(124, 107, 239, 0.2); color: var(--p2)"
-          onclick="openAISetup()"
-          title="AI Settings"
-        >
+        <button class="btn ico opt-hide" style="background: rgba(124, 107, 239, 0.2); color: var(--p2)" onclick="openAISetup()" title="AI Settings" data-testid="ai-settings-btn" fdprocessedid="ob501w">
           🔑
         </button>
+
+        <!-- HEADER GOOGLE LOGIN (always visible) -->
+        <div class="hdr-auth" id="hdrAuth">
+          <button id="hdrSignInBtn" class="hdr-signin" onclick="signInGoogle()" data-testid="header-google-signin-btn" fdprocessedid="vyhlv" style="display: inline-flex;">
+            <svg viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <path fill="#FFC107" d="M43.6 20.5H42V20H24v8h11.3c-1.6 4.6-6 8-11.3 8-6.6 0-12-5.4-12-12s5.4-12 12-12c3.1 0 5.9 1.2 8 3.1l5.7-5.7C34 6.1 29.3 4 24 4 12.9 4 4 12.9 4 24s8.9 20 20 20 20-8.9 20-20c0-1.3-.1-2.3-.4-3.5z"></path>
+              <path fill="#FF3D00" d="M6.3 14.7l6.6 4.8C14.7 15.1 19 12 24 12c3.1 0 5.9 1.2 8 3.1l5.7-5.7C34 6.1 29.3 4 24 4 16.3 4 9.7 8.3 6.3 14.7z"></path>
+              <path fill="#4CAF50" d="M24 44c5.2 0 9.9-2 13.4-5.2l-6.2-5.2C29.2 35.1 26.7 36 24 36c-5.3 0-9.7-3.4-11.3-8.1l-6.5 5C9.5 39.6 16.2 44 24 44z"></path>
+              <path fill="#1976D2" d="M43.6 20.5H42V20H24v8h11.3c-.8 2.2-2.2 4.1-4.1 5.5l6.2 5.2C41.9 35.5 44 30.1 44 24c0-1.3-.1-2.3-.4-3.5z"></path>
+            </svg>
+            <span class="signin-label">Sign in</span>
+          </button>
+          <img id="hdrAvatar" class="hdr-avatar" alt="You" src="https://login-progress-saver.preview.emergentagent.com/studyai_pro.html" style="display: none" onclick="toggleHdrMenu()" data-testid="header-user-avatar">
+        </div>
       </div>
     </header>
 
-    <div class="cnt wide" id="cnt">
+    <!-- AVATAR DROPDOWN (signed-in only) -->
+    <div class="hdr-menu" id="hdrMenu" data-testid="header-user-menu">
+      <div class="uname" id="hdrUName">Student</div>
+      <div class="umail" id="hdrUMail"></div>
+      <span class="sync-pill" id="hdrSyncPill">☁ Synced to cloud</span>
+      <button class="btn sm sec full" style="width:100%" onclick="signOutGoogle();toggleHdrMenu()" data-testid="header-signout-btn">
+        Sign out
+      </button>
+    </div>
+
+    <!-- MOBILE CONTEXT BAR (board / class / subject) -->
+    <div class="ctx-bar" id="ctxBar">
+      <select id="brdM" onchange="saveCtxMobile()" title="Board" data-testid="mobile-board-select">
+        <option>CBSE</option>
+        <option>ICSE</option>
+        <option>Maharashtra</option>
+        <option>Tamil Nadu</option>
+        <option>Karnataka</option>
+      </select>
+      <select id="clsM" onchange="saveCtxMobile()" title="Class" data-testid="mobile-class-select">
+        <option>9</option>
+        <option>10</option>
+        <option>11</option>
+        <option>12</option>
+      </select>
+      <select id="subM" onchange="saveCtxMobile()" title="Subject" data-testid="mobile-subject-select">
+        <option>Mathematics</option>
+        <option>Physics</option>
+        <option>Chemistry</option>
+        <option>Biology</option>
+        <option>English</option>
+      </select>
+    </div>
+
+    <div class="cnt" id="cnt">
       <div class="inner">
         <!-- DASHBOARD -->
         <section class="sec on" id="s-dash">
           <h2>📊 Command Center</h2>
           <p class="subline">
-            Board: <strong id="d-brd"></strong> · Class
-            <strong id="d-cls"></strong> · <strong id="d-sub"></strong>
+            Board: <strong id="d-brd">CBSE</strong> · Class
+            <strong id="d-cls">10</strong> · <strong id="d-sub">Mathematics</strong>
           </p>
-          <div class="sgrid" id="sgrid"></div>
+          <div class="sgrid" id="sgrid">
+    <div class="scard"><div class="snum">0.0</div><div class="slbl">📖 Study Hrs</div></div>
+    <div class="scard"><div class="snum">0</div><div class="slbl">❓ Quizzes Done</div></div>
+    <div class="scard"><div class="snum">0</div><div class="slbl">✅ HW Done</div></div>
+    <div class="scard"><div class="snum">0</div><div class="slbl">🔥 Day Streak</div></div>
+    <div class="scard"><div class="snum">0</div><div class="slbl">📒 Notes</div></div>
+    <div class="scard"><div class="snum">0</div><div class="slbl">🃏 Flashcards</div></div>
+  </div>
           <div class="card" id="cd-exam" style="display: none">
             <h3>📅 <span id="cd-days">--</span> days until exam</h3>
-            <div
-              id="cd-bar"
-              style="
+            <div id="cd-bar" style="
                 height: 8px;
                 background: var(--glass2);
                 border-radius: 4px;
                 margin-top: 8px;
                 overflow: hidden;
-              "
-            >
-              <div
-                id="cd-prog"
-                style="
+              ">
+              <div id="cd-prog" style="
                   height: 100%;
                   background: linear-gradient(90deg, var(--p), var(--a));
                   border-radius: 4px;
                   transition: width 1s;
-                "
-              ></div>
+                "></div>
             </div>
           </div>
           <div class="card">
             <h3>✅ Quick Tasks</h3>
             <div class="irow">
-              <input
-                type="text"
-                id="qtI"
-                placeholder="Add quick task..."
-                onkeydown="if(event.key==='Enter')addQT()"
-              /><button class="btn" onclick="addQT()">➕ Add</button>
+              <input type="text" id="qtI" placeholder="Add quick task..." onkeydown="if(event.key===&#39;Enter&#39;)addQT()" fdprocessedid="srtqrp"><button class="btn" onclick="addQT()" fdprocessedid="q8frvm">➕ Add</button>
             </div>
-            <div id="qtList"></div>
+            <div id="qtList"><p style="color:var(--txt2);font-size:0.82rem;">No tasks yet. Add one above!</p></div>
           </div>
           <div class="card">
             <h3>📈 Weekly Study Hours</h3>
-            <div class="chart-wrap"><canvas id="wChart"></canvas></div>
+            <div class="chart-wrap"><canvas id="wChart" width="1050" height="360" style="display: block; box-sizing: border-box; height: 240px; width: 700px;"></canvas></div>
           </div>
         </section>
 
         <!-- TIMER -->
         <section class="sec" id="s-timer">
-          <div
-            class="card"
-            style="text-align: center; max-width: 540px; margin: 0 auto"
-          >
-            <p
-              id="tlbl"
-              style="
+          <div class="card" style="text-align: center; max-width: 540px; margin: 0 auto">
+            <p id="tlbl" style="
                 color: var(--txt2);
                 font-size: 0.85rem;
                 margin-bottom: 4px;
                 font-weight: 600;
-              "
-            >
+              ">
               🔥 Focus Session
             </p>
             <div class="tdisp" id="tDisp">25:00</div>
@@ -1626,22 +1714,12 @@
               🍅 Sessions today: <strong id="sessC">0</strong>
             </p>
             <div class="music-p">
-              <div class="track" id="trackName">
-                Click 🎵 to start Lo-Fi music
-              </div>
+              <div class="track" id="trackName">🎧 Lofi Study · 🌙 Chill Lo-Fi</div>
               <div class="mc">
-                <button
-                  class="btn sm sec"
-                  onclick="prevTrack()"
-                  title="Previous"
-                >
+                <button class="btn sm sec" onclick="prevTrack()" title="Previous">
                   ⏮
                 </button>
-                <button
-                  class="btn sm acc"
-                  id="musicBtn2"
-                  onclick="toggleMusic()"
-                >
+                <button class="btn sm acc" id="musicBtn2" onclick="toggleMusic()">
                   🎵 Lo-Fi
                 </button>
                 <button class="btn sm sec" onclick="nextTrack()" title="Next">
@@ -1660,11 +1738,11 @@
 
         <!-- PYQ -->
         <section class="sec" id="s-pyq">
-          <h2>📝 PYQ & Papers</h2>
+          <h2>📝 PYQ &amp; Papers</h2>
           <div class="card">
             <div class="ai-tag">📝 Board Examiner AI · Llama 3.3-70B</div>
             <div class="irow">
-              <select id="pyqYr"></select>
+              <select id="pyqYr"><option value="2025">2025</option><option value="2024">2024</option><option value="2023">2023</option><option value="2022">2022</option><option value="2021">2021</option><option value="2020">2020</option><option value="2019">2019</option><option value="2018">2018</option><option value="2017">2017</option><option value="2016">2016</option><option value="2015">2015</option></select>
               <select id="pyqType">
                 <option>Board Exam</option>
                 <option>Sample Paper</option>
@@ -1680,8 +1758,8 @@
               </div>
             </div>
             <div style="display: flex; gap: 8px; flex-wrap: wrap">
-              <button class="btn sm sec" onclick="dlPYQ('txt')">📄 .txt</button>
-              <button class="btn sm acc" onclick="dlPYQ('pdf')">📑 PDF</button>
+              <button class="btn sm sec" onclick="dlPYQ(&#39;txt&#39;)">📄 .txt</button>
+              <button class="btn sm acc" onclick="dlPYQ(&#39;pdf&#39;)">📑 PDF</button>
             </div>
           </div>
         </section>
@@ -1691,13 +1769,11 @@
           <h2>🔮 CBQ Predictor</h2>
           <div class="card">
             <div class="ai-tag">🔮 Exam Oracle AI</div>
-            <p
-              style="
+            <p style="
                 color: var(--txt2);
                 font-size: 0.82rem;
                 margin-bottom: 12px;
-              "
-            >
+              ">
               Get AI-predicted high-probability questions for your upcoming
               exams.
             </p>
@@ -1707,11 +1783,7 @@
           <div class="card">
             <h3>Custom CBQ Generator</h3>
             <div class="irow">
-              <input
-                type="text"
-                id="cbqTopic"
-                placeholder="Enter specific topic or chapter..."
-              />
+              <input type="text" id="cbqTopic" placeholder="Enter specific topic or chapter...">
               <button class="btn acc" onclick="genCBQ()">Generate CBQs</button>
             </div>
             <div id="cbqOut" style="margin-top: 8px"></div>
@@ -1724,16 +1796,10 @@
           <div class="card">
             <div class="ai-tag">📒 Master Scribe AI</div>
             <div class="irow">
-              <input type="text" id="nTitle" placeholder="Note title..." />
+              <input type="text" id="nTitle" placeholder="Note title...">
             </div>
-            <textarea
-              id="nContent"
-              placeholder="Write your notes or paste content — AI will structure it for you..."
-              rows="5"
-            ></textarea>
-            <div
-              style="display: flex; gap: 8px; flex-wrap: wrap; margin-top: 12px"
-            >
+            <textarea id="nContent" placeholder="Write your notes or paste content — AI will structure it for you..." rows="5"></textarea>
+            <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-top: 12px">
               <button class="btn" onclick="saveNote()">💾 Save</button>
               <button class="btn acc" onclick="aiEnhNote()">
                 ✨ AI Enhance
@@ -1744,7 +1810,7 @@
               <button class="btn sm sec" onclick="clearNote()">🗑 Clear</button>
             </div>
           </div>
-          <div class="notes-grid" id="notesList"></div>
+          <div class="notes-grid" id="notesList"><div class="ncard" style="color:var(--txt2);text-align:center;padding:24px;">No notes yet. Write your first note above!</div></div>
         </section>
 
         <!-- MIND MAP -->
@@ -1753,16 +1819,11 @@
           <div class="card">
             <div class="ai-tag">🧩 Concept Mapper AI</div>
             <div class="irow">
-              <input
-                type="text"
-                id="mmTopic"
-                placeholder="Enter topic (e.g. Photosynthesis, Quadratic Equations)..."
-              />
+              <input type="text" id="mmTopic" placeholder="Enter topic (e.g. Photosynthesis, Quadratic Equations)...">
               <button class="btn acc" onclick="genMM()">🧩 Generate</button>
             </div>
             <div class="mm-canvas" id="mmCanvas">
-              <div
-                style="
+              <div style="
                   position: absolute;
                   top: 50%;
                   left: 50%;
@@ -1770,8 +1831,7 @@
                   color: var(--txt2);
                   font-size: 0.85rem;
                   text-align: center;
-                "
-              >
+                ">
                 Enter a topic and click Generate to create a visual mind map
               </div>
             </div>
@@ -1784,20 +1844,13 @@
           <div class="card">
             <div class="ai-tag">❓ Quiz Master AI</div>
             <div class="irow">
-              <input
-                type="text"
-                id="quizTopic"
-                placeholder="Topic for quiz (or leave blank for current subject)..."
-              />
+              <input type="text" id="quizTopic" placeholder="Topic for quiz (or leave blank for current subject)...">
               <button class="btn acc" onclick="genQuiz()">
                 🎯 Generate Quiz
               </button>
             </div>
             <div id="quizArea" style="margin-top: 14px"></div>
-            <div
-              id="quizRes"
-              style="margin-top: 8px; font-weight: 700; font-size: 1rem"
-            ></div>
+            <div id="quizRes" style="margin-top: 8px; font-weight: 700; font-size: 1rem"></div>
           </div>
         </section>
 
@@ -1805,21 +1858,17 @@
         <section class="sec" id="s-fc">
           <h2>
             🃏 Flash Cards
-            <span
-              id="fcCloud"
-              style="
+            <span id="fcCloud" style="
                 font-size: 0.7rem;
                 color: var(--a);
                 font-weight: 600;
                 display: none;
-              "
-              >· ☁ Synced to cloud</span
-            >
+              ">· ☁ Synced to cloud</span>
           </h2>
           <div class="card">
             <div class="irow">
-              <input type="text" id="fcF" placeholder="Front (Question)" />
-              <input type="text" id="fcB" placeholder="Back (Answer)" />
+              <input type="text" id="fcF" placeholder="Front (Question)">
+              <input type="text" id="fcB" placeholder="Back (Answer)">
               <button class="btn" onclick="addFC()">➕ Add</button>
             </div>
           </div>
@@ -1829,65 +1878,88 @@
               <div class="fcb" id="fcBText">Answer appears here</div>
             </div>
           </div>
-          <div
-            style="
+          <div style="
               display: flex;
               gap: 8px;
               justify-content: center;
               align-items: center;
               margin: 10px 0;
               flex-wrap: wrap;
-            "
-          >
+            ">
             <button class="btn sm sec" onclick="prevFC()">◀ Prev</button>
-            <span
-              id="fcCnt"
-              style="
+            <span id="fcCnt" style="
                 color: var(--txt2);
                 font-size: 0.8rem;
                 min-width: 50px;
                 text-align: center;
-              "
-              >0/0</span
-            >
+              ">0/0</span>
             <button class="btn sm sec" onclick="nextFC()">Next ▶</button>
             <button class="btn sm sec" onclick="shuffleFC()">🔀 Shuffle</button>
             <button class="btn sm dng" onclick="delFC()">🗑 Delete</button>
           </div>
-          <div
-            id="fcAllList"
-            style="
+          <div id="fcAllList" style="
               margin-top: 10px;
               display: grid;
               grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
               gap: 8px;
-            "
-          ></div>
+            "></div>
         </section>
 
         <!-- FORMULAS -->
         <section class="sec" id="s-form">
           <h2>📐 Formula Sheet</h2>
           <div class="card">
-            <div
-              style="
+            <div style="
                 display: flex;
                 justify-content: space-between;
                 align-items: center;
                 margin-bottom: 12px;
                 flex-wrap: wrap;
                 gap: 8px;
-              "
-            >
+              ">
               <h3 style="margin: 0">
-                Subject: <strong id="fSubj" style="color: var(--a)"></strong>
+                Subject: <strong id="fSubj" style="color: var(--a)">Mathematics</strong>
               </h3>
               <div style="display: flex; gap: 6px">
                 <button class="btn sm sec" onclick="copyForm()">📋 Copy</button>
                 <button class="btn sm acc" onclick="dlFormPDF()">📑 PDF</button>
               </div>
             </div>
-            <div class="fbox" id="fBox"></div>
+            <div class="fbox" id="fBox"><span class="cat">━━ ALGEBRA ━━</span>
+<span class="formula">Quadratic Formula:</span> x = (−b ± √(b²−4ac)) / 2a
+<span class="formula">AP nth term:</span> aₙ = a + (n−1)d
+<span class="formula">AP Sum:</span> Sₙ = n/2 · [2a + (n−1)d]
+<span class="formula">GP nth term:</span> aₙ = ar^(n−1)
+<span class="formula">GP Sum:</span> Sₙ = a(rⁿ−1)/(r−1)
+
+<span class="cat">━━ TRIGONOMETRY ━━</span>
+<span class="formula">Identities:</span>
+  sin²θ + cos²θ = 1
+  1 + tan²θ = sec²θ
+  1 + cot²θ = cosec²θ
+<span class="formula">Values:</span>
+  sin30°=½  cos30°=√3/2  tan30°=1/√3
+  sin45°=cos45°=1/√2  tan45°=1
+  sin60°=√3/2  cos60°=½  tan60°=√3
+<span class="formula">Addition:</span> sin(A+B) = sinAcosB + cosAsinB
+
+<span class="cat">━━ COORDINATE GEOMETRY ━━</span>
+<span class="formula">Distance:</span> d = √((x₂-x₁)² + (y₂-y₁)²)
+<span class="formula">Midpoint:</span> M = ((x₁+x₂)/2, (y₁+y₂)/2)
+<span class="formula">Section formula:</span> (mx₂+nx₁)/(m+n), (my₂+ny₁)/(m+n)
+<span class="formula">Slope:</span> m = (y₂-y₁)/(x₂-x₁) = tanθ
+
+<span class="cat">━━ MENSURATION ━━</span>
+  Circle: A = πr², C = 2πr
+  Sphere: SA = 4πr², V = 4/3πr³
+  Cylinder: V = πr²h, CSA = 2πrh
+  Cone: V = 1/3πr²h, l = √(r²+h²)
+  Cuboid: V = lbh, TSA = 2(lb+bh+hl)
+
+<span class="cat">━━ STATISTICS ━━</span>
+<span class="formula">Mean (grouped):</span> x̄ = Σfx / Σf
+<span class="formula">Median:</span> l + [(n/2 − cf)/f] × h
+<span class="formula">Mode:</span> l + [(f₁−f₀)/(2f₁−f₀−f₂)] × h</div>
           </div>
         </section>
 
@@ -1896,21 +1968,17 @@
           <h2>✅ Homework Tracker</h2>
           <div class="card">
             <div class="irow">
-              <input type="text" id="hwT" placeholder="Task description..." />
-              <input
-                type="date"
-                id="hwD"
-                style="max-width: 160px; border-radius: 25px !important"
-              />
+              <input type="text" id="hwT" placeholder="Task description...">
+              <input type="date" id="hwD" style="max-width: 160px; border-radius: 25px !important">
               <select id="hwPri" style="max-width: 110px">
                 <option value="high">🔴 High</option>
-                <option value="med" selected>🟡 Med</option>
+                <option value="med" selected="">🟡 Med</option>
                 <option value="low">🟢 Low</option>
               </select>
               <button class="btn" onclick="addHW()">➕ Add</button>
             </div>
           </div>
-          <div id="hwList"></div>
+          <div id="hwList"><p style="color:var(--txt2);font-size:0.82rem;padding:8px;">No homework. Add a task above!</p></div>
           <p style="color: var(--txt2); font-size: 0.82rem; margin-top: 6px">
             ✅ Done: <strong id="hwDone">0</strong> · 📋 Pending:
             <strong id="hwPend">0</strong>
@@ -1932,40 +2000,20 @@
               </div>
             </div>
             <div class="cinput">
-              <input
-                type="text"
-                id="dInput"
-                placeholder="Type your doubt..."
-                onkeydown="if(event.key==='Enter')askDoubt()"
-              />
+              <input type="text" id="dInput" placeholder="Type your doubt..." onkeydown="if(event.key===&#39;Enter&#39;)askDoubt()">
               <button class="btn acc" onclick="askDoubt()">Send 🚀</button>
             </div>
             <div class="voice-row">
-              <button
-                class="voice-btn"
-                id="voiceBtn"
-                onclick="toggleVoiceMode()"
-                title="Speak your doubt out loud"
-              >
+              <button class="voice-btn" id="voiceBtn" onclick="toggleVoiceMode()" title="Speak your doubt out loud">
                 <span class="mic-dot"></span>
                 <span id="voiceBtnLbl">🎙 Voice Mode</span>
               </button>
-              <button
-                class="btn sm sec"
-                onclick="stopSpeaking()"
-                title="Stop the AI from speaking"
-              >
+              <button class="btn sm sec" onclick="stopSpeaking()" title="Stop the AI from speaking">
                 🔇 Stop voice
               </button>
-              <span class="voice-status" id="voiceStatus"
-                >Tap to speak — I'll listen, then reply out loud.</span
-              >
+              <span class="voice-status" id="voiceStatus">Tap to speak — I'll listen, then reply out loud.</span>
             </div>
-            <button
-              class="btn sm sec"
-              style="margin-top: 10px"
-              onclick="clearChat('dChat')"
-            >
+            <button class="btn sm sec" style="margin-top: 10px" onclick="clearChat(&#39;dChat&#39;)">
               🗑 Clear Chat
             </button>
           </div>
@@ -1977,15 +2025,10 @@
           <div class="card">
             <h3>My Weak Topics</h3>
             <div class="irow">
-              <input
-                type="text"
-                id="wkI"
-                placeholder="Add a weak topic..."
-                onkeydown="if(event.key==='Enter')addWk()"
-              />
+              <input type="text" id="wkI" placeholder="Add a weak topic..." onkeydown="if(event.key===&#39;Enter&#39;)addWk()">
               <button class="btn" onclick="addWk()">➕ Add</button>
             </div>
-            <div id="wkList"></div>
+            <div id="wkList"><p style="color:var(--txt2);font-size:0.82rem;">Add your weak topics to get a recovery plan.</p></div>
           </div>
           <div class="card">
             <div class="ai-tag">📉 Recovery Coach AI</div>
@@ -2000,34 +2043,25 @@
         <section class="sec" id="s-res">
           <h2>🔗 Resources</h2>
           <div class="card">
-            <h3 id="resTitle">Official Study Resources</h3>
-            <div class="res-grid" id="resGrid"></div>
+            <h3 id="resTitle">CBSE Official Resources</h3>
+            <div class="res-grid" id="resGrid"><a href="https://ncert.nic.in/" target="_blank" rel="noopener" class="rcard"><div class="ricon">📗</div><div class="rtitle">NCERT Official</div><div class="rdesc">Free NCERT textbooks &amp; solutions</div></a><a href="https://cbseacademic.nic.in/web_material/CurriculumMain25/SrSec/English_SrSec_2024-25.pdf" target="_blank" rel="noopener" class="rcard"><div class="ricon">📋</div><div class="rtitle">CBSE Official</div><div class="rdesc">Syllabus, sample papers, circulars</div></a><a href="https://cbseacademic.nic.in/" target="_blank" rel="noopener" class="rcard"><div class="ricon">📝</div><div class="rtitle">CBSE Sample Papers</div><div class="rdesc">Latest pattern sample papers</div></a><a href="https://diksha.gov.in/" target="_blank" rel="noopener" class="rcard"><div class="ricon">🎓</div><div class="rtitle">DIKSHA Platform</div><div class="rdesc">Free digital content by NCERT</div></a></div>
           </div>
           <div class="card">
             <h3>📺 Stay-On-Site Viewer</h3>
-            <p
-              style="color: var(--txt2); font-size: 0.8rem; margin-bottom: 8px"
-            >
+            <p style="color: var(--txt2); font-size: 0.8rem; margin-bottom: 8px">
               Open syllabus PDFs and videos right inside StudyAI Pro — no
               leaving the app.
             </p>
             <div class="irow">
-              <select id="embedPick" onchange="loadEmbed()">
-                <option value="">— Select a resource —</option>
-              </select>
+              <select id="embedPick" onchange="loadEmbed()"><option value="">— Select a resource —</option><option value="https://ncert.nic.in">📗 NCERT Official</option><option value="https://cbseacademic.nic.in/web_material/CurriculumMain25/SrSec/English_SrSec_2024-25.pdf">📋 CBSE Official</option></select>
             </div>
             <div class="iframe-wrap" id="embedWrap" style="display: none">
-              <iframe
-                id="embedFrame"
-                allow="autoplay; encrypted-media"
-                allowfullscreen
-                referrerpolicy="no-referrer"
-              ></iframe>
+              <iframe id="embedFrame" allow="autoplay; encrypted-media" allowfullscreen="" referrerpolicy="no-referrer" src="./By Emergient AI StudyAI Pro V2 _ #1 Study Hub by Master Arhan_files/saved_resource.html"></iframe>
             </div>
           </div>
           <div class="card">
             <h3>🎥 Recommended YouTube Channels</h3>
-            <div class="res-grid" id="ytGrid"></div>
+            <div class="res-grid" id="ytGrid"><a href="https://www.khanacademy.org/" target="_blank" rel="noopener" class="rcard"><div class="ricon">▶️</div><div class="rtitle">Khan Academy India</div><div class="rdesc">Free world-class education</div></a><a href="https://www.vedantu.com/" target="_blank" rel="noopener" class="rcard"><div class="ricon">▶️</div><div class="rtitle">Vedantu</div><div class="rdesc">Live classes, CBSE/ICSE</div></a><a href="https://byjus.com/" target="_blank" rel="noopener" class="rcard"><div class="ricon">▶️</div><div class="rtitle">BYJU'S</div><div class="rdesc">Animated concept videos</div></a><a href="https://pw.live/" target="_blank" rel="noopener" class="rcard"><div class="ricon">▶️</div><div class="rtitle">Physics Wallah</div><div class="rdesc">Affordable quality education</div></a><a href="https://unacademy.com/" target="_blank" rel="noopener" class="rcard"><div class="ricon">▶️</div><div class="rtitle">Unacademy</div><div class="rdesc">All boards, all subjects</div></a><a href="https://www.doubtnut.com/" target="_blank" rel="noopener" class="rcard"><div class="ricon">▶️</div><div class="rtitle">Doubtnut</div><div class="rdesc">Instant doubt solving</div></a></div>
           </div>
         </section>
 
@@ -2036,13 +2070,11 @@
           <h2>🎯 Study Strategies</h2>
           <div class="card">
             <div class="ai-tag">🎯 Strategy Architect AI</div>
-            <p
-              style="
+            <p style="
                 color: var(--txt2);
                 font-size: 0.82rem;
                 margin-bottom: 12px;
-              "
-            >
+              ">
               Get a personalized study strategy based on your board, class, and
               subject.
             </p>
@@ -2051,12 +2083,8 @@
           </div>
           <div class="card">
             <h3>😌 Exam Pressure Tips</h3>
-            <div id="pressOut"></div>
-            <button
-              class="btn sm sec"
-              style="margin-top: 10px"
-              onclick="showPressure()"
-            >
+            <div id="pressOut"><div class="item">📵 <span>Phone-free study blocks. Place phone in another room, not just face-down.</span></div><div class="item">🧘 <span>Deep breathing: 4-7-8 technique. Inhale 4s, hold 7s, exhale 8s. Repeat 3x.</span></div><div class="item">🎯 <span>Use the 2-minute rule: If a task takes under 2 minutes, do it immediately.</span></div></div>
+            <button class="btn sm sec" style="margin-top: 10px" onclick="showPressure()">
               🔄 Refresh Tips
             </button>
           </div>
@@ -2065,47 +2093,23 @@
         <!-- MOTIVATION -->
         <section class="sec" id="s-motiv">
           <h2>🔥 Motivation</h2>
-          <div
-            class="card"
-            style="text-align: center; max-width: 520px; margin: 0 auto 16px"
-          >
-            <div style="font-size: 2.6rem; margin-bottom: 12px" id="mEmoji">
-              🌟
-            </div>
-            <h3
-              id="mQ"
-              style="
+          <div class="card" style="text-align: center; max-width: 520px; margin: 0 auto 16px">
+            <div style="font-size: 2.6rem; margin-bottom: 12px" id="mEmoji">🪞</div>
+            <h3 id="mQ" style="
                 font-size: 1.18rem;
                 font-weight: 700;
                 line-height: 1.5;
                 margin-bottom: 8px;
-              "
-            >
-              "Success is not final, failure is not fatal."
-            </h3>
-            <p id="mA" style="color: var(--txt2); font-size: 0.85rem">
-              — Winston Churchill
-            </p>
-            <button
-              class="btn acc3"
-              style="margin-top: 14px"
-              onclick="newQuote()"
-            >
+              ">"Your only competition is who you were yesterday."</h3>
+            <p id="mA" style="color: var(--txt2); font-size: 0.85rem">— Anonymous</p>
+            <button class="btn acc3" style="margin-top: 14px" onclick="newQuote()">
               ✨ New Quote
             </button>
-            <button
-              class="btn sec sm"
-              style="margin-top: 8px; margin-left: 6px"
-              onclick="aiMotivate()"
-            >
+            <button class="btn sec sm" style="margin-top: 8px; margin-left: 6px" onclick="aiMotivate()">
               🤖 AI Motivate Me
             </button>
           </div>
-          <div
-            class="card"
-            id="aiMotivCard"
-            style="display: none; max-width: 520px; margin: 0 auto"
-          >
+          <div class="card" id="aiMotivCard" style="display: none; max-width: 520px; margin: 0 auto">
             <div class="ai-tag">🔥 Personal AI Motivator</div>
             <div id="motivOut"></div>
           </div>
@@ -2117,23 +2121,14 @@
 
     <!-- FOCUS / ZEN OVERLAY -->
     <div class="fov" id="fov">
-      <button
-        class="btn dng ico"
-        onclick="toggleFocus()"
-        style="position: absolute; top: 16px; right: 16px"
-      >
+      <button class="btn dng ico" onclick="toggleFocus()" style="position: absolute; top: 16px; right: 16px">
         ✕
       </button>
       <div class="tdisp" id="fTDisp">25:00</div>
       <p style="color: var(--txt2); font-size: 0.85rem">
         Zen Mode — all distractions hidden
       </p>
-      <textarea
-        id="fTask"
-        placeholder="What are you focusing on right now?"
-        rows="3"
-        oninput="S.focusTask=this.value;sv()"
-      ></textarea>
+      <textarea id="fTask" placeholder="What are you focusing on right now?" rows="3" oninput="S.focusTask=this.value;sv()"></textarea>
       <div class="tbtn-row">
         <button class="btn acc" onclick="startT()">▶ Start</button>
         <button class="btn sec" onclick="pauseT()">⏸</button>
@@ -2145,10 +2140,10 @@
     <div class="modal" id="examM">
       <div class="mbox">
         <h3>📅 Set Exam Date</h3>
-        <input type="date" id="examD" />
+        <input type="date" id="examD">
         <div class="mbtns">
-          <button class="btn" onclick="saveExam()">Save</button>
-          <button class="btn sec" onclick="closeModal('examM')">Cancel</button>
+          <button class="btn" onclick="saveExam()" fdprocessedid="9cuz6e">Save</button>
+          <button class="btn sec" onclick="closeModal(&#39;examM&#39;)">Cancel</button>
         </div>
       </div>
     </div>
@@ -2161,26 +2156,21 @@
           Enter your <strong>Groq API Key</strong> to power all AI features
           (free tier available). Stored locally in your browser only.
         </p>
-        <input type="password" id="akIn" placeholder="gsk_..." />
+        <input type="password" id="akIn" placeholder="gsk_..." fdprocessedid="kkimbm">
         <p style="font-size: 0.72rem; color: var(--txt2); margin-top: 6px">
           Get a free key at
-          <a
-            href="https://console.groq.com/keys"
-            target="_blank"
-            style="color: var(--a)"
-            >console.groq.com/keys</a
-          >
+          <a href="https://console.groq.com/keys" target="_blank" style="color: var(--a)">console.groq.com/keys</a>
         </p>
         <div class="mbtns">
-          <button class="btn acc" onclick="saveAK()">✅ Enable AI</button>
-          <button class="btn sec" onclick="closeModal('aiM')">Later</button>
-          <button class="btn sm dng" onclick="clearAK()">Clear Key</button>
+          <button class="btn acc" onclick="saveAK()" fdprocessedid="yt4pkr">✅ Enable AI</button>
+          <button class="btn sec" onclick="closeModal(&#39;aiM&#39;)">Later</button>
+          <button class="btn sm dng" onclick="clearAK()" fdprocessedid="9wig2">Clear Key</button>
         </div>
       </div>
     </div>
 
-    <audio id="aud" preload="none" style="display: none"></audio>
-    <div id="toast" class="toast suc" style="display: none"></div>
+    <audio id="aud" preload="none" style="display: none" src="https://cdn.pixabay.com/download/audio/2023/10/12/audio_1808fbf07a.mp3?filename=lofi-study-112191.mp3"></audio>
+    <div id="toast" class="toast err" style="display: none;">Sign in failed: Firebase: Error (auth/unauthorized-domain).</div>
 
     <script>
       (function () {
@@ -2255,14 +2245,29 @@
           try {
             localStorage.setItem("sap_v4", JSON.stringify(S));
           } catch (e) {}
+          // Cloud-sync the entire study state (debounced) when signed in
+          if (typeof saveCloudState === "function") saveCloudState();
         };
         const $ = (id) => document.getElementById(id);
+
+        /* Avatar dropdown toggle */
+        window.toggleHdrMenu = () => {
+          const m = $("hdrMenu");
+          if (m) m.classList.toggle("on");
+        };
+        document.addEventListener("click", (e) => {
+          const m = $("hdrMenu"), a = $("hdrAvatar");
+          if (!m || !m.classList.contains("on")) return;
+          if (m.contains(e.target) || (a && a.contains(e.target))) return;
+          m.classList.remove("on");
+        });
 
         /* ── AUTH STATE ─────────────────────────────────────────────────────────── */
         let currentUser = null;
         let fbAuth = null,
           fbDB = null;
         let fcUnsub = null;
+        let stateUnsub = null;
 
         /* ── TOAST ──────────────────────────────────────────────────────────────── */
         let tTm;
@@ -2575,11 +2580,28 @@ Be genuine and uplifting.`,
           S.board = $("brd").value;
           S.cls = $("cls").value;
           S.sub = $("sub").value;
+          syncCtxSelects();
           sv();
           refreshDash();
           renderForm();
           renderRes();
         };
+        window.saveCtxMobile = () => {
+          if ($("brdM")) S.board = $("brdM").value;
+          if ($("clsM")) S.cls = $("clsM").value;
+          if ($("subM")) S.sub = $("subM").value;
+          syncCtxSelects();
+          sv();
+          refreshDash();
+          renderForm();
+          renderRes();
+        };
+        function syncCtxSelects() {
+          ["brd", "brdM"].forEach((id) => { if ($(id)) $(id).value = S.board; });
+          ["cls", "clsM"].forEach((id) => { if ($(id)) $(id).value = S.cls; });
+          ["sub", "subM"].forEach((id) => { if ($(id)) $(id).value = S.sub; });
+        }
+        window.syncCtxSelects = syncCtxSelects;
 
         /* ═══════════════════════════════════════════════════════════════════════════
          * DASHBOARD
@@ -4177,8 +4199,18 @@ Be genuine and uplifting.`,
                 $("uPhoto").src = user.photoURL || "";
                 $("fcCloud").style.display = "inline";
                 $("fcSyncBadge").style.display = "inline-block";
+                // header pill / avatar
+                if ($("hdrSignInBtn")) $("hdrSignInBtn").style.display = "none";
+                if ($("hdrAvatar")) {
+                  $("hdrAvatar").src = user.photoURL || "";
+                  $("hdrAvatar").style.display = "inline-block";
+                }
+                if ($("hdrUName")) $("hdrUName").textContent = user.displayName || "Student";
+                if ($("hdrUMail")) $("hdrUMail").textContent = user.email || "";
                 await loadCloudStats();
+                await loadCloudState();
                 attachFCListener();
+                attachStateListener();
                 toast(
                   "👋 Welcome " +
                     (user.displayName?.split(" ")[0] || "back") +
@@ -4189,9 +4221,16 @@ Be genuine and uplifting.`,
                 $("loggedIn").style.display = "none";
                 $("fcCloud").style.display = "none";
                 $("fcSyncBadge").style.display = "none";
+                if ($("hdrSignInBtn")) $("hdrSignInBtn").style.display = "inline-flex";
+                if ($("hdrAvatar")) $("hdrAvatar").style.display = "none";
+                if ($("hdrMenu")) $("hdrMenu").classList.remove("on");
                 if (fcUnsub) {
                   fcUnsub();
                   fcUnsub = null;
+                }
+                if (stateUnsub) {
+                  stateUnsub();
+                  stateUnsub = null;
                 }
               }
             });
@@ -4280,6 +4319,98 @@ Be genuine and uplifting.`,
         // Expose so addStudyHours / quiz / hw handlers can call it cheaply
         window.saveCloudStats = saveCloudStats;
 
+        /* ─────────── FULL STUDY-STATE CLOUD SYNC ───────────
+         * Saves everything the student creates (notes, homework, weak areas,
+         * exam date, board/class/subject context, quick tasks, sessions, etc.)
+         * to Firestore so progress follows them across phones, laptops & tablets.
+         * On login we MERGE: cloud is authoritative for arrays/strings if present,
+         * and `Math.max` is used for stat numbers via loadCloudStats. */
+        const SYNC_KEYS = [
+          "board", "cls", "sub", "examDate", "lastDate", "theme", "vibe",
+          "notes", "hw", "wk", "qt", "sessions", "focusTask",
+        ];
+        let _stateSaveTm = null, _suppressStateSave = false;
+        function saveCloudState() {
+          if (!currentUser || !fbDB || !window.FB) return;
+          if (_suppressStateSave) return;
+          clearTimeout(_stateSaveTm);
+          _stateSaveTm = setTimeout(() => {
+            try {
+              const payload = {};
+              SYNC_KEYS.forEach((k) => { if (S[k] !== undefined) payload[k] = S[k]; });
+              payload.updatedAt = Date.now();
+              const ref = window.FB.doc(fbDB, "users", currentUser.uid);
+              window.FB.setDoc(ref, payload, { merge: true })
+                .catch((e) => console.warn("saveCloudState", e));
+            } catch (e) { console.warn(e); }
+          }, 800);
+        }
+        window.saveCloudState = saveCloudState;
+
+        async function loadCloudState() {
+          if (!currentUser || !fbDB || !window.FB) return;
+          try {
+            const ref = window.FB.doc(fbDB, "users", currentUser.uid);
+            const snap = await window.FB.getDoc(ref);
+            if (!snap.exists()) { saveCloudState(); return; }
+            const cloud = snap.data() || {};
+            _suppressStateSave = true;
+            // Strings/scalars: cloud wins if non-empty
+            ["board", "cls", "sub", "examDate", "lastDate", "theme", "vibe", "focusTask"].forEach((k) => {
+              if (cloud[k] !== undefined && cloud[k] !== null && cloud[k] !== "") S[k] = cloud[k];
+            });
+            // Arrays: cloud wins if it has any items, otherwise keep local
+            ["notes", "hw", "wk", "qt"].forEach((k) => {
+              if (Array.isArray(cloud[k]) && cloud[k].length) S[k] = cloud[k];
+            });
+            if (cloud.sessions && typeof cloud.sessions === "object") {
+              S.sessions = { ...(S.sessions || {}), ...cloud.sessions };
+            }
+            // Re-render everything
+            try { syncCtxSelects && syncCtxSelects(); } catch (e) {}
+            try { refreshDash && refreshDash(); } catch (e) {}
+            try { renderNotes && renderNotes(); } catch (e) {}
+            try { renderHW && renderHW(); } catch (e) {}
+            try { renderWk && renderWk(); } catch (e) {}
+            try { renderForm && renderForm(); } catch (e) {}
+            try { renderRes && renderRes(); } catch (e) {}
+            if (S.theme === "light") document.body.classList.add("light");
+            else document.body.classList.remove("light");
+            _suppressStateSave = false;
+            sv();  // also re-saves to cloud now that local is up to date
+          } catch (e) { console.warn("loadCloudState", e); _suppressStateSave = false; }
+        }
+        window.loadCloudState = loadCloudState;
+
+        function attachStateListener() {
+          if (!currentUser || !fbDB || !window.FB) return;
+          if (stateUnsub) { stateUnsub(); stateUnsub = null; }
+          try {
+            const ref = window.FB.doc(fbDB, "users", currentUser.uid);
+            stateUnsub = window.FB.onSnapshot(ref, (snap) => {
+              if (!snap.metadata.hasPendingWrites) {
+                // Only react to remote changes (other devices)
+                const cloud = snap.data();
+                if (!cloud) return;
+                _suppressStateSave = true;
+                ["notes", "hw", "wk", "qt"].forEach((k) => {
+                  if (Array.isArray(cloud[k])) S[k] = cloud[k];
+                });
+                ["board", "cls", "sub", "examDate"].forEach((k) => {
+                  if (cloud[k] !== undefined && cloud[k] !== null) S[k] = cloud[k];
+                });
+                try { syncCtxSelects && syncCtxSelects(); } catch (e) {}
+                try { refreshDash && refreshDash(); } catch (e) {}
+                try { renderNotes && renderNotes(); } catch (e) {}
+                try { renderHW && renderHW(); } catch (e) {}
+                try { renderWk && renderWk(); } catch (e) {}
+                _suppressStateSave = false;
+                try { localStorage.setItem("sap_v4", JSON.stringify(S)); } catch (e) {}
+              }
+            }, (e) => console.warn("state listener", e));
+          } catch (e) { console.warn(e); }
+        }
+
         /* ── UTIL ───────────────────────────────────────────────────────────────── */
         function escapeHtml(s) {
           return String(s ?? "").replace(
@@ -4302,6 +4433,9 @@ Be genuine and uplifting.`,
           $("brd").value = S.board || "CBSE";
           $("cls").value = S.cls || "10";
           $("sub").value = S.sub || "Mathematics";
+          if ($("brdM")) $("brdM").value = S.board || "CBSE";
+          if ($("clsM")) $("clsM").value = S.cls || "10";
+          if ($("subM")) $("subM").value = S.sub || "Mathematics";
           $("vibeSel").value = S.vibe || 0;
           if (S.theme === "light") document.body.classList.add("light");
           $("hwD").valueAsDate = new Date();
@@ -4361,5 +4495,7 @@ Be genuine and uplifting.`,
         init();
       })();
     </script>
-  </body>
-</html>
+  <script defer="" src="./By Emergient AI StudyAI Pro V2 _ #1 Study Hub by Master Arhan_files/v8c78df7c7c0f484497ecbca7046644da1771523124516" integrity="sha512-8DS7rgIrAmghBFwoOTujcf6D9rXvH8xm8JQ1Ja01h9QX8EzXldiszufYa4IFfKdLUKTTrnSFXLDkUEOTrZQ8Qg==" data-cf-beacon="{&quot;version&quot;:&quot;2024.11.0&quot;,&quot;token&quot;:&quot;7f7b0fd8732c4326aae4b9d58d5c514a&quot;,&quot;server_timing&quot;:{&quot;name&quot;:{&quot;cfCacheStatus&quot;:true,&quot;cfEdge&quot;:true,&quot;cfExtPri&quot;:true,&quot;cfL4&quot;:true,&quot;cfOrigin&quot;:true,&quot;cfSpeedBrain&quot;:true},&quot;location_startswith&quot;:null}}" crossorigin="anonymous"></script>
+
+
+<span id="PING_IFRAME_FORM_DETECTION" style="display: none;"></span><iframe ng-non-bindable="" frameborder="0" hspace="0" marginheight="0" marginwidth="0" scrolling="no" tabindex="-1" vspace="0" width="100%" aria-hidden="true" id="I0_1777355162865" name="I0_1777355162865" src="./By Emergient AI StudyAI Pro V2 _ #1 Study Hub by Master Arhan_files/iframe.html" style="position: absolute; top: -100px; width: 1px; height: 1px;"></iframe></body></html>
