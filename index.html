@@ -2193,20 +2193,21 @@
          * in a browser, so only use this on your own personal machine. Rotate
          * your keys at console.groq.com / Firebase if you ever share the file.
          * ═══════════════════════════════════════════════════════════════════════════ */
-        const AI_CONFIG = {
-          // Groq (Llama 3.3-70B) — paste your own gsk_... key between the quotes
-          GROQ_API_KEY: "",
-          GROQ_MODEL: "llama-3.3-70b-versatile",
-          // Firebase Web App config (Project Settings → Your apps → Web)
-          FIREBASE: {
-            apiKey: "YOUR_FIREBASE_API_KEY",
-            authDomain: "YOUR_PROJECT.firebaseapp.com",
-            projectId: "YOUR_PROJECT_ID",
-            storageBucket: "YOUR_PROJECT.appspot.com",
-            messagingSenderId: "YOUR_SENDER_ID",
-            appId: "YOUR_APP_ID",
-          },
-        };
+       const AI_CONFIG = {
+    // Groq (Llama 3.3-70B)
+    GROQ_API_KEY: "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", 
+    GROQ_MODEL: "llama-3.3-70b-versatile",
+
+    // Firebase Web App config
+    FIREBASE: {
+      apiKey: "AIzaSyDy_hK3hkcfXMUUdFTBiZlQ4bI77ATtoe8",
+      authDomain: "studyai-pro-87190.firebaseapp.com",
+      projectId: "studyai-pro-87190",
+      storageBucket: "studyai-pro-87190.firebasestorage.app",
+      messagingSenderId: "950226562413",
+      appId: "1:950226562413:web:ba8f4449e5befc6031be64"
+    },
+};
         // Backwards-compat aliases used elsewhere in the file
         const FIREBASE_CONFIG = AI_CONFIG.FIREBASE;
         const GROQ_MODEL = AI_CONFIG.GROQ_MODEL;
