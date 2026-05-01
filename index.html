@@ -4693,17 +4693,18 @@ document.getElementById('hdrSignInBtn')?.addEventListener('click', openAuthModal
             $("musicBtn2").textContent = "⏸️ Lo-Fi";
           }
 
-          // Sidebar default state — hidden on mobile, hidden on desktop too (toggle via ☰)
-          if (window.innerWidth >= 768) 
-          }
-
-          initFirebase();{
+                   // Sidebar default state — hidden on mobile, hidden on desktop too (toggle via ☰)
+          if (window.innerWidth >= 768) {
             $("sb").classList.remove("mob-on");
             $("sb").classList.remove("off");
             $("cnt").classList.remove("wide");
-          } else {
-            $("sb").classList.add("off");
-            $("cnt").classList.add("wide");
+         } else {
+  $("sb").classList.add("off");
+  $("cnt").classList.add("wide");
+}
+
+          initFirebase();
+            
 
           // First-time API key prompt
           if (
