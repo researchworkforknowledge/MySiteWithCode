@@ -10,29 +10,41 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <!-- Firebase v10 (Modular / v9+) — exposed on window.FB for the main script -->
-      import {
-        getFirestore,
-        doc,
-        setDoc,
-        getDoc,
-        onSnapshot,
-      } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-firestore.js";
-      window.FB = {
-        initializeApp,
-        getAuth,
-        GoogleAuthProvider,
-        signInWithPopup,
-        signOut,
-        onAuthStateChanged,
-        getFirestore,
-        doc,
-        setDoc,
-        getDoc,
-        onSnapshot,
-      };
-      // Notify the main script that Firebase modular SDK is ready
-      window.dispatchEvent(new Event("fb-ready"));
-    </script>
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-app.js";
+  import {
+    getAuth,
+    GoogleAuthProvider,
+    signInWithPopup,
+    createUserWithEmailAndPassword,
+    signInWithEmailAndPassword,
+    signOut,
+    onAuthStateChanged,
+  } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-auth.js";
+  import {
+    getFirestore,
+    doc,
+    setDoc,
+    getDoc,
+    onSnapshot,
+  } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-firestore.js";
+  window.FB = {
+    initializeApp,
+    getAuth,
+    GoogleAuthProvider,
+    signInWithPopup,
+    createUserWithEmailAndPassword,
+    signInWithEmailAndPassword,
+    signOut,
+    onAuthStateChanged,
+    getFirestore,
+    doc,
+    setDoc,
+    getDoc,
+    onSnapshot,
+  };
+  window.dispatchEvent(new Event("fb-ready"));
+</script
     <style>
       :root {
         --bg: #07071a;
