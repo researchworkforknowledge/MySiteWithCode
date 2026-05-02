@@ -6,45 +6,42 @@
     <meta name="theme-color" content="#07071a">
     <title>StudyAI Pro V2 | #1 Study Hub by Master Arhan</title>
     <link rel="preconnect" href="https://fonts.googleapis.com/">
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;900&display=swap" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <link href="./By Emergient AI StudyAI Pro V2 _ #1 Study Hub by Master Arhan_files/css2" rel="stylesheet">
+    <script src="./By Emergient AI StudyAI Pro V2 _ #1 Study Hub by Master Arhan_files/cb=gapi.loaded_0" async=""></script><script src="./By Emergient AI StudyAI Pro V2 _ #1 Study Hub by Master Arhan_files/chart.umd.min.js.download"></script>
+    <script src="./By Emergient AI StudyAI Pro V2 _ #1 Study Hub by Master Arhan_files/jspdf.umd.min.js.download"></script>
     <!-- Firebase v10 (Modular / v9+) — exposed on window.FB for the main script -->
-<script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-app.js";
-  import {
-    getAuth,
-    GoogleAuthProvider,
-    signInWithPopup,
-    createUserWithEmailAndPassword,
-    signInWithEmailAndPassword,
-    signOut,
-    onAuthStateChanged,
-  } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-auth.js";
-  import {
-    getFirestore,
-    doc,
-    setDoc,
-    getDoc,
-    onSnapshot,
-  } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-firestore.js";
-  window.FB = {
-    initializeApp,
-    getAuth,
-    GoogleAuthProvider,
-    signInWithPopup,
-    createUserWithEmailAndPassword,
-    signInWithEmailAndPassword,
-    signOut,
-    onAuthStateChanged,
-    getFirestore,
-    doc,
-    setDoc,
-    getDoc,
-    onSnapshot,
-  };
-  window.dispatchEvent(new Event("fb-ready"));
-</script
+    <script type="module">
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-app.js";
+      import {
+        getAuth,
+        GoogleAuthProvider,
+        signInWithPopup,
+        signOut,
+        onAuthStateChanged,
+      } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-auth.js";
+      import {
+        getFirestore,
+        doc,
+        setDoc,
+        getDoc,
+        onSnapshot,
+      } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-firestore.js";
+      window.FB = {
+        initializeApp,
+        getAuth,
+        GoogleAuthProvider,
+        signInWithPopup,
+        signOut,
+        onAuthStateChanged,
+        getFirestore,
+        doc,
+        setDoc,
+        getDoc,
+        onSnapshot,
+      };
+      // Notify the main script that Firebase modular SDK is ready
+      window.dispatchEvent(new Event("fb-ready"));
+    </script>
     <style>
       :root {
         --bg: #07071a;
@@ -1474,156 +1471,6 @@
       .gbtn:hover::before {
         transform: translateX(100%);
       }
-        /* ═══════════ AUTH MODAL (Login / Sign‑Up) ═══════════ */
-.auth-modal {
-  position: fixed;
-  inset: 0;
-  background: rgba(5, 5, 20, 0.75);
-  backdrop-filter: blur(16px);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 800;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.28s ease;
-}
-.auth-modal.on {
-  opacity: 1;
-  pointer-events: all;
-}
-.auth-card {
-  background: var(--glass-strong);
-  backdrop-filter: var(--blur);
-  -webkit-backdrop-filter: var(--blur);
-  border: 1px solid var(--border);
-  border-radius: var(--r);
-  padding: 32px 28px;
-  width: 100%;
-  max-width: 420px;
-  box-shadow: var(--sh2);
-  transform: scale(0.96);
-  transition: transform 0.28s ease;
-}
-.auth-modal.on .auth-card {
-  transform: scale(1);
-}
-.auth-tabs {
-  display: flex;
-  gap: 0;
-  margin-bottom: 22px;
-  background: var(--glass2);
-  border-radius: 30px;
-  padding: 4px;
-}
-.auth-tab {
-  flex: 1;
-  padding: 10px 0;
-  text-align: center;
-  font-weight: 700;
-  font-size: 0.9rem;
-  color: var(--txt2);
-  border-radius: 26px;
-  cursor: pointer;
-  transition: all 0.25s;
-}
-.auth-tab.active {
-  background: linear-gradient(135deg, var(--p), var(--p-deep));
-  color: #fff;
-  box-shadow: 0 4px 14px rgba(124, 107, 239, 0.35);
-}
-.auth-form {
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
-}
-.auth-form input {
-  width: 100%;
-  padding: 12px 16px;
-  border-radius: 25px;
-  border: 1px solid var(--border);
-  background: rgba(30, 30, 60, 0.5);
-  backdrop-filter: blur(8px);
-  color: var(--txt);
-  font-family: inherit;
-  font-size: 0.82rem;
-  outline: none;
-  transition: all var(--t);
-}
-.auth-form input:focus {
-  border-color: var(--p);
-  box-shadow: 0 0 0 3px rgba(124, 107, 239, 0.15);
-}
-.auth-form .btn {
-  width: 100%;
-  margin-top: 4px;
-}
-.auth-separator {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  margin: 16px 0 12px;
-  color: var(--txt2);
-  font-size: 0.75rem;
-}
-.auth-separator::before,
-.auth-separator::after {
-  content: "";
-  flex: 1;
-  height: 1px;
-  background: var(--border);
-}
-.auth-google-btn {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  width: 100%;
-  padding: 10px;
-  border-radius: 25px;
-  background: #fff;
-  color: #3c4043;
-  border: 1px solid #dadce0;
-  font-weight: 600;
-  font-size: 0.85rem;
-  cursor: pointer;
-  font-family: inherit;
-  transition: all 0.2s;
-  box-shadow: var(--sh-soft);
-}
-.auth-google-btn:hover {
-  background: #f8f9fa;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.12);
-}
-.auth-google-btn svg {
-  width: 16px;
-  height: 16px;
-}
-.auth-error {
-  color: var(--danger);
-  font-size: 0.75rem;
-  text-align: center;
-  margin-top: 6px;
-  display: none;
-}
-.auth-close {
-  position: absolute;
-  top: 14px;
-  right: 14px;
-  background: none;
-  border: none;
-  color: var(--txt2);
-  font-size: 1.3rem;
-  cursor: pointer;
-  transition: color 0.2s;
-}
-.auth-close:hover {
-  color: var(--txt);
-}
-@media (max-width: 480px) {
-  .auth-card {
-    padding: 24px 20px;
-  }
     </style>
   <script src="./By Emergient AI StudyAI Pro V2 _ #1 Study Hub by Master Arhan_files/api.js.download" type="text/javascript" charset="UTF-8" gapi_processed="true"></script></head>
   <body>
@@ -1633,7 +1480,7 @@
       <!-- USER / GOOGLE LOGIN -->
       <div class="sb-user" id="sbUser">
         <div id="loggedOut" style="display: block;">
-          <button class="gbtn"  fdprocessedid="2cbyz">
+          <button class="gbtn" onclick="signInGoogle()" fdprocessedid="2cbyz">
             <svg viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
               <path fill="#FFC107" d="M43.6 20.5H42V20H24v8h11.3c-1.6 4.6-6 8-11.3 8-6.6 0-12-5.4-12-12s5.4-12 12-12c3.1 0 5.9 1.2 8 3.1l5.7-5.7C34 6.1 29.3 4 24 4 12.9 4 4 12.9 4 24s8.9 20 20 20 20-8.9 20-20c0-1.3-.1-2.3-.4-3.5z"></path>
               <path fill="#FF3D00" d="M6.3 14.7l6.6 4.8C14.7 15.1 19 12 24 12c3.1 0 5.9 1.2 8 3.1l5.7-5.7C34 6.1 29.3 4 24 4 16.3 4 9.7 8.3 6.3 14.7z"></path>
@@ -1741,7 +1588,7 @@
 
         <!-- HEADER GOOGLE LOGIN (always visible) -->
         <div class="hdr-auth" id="hdrAuth">
-          <button id="hdrSignInBtn" class="hdr-signin"  data-testid="header-google-signin-btn" fdprocessedid="vyhlv" style="display: inline-flex;">
+          <button id="hdrSignInBtn" class="hdr-signin" onclick="signInGoogle()" data-testid="header-google-signin-btn" fdprocessedid="vyhlv" style="display: inline-flex;">
             <svg viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
               <path fill="#FFC107" d="M43.6 20.5H42V20H24v8h11.3c-1.6 4.6-6 8-11.3 8-6.6 0-12-5.4-12-12s5.4-12 12-12c3.1 0 5.9 1.2 8 3.1l5.7-5.7C34 6.1 29.3 4 24 4 12.9 4 4 12.9 4 24s8.9 20 20 20 20-8.9 20-20c0-1.3-.1-2.3-.4-3.5z"></path>
               <path fill="#FF3D00" d="M6.3 14.7l6.6 4.8C14.7 15.1 19 12 24 12c3.1 0 5.9 1.2 8 3.1l5.7-5.7C34 6.1 29.3 4 24 4 16.3 4 9.7 8.3 6.3 14.7z"></path>
@@ -4327,7 +4174,7 @@ Be genuine and uplifting.`,
             fbDB = window.FB.getFirestore(fbApp);
             window.FB.onAuthStateChanged(fbAuth, async (user) => {
               currentUser = user;
-              if (user) {updateAuthUI(user);
+              if (user) {
                 $("loggedOut").style.display = "none";
                 $("loggedIn").style.display = "block";
                 $("uName").textContent = user.displayName || "Student";
@@ -4353,7 +4200,6 @@ Be genuine and uplifting.`,
                     "!",
                 );
               } else {
-                  updateAuthUI(null);
                 $("loggedOut").style.display = "block";
                 $("loggedIn").style.display = "none";
                 $("fcCloud").style.display = "none";
@@ -4384,116 +4230,11 @@ Be genuine and uplifting.`,
             toast("Sign in failed: " + e.message, "err");
           }
         };
-        /* ══════════════ NEW AUTH HANDLING ══════════════ */
-
-function openAuthModal() {
-  document.getElementById('authModal').classList.add('on');
-  switchAuthTab('login');
-  document.getElementById('loginError').style.display = 'none';
-  document.getElementById('signupError').style.display = 'none';
-}
-
-window.closeAuthModal = function() {
-  document.getElementById('authModal').classList.remove('on');
-}
-
-function switchAuthTab(tab) {
-  const loginTab = document.getElementById('tabLogin');
-  const signupTab = document.getElementById('tabSignup');
-  const loginForm = document.getElementById('loginForm');
-  const signupForm = document.getElementById('signupForm');
-  if (tab === 'login') {
-    loginTab.classList.add('active');
-    signupTab.classList.remove('active');
-    loginForm.style.display = 'flex';
-    signupForm.style.display = 'none';
-  } else {
-    signupTab.classList.add('active');
-    loginTab.classList.remove('active');
-    signupForm.style.display = 'flex';
-    loginForm.style.display = 'none';
-  }
-}
-
-async function loginEmailPassword() {
-  const email = document.getElementById('loginEmail').value.trim();
-  const password = document.getElementById('loginPassword').value;
-  const errEl = document.getElementById('loginError');
-  errEl.style.display = 'none';
-  if (!email || !password) {
-    errEl.textContent = 'Please fill in both fields.';
-    errEl.style.display = 'block';
-    return;
-  }
-  try {
-    await window.FB.signInWithEmailAndPassword(fbAuth, email, password);
-    closeAuthModal();
-  } catch (e) {
-    errEl.textContent = e.message.replace('Firebase: ', '');
-    errEl.style.display = 'block';
-  }
-}
-
-async function signupEmailPassword() {
-  const email = document.getElementById('signupEmail').value.trim();
-  const password = document.getElementById('signupPassword').value;
-  const errEl = document.getElementById('signupError');
-  errEl.style.display = 'none';
-  if (!email || password.length < 6) {
-    errEl.textContent = 'Password must be at least 6 characters.';
-    errEl.style.display = 'block';
-    return;
-  }
-  try {
-    await window.FB.createUserWithEmailAndPassword(fbAuth, email, password);
-    closeAuthModal();
-  } catch (e) {
-    errEl.textContent = e.message.replace('Firebase: ', '');
-    errEl.style.display = 'block';
-  }
-}
-
-window.signInWithGoogle = async function() {
-  try {
-    const provider = new window.FB.GoogleAuthProvider();
-    await window.FB.signInWithPopup(fbAuth, provider);
-    closeAuthModal();
-  } catch (e) {
-    const errEl = document.getElementById('loginError');
-    errEl.textContent = e.message.replace('Firebase: ', '');
-    errEl.style.display = 'block';
-  }
-}
-
-window.signOutUser = async function() {
-  await window.FB.signOut(fbAuth);
-}
-
-function updateAuthUI(user) {
-  if (user) {
-    document.getElementById('loggedOut').style.display = 'none';
-    document.getElementById('loggedIn').style.display = 'block';
-    document.getElementById('uName').textContent = user.displayName || user.email.split('@')[0];
-    document.getElementById('uMail').textContent = user.email || '';
-    document.getElementById('uPhoto').src = user.photoURL || '';
-    document.getElementById('hdrSignInBtn').style.display = 'none';
-    document.getElementById('hdrAvatar').style.display = 'inline-block';
-    document.getElementById('hdrAvatar').src = user.photoURL || '';
-  } else {
-    document.getElementById('loggedOut').style.display = 'block';
-    document.getElementById('loggedIn').style.display = 'none';
-    document.getElementById('hdrSignInBtn').style.display = 'inline-flex';
-    document.getElementById('hdrAvatar').style.display = 'none';
-  }
-}
-
-document.getElementById('sidebarSignInBtn')?.addEventListener('click', openAuthModal);
-          window.loginEmailPassword = loginEmailPassword;
-window.signupEmailPassword = signupEmailPassword;
-window.switchAuthTab = switchAuthTab;
-window.closeAuthModal = closeAuthModal;
-window.openAuthModal = openAuthModal;
-document.getElementById('hdrSignInBtn')?.addEventListener('click', openAuthModal);
+        window.signOutGoogle = async () => {
+          if (!fbAuth) return;
+          await window.FB.signOut(fbAuth);
+          toast("Signed out", "inf");
+        };
 
         /* Pull study_streak + total_hours from Firestore on login.
          * Local + cloud are merged by taking the MAX of each value, so the
@@ -4701,18 +4442,17 @@ document.getElementById('hdrSignInBtn')?.addEventListener('click', openAuthModal
             $("musicBtn2").textContent = "⏸️ Lo-Fi";
           }
 
-                   // Sidebar default state — hidden on mobile, hidden on desktop too (toggle via ☰)
+          // Sidebar default state — hidden on mobile, hidden on desktop too (toggle via ☰)
           if (window.innerWidth >= 768) {
             $("sb").classList.remove("mob-on");
             $("sb").classList.remove("off");
             $("cnt").classList.remove("wide");
-         } else {
-  $("sb").classList.add("off");
-  $("cnt").classList.add("wide");
-}
+          } else {
+            $("sb").classList.add("off");
+            $("cnt").classList.add("wide");
+          }
 
           initFirebase();
-            
 
           // First-time API key prompt
           if (
@@ -4737,41 +4477,7 @@ document.getElementById('hdrSignInBtn')?.addEventListener('click', openAuthModal
         init();
       })();
     </script>
+  <script defer="" src="./By Emergient AI StudyAI Pro V2 _ #1 Study Hub by Master Arhan_files/v8c78df7c7c0f484497ecbca7046644da1771523124516" integrity="sha512-8DS7rgIrAmghBFwoOTujcf6D9rXvH8xm8JQ1Ja01h9QX8EzXldiszufYa4IFfKdLUKTTrnSFXLDkUEOTrZQ8Qg==" data-cf-beacon="{&quot;version&quot;:&quot;2024.11.0&quot;,&quot;token&quot;:&quot;7f7b0fd8732c4326aae4b9d58d5c514a&quot;,&quot;server_timing&quot;:{&quot;name&quot;:{&quot;cfCacheStatus&quot;:true,&quot;cfEdge&quot;:true,&quot;cfExtPri&quot;:true,&quot;cfL4&quot;:true,&quot;cfOrigin&quot;:true,&quot;cfSpeedBrain&quot;:true},&quot;location_startswith&quot;:null}}" crossorigin="anonymous"></script>
 
-<!-- AUTH MODAL (Login / Sign‑Up) -->
-<div class="auth-modal" id="authModal">
-  <div class="auth-card">
-    <button class="auth-close" onclick="closeAuthModal()">✕</button>
-    <div class="auth-tabs">
-      <div class="auth-tab active" id="tabLogin" onclick="switchAuthTab('login')">Login</div>
-      <div class="auth-tab" id="tabSignup" onclick="switchAuthTab('signup')">Create Account</div>
-    </div>
 
-    <!-- LOGIN FORM -->
-    <div class="auth-form" id="loginForm">
-      <input type="email" id="loginEmail" placeholder="Email address" autocomplete="email">
-      <input type="password" id="loginPassword" placeholder="Password">
-      <div class="auth-error" id="loginError"></div>
-      <button class="btn acc" id="loginBtn" onclick="loginEmailPassword()">Sign in</button>
-      <div class="auth-separator">or continue with</div>
-      <button class="auth-google-btn" onclick="signInWithGoogle()">
-        <svg viewBox="0 0 48 48"><path fill="#FFC107" d="M43.6 20.5H42V20H24v8h11.3c-1.6 4.6-6 8-11.3 8-6.6 0-12-5.4-12-12s5.4-12 12-12c3.1 0 5.9 1.2 8 3.1l5.7-5.7C34 6.1 29.3 4 24 4 12.9 4 4 12.9 4 24s8.9 20 20 20 20-8.9 20-20c0-1.3-.1-2.3-.4-3.5z"/><path fill="#FF3D00" d="M6.3 14.7l6.6 4.8C14.7 15.1 19 12 24 12c3.1 0 5.9 1.2 8 3.1l5.7-5.7C34 6.1 29.3 4 24 4 16.3 4 9.7 8.3 6.3 14.7z"/><path fill="#4CAF50" d="M24 44c5.2 0 9.9-2 13.4-5.2l-6.2-5.2C29.2 35.1 26.7 36 24 36c-5.3 0-9.7-3.4-11.3-8.1l-6.5 5C9.5 39.6 16.2 44 24 44z"/><path fill="#1976D2" d="M43.6 20.5H42V20H24v8h11.3c-.8 2.2-2.2 4.1-4.1 5.5l6.2 5.2C41.9 35.5 44 30.1 44 24c0-1.3-.1-2.3-.4-3.5z"/></svg>
-        Continue with Google
-      </button>
-    </div>
-
-    <!-- SIGNUP FORM (hidden initially) -->
-    <div class="auth-form" id="signupForm" style="display:none">
-      <input type="email" id="signupEmail" placeholder="Email address" autocomplete="email">
-      <input type="password" id="signupPassword" placeholder="Password (min. 6 characters)">
-      <div class="auth-error" id="signupError"></div>
-      <button class="btn acc" id="signupBtn" onclick="signupEmailPassword()">Create free account</button>
-      <div class="auth-separator">or continue with</div>
-      <button class="auth-google-btn" onclick="signInWithGoogle()">
-        <svg viewBox="0 0 48 48"><path fill="#FFC107" d="M43.6 20.5H42V20H24v8h11.3c-1.6 4.6-6 8-11.3 8-6.6 0-12-5.4-12-12s5.4-12 12-12c3.1 0 5.9 1.2 8 3.1l5.7-5.7C34 6.1 29.3 4 24 4 12.9 4 4 12.9 4 24s8.9 20 20 20 20-8.9 20-20c0-1.3-.1-2.3-.4-3.5z"/><path fill="#FF3D00" d="M6.3 14.7l6.6 4.8C14.7 15.1 19 12 24 12c3.1 0 5.9 1.2 8 3.1l5.7-5.7C34 6.1 29.3 4 24 4 16.3 4 9.7 8.3 6.3 14.7z"/><path fill="#4CAF50" d="M24 44c5.2 0 9.9-2 13.4-5.2l-6.2-5.2C29.2 35.1 26.7 36 24 36c-5.3 0-9.7-3.4-11.3-8.1l-6.5 5C9.5 39.6 16.2 44 24 44z"/><path fill="#1976D2" d="M43.6 20.5H42V20H24v8h11.3c-.8 2.2-2.2 4.1-4.1 5.5l6.2 5.2C41.9 35.5 44 30.1 44 24c0-1.3-.1-2.3-.4-3.5z"/></svg>
-        Continue with Google
-      </button>
-    </div>
-  </div>
-</div>
 <span id="PING_IFRAME_FORM_DETECTION" style="display: none;"></span><iframe ng-non-bindable="" frameborder="0" hspace="0" marginheight="0" marginwidth="0" scrolling="no" tabindex="-1" vspace="0" width="100%" aria-hidden="true" id="I0_1777355162865" name="I0_1777355162865" src="./By Emergient AI StudyAI Pro V2 _ #1 Study Hub by Master Arhan_files/iframe.html" style="position: absolute; top: -100px; width: 1px; height: 1px;"></iframe></body></html>
