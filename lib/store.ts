@@ -9,6 +9,7 @@ export interface Note {
   content: string
   date: string
   subject: string
+  category?: string
 }
 
 export interface Homework {
@@ -26,7 +27,8 @@ export interface Flashcard {
   back: string
   subject: string
   lastReviewed?: string
-  confidence: number // 0-5 spaced repetition
+  confidence: number
+  difficulty: "easy" | "medium" | "hard"
 }
 
 export interface WeakTopic {
@@ -53,24 +55,72 @@ export interface ChatMessage {
 
 export interface TimerState {
   seconds: number
-  mode: 25 | 50 | 10 | 5 // Pomodoro durations
+  mode: "focus" | "shortBreak" | "longBreak"
   running: boolean
-  sessionsToday: number
+  sessionsCompleted: number
 }
 
 export interface Stats {
-  studyHours: number
-  quizzesDone: number
-  hwDone: number
-  dayStreak: number
-  totalSessions: number
+  totalStudyTime: number // minutes
+  sessionsCompleted: number
+  streak: number
   lastActiveDate: string | null
+  quizzesCompleted: number
+  flashcardsReviewed: number
 }
 
 export interface StudySession {
   date: string
-  hours: number
-  sessions: number
+  duration: number // minutes
+  sessionsCount: number
+}
+
+export interface QuizResult {
+  id: string
+  date: string
+  score: number
+  total: number
+  subject: string
+  topic?: string
+}
+
+export interface MindmapNode {
+  id: string
+  label: string
+  x: number
+  y: number
+  parentId?: string
+  color?: string
+}
+
+export interface Mindmap {
+  id: string
+  title: string
+  nodes: MindmapNode[]
+  subject: string
+  createdAt: string
+}
+
+export interface ScheduleEvent {
+  id: string
+  title: string
+  subject: string
+  date: Date | string
+  startTime: string
+  endTime: string
+  color: string
+}
+
+export interface Settings {
+  theme: "light" | "dark"
+  soundEnabled: boolean
+  notifications: boolean
+  focusDuration: number
+  shortBreakDuration: number
+  longBreakDuration: number
+  autoStartBreaks: boolean
+  userName: string
+  dailyGoal: number // minutes
 }
 
 export type AIPersona =
@@ -92,7 +142,9 @@ export interface StudyState {
   classLevel: string
   subject: string
   examDate: string | null
-  theme: "light" | "dark" | "system"
+
+  // Settings
+  settings: Settings
 
   // Data Collections
   notes: Note[]
@@ -101,13 +153,16 @@ export interface StudyState {
   weakTopics: WeakTopic[]
   quickTasks: QuickTask[]
   chatHistory: Record<AIPersona, ChatMessage[]>
+  quizHistory: QuizResult[]
+  mindmaps: Mindmap[]
+  schedule: ScheduleEvent[]
+  studySessions: StudySession[]
 
   // Timer
   timer: TimerState
 
   // Stats
   stats: Stats
-  sessions: Record<string, StudySession>
 
   // UI State
   sidebarOpen: boolean
@@ -124,7 +179,9 @@ export interface StudyState {
   setClassLevel: (classLevel: string) => void
   setSubject: (subject: string) => void
   setExamDate: (date: string | null) => void
-  setTheme: (theme: "light" | "dark" | "system") => void
+
+  // Actions - Settings
+  updateSettings: (settings: Partial<Settings>) => void
 
   // Actions - Notes
   addNote: (note: Omit<Note, "id" | "date">) => void
@@ -137,8 +194,8 @@ export interface StudyState {
   deleteHomework: (id: string) => void
 
   // Actions - Flashcards
-  addFlashcard: (fc: Omit<Flashcard, "id" | "confidence">) => void
-  updateFlashcardConfidence: (id: string, confidence: number) => void
+  addFlashcard: (fc: Omit<Flashcard, "id" | "confidence" | "difficulty">) => void
+  updateFlashcard: (id: string, updates: Partial<Flashcard>) => void
   deleteFlashcard: (id: string) => void
   setFlashcardIndex: (index: number) => void
   importFlashcards: (flashcards: Flashcard[]) => void
@@ -157,17 +214,29 @@ export interface StudyState {
   addChatMessage: (persona: AIPersona, message: Omit<ChatMessage, "id" | "timestamp">) => void
   clearChat: (persona: AIPersona) => void
 
+  // Actions - Quiz
+  addQuizResult: (result: Omit<QuizResult, "id" | "date">) => void
+
+  // Actions - Mindmap
+  addMindmap: (mindmap: Omit<Mindmap, "id" | "createdAt">) => void
+  updateMindmap: (id: string, updates: Partial<Mindmap>) => void
+  deleteMindmap: (id: string) => void
+
+  // Actions - Schedule
+  addScheduleEvent: (event: Omit<ScheduleEvent, "id">) => void
+  updateScheduleEvent: (id: string, updates: Partial<ScheduleEvent>) => void
+  deleteScheduleEvent: (id: string) => void
+
   // Actions - Timer
-  setTimerMode: (mode: 25 | 50 | 10 | 5) => void
+  setTimerMode: (mode: "focus" | "shortBreak" | "longBreak") => void
   setTimerSeconds: (seconds: number) => void
   setTimerRunning: (running: boolean) => void
   resetTimer: () => void
   completeSession: () => void
 
   // Actions - Stats
-  addStudyHours: (hours: number) => void
-  incrementQuizzes: () => void
-  updateStreak: () => void
+  updateStats: (updates: Partial<Stats>) => void
+  addStudySession: (duration: number) => void
 
   // Actions - UI
   setSidebarOpen: (open: boolean) => void
@@ -179,11 +248,25 @@ export interface StudyState {
   setFocusTask: (task: string) => void
 
   // Utility
-  reset: () => void
+  exportData: () => string
+  importData: (data: string) => void
+  clearAllData: () => void
 }
 
 const generateId = () => Math.random().toString(36).substr(2, 9)
 const getToday = () => new Date().toISOString().split("T")[0]
+
+const defaultSettings: Settings = {
+  theme: "dark",
+  soundEnabled: true,
+  notifications: true,
+  focusDuration: 25,
+  shortBreakDuration: 5,
+  longBreakDuration: 15,
+  autoStartBreaks: false,
+  userName: "",
+  dailyGoal: 120,
+}
 
 const initialState = {
   // User Context
@@ -191,14 +274,16 @@ const initialState = {
   classLevel: "10",
   subject: "Mathematics",
   examDate: null,
-  theme: "dark" as const,
+
+  // Settings
+  settings: defaultSettings,
 
   // Data Collections
-  notes: [],
-  homework: [],
-  flashcards: [],
-  weakTopics: [],
-  quickTasks: [],
+  notes: [] as Note[],
+  homework: [] as Homework[],
+  flashcards: [] as Flashcard[],
+  weakTopics: [] as WeakTopic[],
+  quickTasks: [] as QuickTask[],
   chatHistory: {
     doubts: [],
     notes: [],
@@ -211,26 +296,29 @@ const initialState = {
     motiv: [],
     summarize: [],
     eli5: [],
-  },
+  } as Record<AIPersona, ChatMessage[]>,
+  quizHistory: [] as QuizResult[],
+  mindmaps: [] as Mindmap[],
+  schedule: [] as ScheduleEvent[],
+  studySessions: [] as StudySession[],
 
   // Timer
   timer: {
     seconds: 25 * 60,
-    mode: 25 as const,
+    mode: "focus" as const,
     running: false,
-    sessionsToday: 0,
+    sessionsCompleted: 0,
   },
 
   // Stats
   stats: {
-    studyHours: 0,
-    quizzesDone: 0,
-    hwDone: 0,
-    dayStreak: 0,
-    totalSessions: 0,
+    totalStudyTime: 0,
+    sessionsCompleted: 0,
+    streak: 0,
     lastActiveDate: null,
+    quizzesCompleted: 0,
+    flashcardsReviewed: 0,
   },
-  sessions: {},
 
   // UI State
   sidebarOpen: true,
@@ -253,14 +341,19 @@ export const useStudyStore = create<StudyState>()(
       setClassLevel: (classLevel) => set((state) => { state.classLevel = classLevel }),
       setSubject: (subject) => set((state) => { state.subject = subject }),
       setExamDate: (date) => set((state) => { state.examDate = date }),
-      setTheme: (theme) => set((state) => { state.theme = theme }),
+
+      // Settings Actions
+      updateSettings: (updates) =>
+        set((state) => {
+          Object.assign(state.settings, updates)
+        }),
 
       // Notes Actions
       addNote: (note) =>
         set((state) => {
           state.notes.unshift({
             id: generateId(),
-            date: new Date().toLocaleDateString(),
+            date: new Date().toISOString(),
             ...note,
           })
         }),
@@ -293,20 +386,11 @@ export const useStudyStore = create<StudyState>()(
           const hw = state.homework.find((h) => h.id === id)
           if (hw) {
             hw.done = !hw.done
-            if (hw.done) {
-              state.stats.hwDone += 1
-            } else {
-              state.stats.hwDone = Math.max(0, state.stats.hwDone - 1)
-            }
           }
         }),
 
       deleteHomework: (id) =>
         set((state) => {
-          const hw = state.homework.find((h) => h.id === id)
-          if (hw?.done) {
-            state.stats.hwDone = Math.max(0, state.stats.hwDone - 1)
-          }
           state.homework = state.homework.filter((h) => h.id !== id)
         }),
 
@@ -316,16 +400,20 @@ export const useStudyStore = create<StudyState>()(
           state.flashcards.push({
             id: generateId(),
             confidence: 0,
+            difficulty: "medium",
             ...fc,
           })
         }),
 
-      updateFlashcardConfidence: (id, confidence) =>
+      updateFlashcard: (id, updates) =>
         set((state) => {
           const fc = state.flashcards.find((f) => f.id === id)
           if (fc) {
-            fc.confidence = confidence
-            fc.lastReviewed = new Date().toISOString()
+            Object.assign(fc, updates)
+            if (updates.confidence !== undefined || updates.difficulty !== undefined) {
+              fc.lastReviewed = new Date().toISOString()
+              state.stats.flashcardsReviewed += 1
+            }
           }
         }),
 
@@ -402,11 +490,72 @@ export const useStudyStore = create<StudyState>()(
           state.chatHistory[persona] = []
         }),
 
+      // Quiz Actions
+      addQuizResult: (result) =>
+        set((state) => {
+          state.quizHistory.push({
+            id: generateId(),
+            date: new Date().toISOString(),
+            ...result,
+          })
+          state.stats.quizzesCompleted += 1
+        }),
+
+      // Mindmap Actions
+      addMindmap: (mindmap) =>
+        set((state) => {
+          state.mindmaps.push({
+            id: generateId(),
+            createdAt: new Date().toISOString(),
+            ...mindmap,
+          })
+        }),
+
+      updateMindmap: (id, updates) =>
+        set((state) => {
+          const index = state.mindmaps.findIndex((m) => m.id === id)
+          if (index !== -1) {
+            Object.assign(state.mindmaps[index], updates)
+          }
+        }),
+
+      deleteMindmap: (id) =>
+        set((state) => {
+          state.mindmaps = state.mindmaps.filter((m) => m.id !== id)
+        }),
+
+      // Schedule Actions
+      addScheduleEvent: (event) =>
+        set((state) => {
+          state.schedule.push({
+            id: generateId(),
+            ...event,
+          })
+        }),
+
+      updateScheduleEvent: (id, updates) =>
+        set((state) => {
+          const index = state.schedule.findIndex((e) => e.id === id)
+          if (index !== -1) {
+            Object.assign(state.schedule[index], updates)
+          }
+        }),
+
+      deleteScheduleEvent: (id) =>
+        set((state) => {
+          state.schedule = state.schedule.filter((e) => e.id !== id)
+        }),
+
       // Timer Actions
       setTimerMode: (mode) =>
         set((state) => {
           state.timer.mode = mode
-          state.timer.seconds = mode * 60
+          const durations = {
+            focus: state.settings.focusDuration,
+            shortBreak: state.settings.shortBreakDuration,
+            longBreak: state.settings.longBreakDuration,
+          }
+          state.timer.seconds = durations[mode] * 60
           state.timer.running = false
         }),
 
@@ -422,68 +571,71 @@ export const useStudyStore = create<StudyState>()(
 
       resetTimer: () =>
         set((state) => {
-          state.timer.seconds = state.timer.mode * 60
+          const durations = {
+            focus: state.settings.focusDuration,
+            shortBreak: state.settings.shortBreakDuration,
+            longBreak: state.settings.longBreakDuration,
+          }
+          state.timer.seconds = durations[state.timer.mode] * 60
           state.timer.running = false
         }),
 
       completeSession: () =>
         set((state) => {
-          const today = getToday()
-          state.timer.sessionsToday += 1
-          state.stats.totalSessions += 1
-          
-          // Add study hours based on mode
-          const hoursToAdd = state.timer.mode / 60
-          state.stats.studyHours += hoursToAdd
+          if (state.timer.mode === "focus") {
+            state.timer.sessionsCompleted += 1
+            state.stats.sessionsCompleted += 1
+            state.stats.totalStudyTime += state.settings.focusDuration
 
-          // Update daily session
-          if (!state.sessions[today]) {
-            state.sessions[today] = { date: today, hours: 0, sessions: 0 }
+            // Add study session
+            const today = getToday()
+            const existingSession = state.studySessions.find((s) => s.date === today)
+            if (existingSession) {
+              existingSession.duration += state.settings.focusDuration
+              existingSession.sessionsCount += 1
+            } else {
+              state.studySessions.push({
+                date: today,
+                duration: state.settings.focusDuration,
+                sessionsCount: 1,
+              })
+            }
+
+            // Update streak
+            const yesterday = new Date()
+            yesterday.setDate(yesterday.getDate() - 1)
+            const yesterdayStr = yesterday.toISOString().split("T")[0]
+
+            if (state.stats.lastActiveDate === yesterdayStr) {
+              state.stats.streak += 1
+            } else if (state.stats.lastActiveDate !== today) {
+              state.stats.streak = 1
+            }
+            state.stats.lastActiveDate = today
           }
-          state.sessions[today].hours += hoursToAdd
-          state.sessions[today].sessions += 1
-
-          // Update streak
-          get().updateStreak()
         }),
 
       // Stats Actions
-      addStudyHours: (hours) =>
+      updateStats: (updates) =>
         set((state) => {
-          state.stats.studyHours += hours
-          const today = getToday()
-          if (!state.sessions[today]) {
-            state.sessions[today] = { date: today, hours: 0, sessions: 0 }
-          }
-          state.sessions[today].hours += hours
+          Object.assign(state.stats, updates)
         }),
 
-      incrementQuizzes: () =>
-        set((state) => {
-          state.stats.quizzesDone += 1
-        }),
-
-      updateStreak: () =>
+      addStudySession: (duration) =>
         set((state) => {
           const today = getToday()
-          const yesterday = new Date()
-          yesterday.setDate(yesterday.getDate() - 1)
-          const yesterdayStr = yesterday.toISOString().split("T")[0]
-
-          if (state.stats.lastActiveDate === today) {
-            // Already updated today
-            return
+          const existingSession = state.studySessions.find((s) => s.date === today)
+          if (existingSession) {
+            existingSession.duration += duration
+            existingSession.sessionsCount += 1
+          } else {
+            state.studySessions.push({
+              date: today,
+              duration,
+              sessionsCount: 1,
+            })
           }
-
-          if (state.stats.lastActiveDate === yesterdayStr) {
-            // Consecutive day
-            state.stats.dayStreak += 1
-          } else if (state.stats.lastActiveDate !== today) {
-            // Streak broken, start fresh
-            state.stats.dayStreak = 1
-          }
-
-          state.stats.lastActiveDate = today
+          state.stats.totalStudyTime += duration
         }),
 
       // UI Actions
@@ -495,28 +647,69 @@ export const useStudyStore = create<StudyState>()(
       setCurrentTrack: (track) => set((state) => { state.currentTrack = track }),
       setFocusTask: (task) => set((state) => { state.focusTask = task }),
 
-      // Reset
-      reset: () => set(initialState),
+      // Utility Actions
+      exportData: () => {
+        const state = get()
+        const exportObj = {
+          version: "2.0.0",
+          exportedAt: new Date().toISOString(),
+          data: {
+            board: state.board,
+            classLevel: state.classLevel,
+            subject: state.subject,
+            examDate: state.examDate,
+            settings: state.settings,
+            notes: state.notes,
+            homework: state.homework,
+            flashcards: state.flashcards,
+            weakTopics: state.weakTopics,
+            quickTasks: state.quickTasks,
+            chatHistory: state.chatHistory,
+            quizHistory: state.quizHistory,
+            mindmaps: state.mindmaps,
+            schedule: state.schedule,
+            studySessions: state.studySessions,
+            stats: state.stats,
+          },
+        }
+        return JSON.stringify(exportObj, null, 2)
+      },
+
+      importData: (data) =>
+        set((state) => {
+          try {
+            const parsed = JSON.parse(data)
+            if (parsed.data) {
+              Object.assign(state, parsed.data)
+            }
+          } catch (e) {
+            console.error("Failed to import data:", e)
+          }
+        }),
+
+      clearAllData: () => set(initialState),
     })),
     {
-      name: "studyai-pro-v2",
+      name: "studyai-pro-v3",
       storage: createJSONStorage(() => localStorage),
       partialize: (state) => ({
-        // Persist everything except running state
         board: state.board,
         classLevel: state.classLevel,
         subject: state.subject,
         examDate: state.examDate,
-        theme: state.theme,
+        settings: state.settings,
         notes: state.notes,
         homework: state.homework,
         flashcards: state.flashcards,
         weakTopics: state.weakTopics,
         quickTasks: state.quickTasks,
         chatHistory: state.chatHistory,
+        quizHistory: state.quizHistory,
+        mindmaps: state.mindmaps,
+        schedule: state.schedule,
+        studySessions: state.studySessions,
         timer: { ...state.timer, running: false },
         stats: state.stats,
-        sessions: state.sessions,
         flashcardIndex: state.flashcardIndex,
         currentVibe: state.currentVibe,
         currentTrack: state.currentTrack,
@@ -537,3 +730,4 @@ export const useHomework = () => useStudyStore((s) => s.homework)
 export const useFlashcards = () => useStudyStore((s) => s.flashcards)
 export const useActiveSection = () => useStudyStore((s) => s.activeSection)
 export const useSidebarOpen = () => useStudyStore((s) => s.sidebarOpen)
+export const useSettings = () => useStudyStore((s) => s.settings)
